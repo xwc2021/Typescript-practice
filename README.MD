@@ -1,7 +1,7 @@
-#從新出發
+# 從新出發
 使用過cocos creator後，再也無法忍受unity build webgl的龜速
 
-#裝nvm (node version manager)
+# 裝nvm (node version manager)
 https://github.com/coreybutler/nvm-windows/releases
 
 裝好之後
@@ -22,34 +22,34 @@ nvm use 12.18.2
 ```
 
 
-#快速初始化專案
+# 快速初始化專案
 
 ```
 npm init -y
 ```
 
-#裝typescript
+# 裝typescript
 ```
 npm install --save-dev typescript ts-loader
 ```
 
-#裝webpack
+# 裝webpack
 參考這裡
 https://www.typescriptlang.org/docs/handbook/react-&-webpack.html
 ```
 npm install --save-dev webpack webpack-cli
 ```
 
-#建立index.html
+# 建立index.html
 加入
 ```
 <script src='./dist/build.js'></script>
 ```
 
-#建立dist,src資料夾
+# 建立dist,src資料夾
 src裡放程式碼，dist是build完輸出的地方
 
-#設定tsconfig.json,webpack.config.js
+# 設定tsconfig.json,webpack.config.js
 參考這裡
 https://webpack.js.org/guides/typescript/
 
@@ -95,10 +95,10 @@ module.exports = {
 ```
 
 
-#執行webpack
+# 執行webpack
 ```
 npx webpack
 ```
 
-#啟動live server
+# 啟動live server
 點擊index.html，啟動live server就可以看到結果了
