@@ -1,7 +1,7 @@
 export default class App {
 
-    w: number = 256;
-    h: number = 256;
+    w: number = 512;
+    h: number = 512;
     backbuffer: OffscreenCanvas = null;
 
     constructor() {
@@ -25,10 +25,11 @@ export default class App {
                 // between 0~1
                 let r = (X / this.w);
                 let g = (Y / this.h);
+                let b = 0.25;;
 
                 backbuffer_data_array[index++] = Math.round(r * 255);
                 backbuffer_data_array[index++] = Math.round(g * 255);
-                backbuffer_data_array[index++] = 0;
+                backbuffer_data_array[index++] = Math.round(b * 255);
                 backbuffer_data_array[index] = 255;
             }
         }
@@ -38,10 +39,12 @@ export default class App {
         // 設定buffer的大小和css style的大小一樣
         // https://openhome.cc/Gossip/WebGL/Canvas.html
         let canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        canvas.style.width = this.w + 'px';
+        canvas.style.height = this.h + 'px';
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 
-        // copy
+        // copy backbuffer to canvas
         let context_bitmap_render = canvas.getContext("bitmaprenderer");
         context_bitmap_render.transferFromImageBitmap(this.backbuffer.transferToImageBitmap());
     }
