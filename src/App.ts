@@ -21,7 +21,7 @@ export default class App {
         let ratio = this.w / this.h;
 
         let camera = new Camera(new Vector(0, 10, -10), Vector.zero, 60);
-        let rect = new Rect(new Plane(Vector.zero, new Vector(0, 0, -1)), 4, 2)
+        let rect = new Rect(new Plane(Vector.zero, new Vector(0, 0, -1)), 2, 2)
 
         // set array value
         for (let y = 0; y < this.h; ++y) {
