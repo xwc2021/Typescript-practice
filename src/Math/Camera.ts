@@ -1,6 +1,9 @@
 import Vector from "./Vector";
 import Ray from "./Ray";
 import { degree_to_Rad } from "./Tool"
+import RenderTarget from "./RenderTarget";
+import Hitable from "./Hitable";
+import HitInfo from "./HitInfo";
 
 export default class Camera {
     eye: Vector;
@@ -36,5 +39,30 @@ export default class Camera {
             .add(this.y_axis.multiply(y_weight * tan_h));
 
         return new Ray(this.eye.clone(), dir);
+    }
+
+    render(render_target: RenderTarget, obj_list: Hitable[]) {
+        render_target.render_pixel((x_weight: number, y_weight: number, ratio: number) => {
+            let ray = this.create_ray(x_weight, y_weight, ratio);
+
+            let hit_sort_list = obj_list.map(obj => obj.hit(ray))
+                .filter(info => info.is_hit)
+                .sort((a: HitInfo, b: HitInfo) => a.t - b.t);
+
+            // 有射中嗎
+            let is_hit = hit_sort_list.length != 0;
+            if (is_hit) {
+                let result = hit_sort_list[0];
+                var r = result.is_hit ? 1 : 0;
+                var g = result.is_hit ? 1 : 0;
+                var b = 0;
+            } else {
+                var r = 0.5;
+                var g = 0.5;
+                var b = 0.5;
+            }
+
+            return new Vector(r, g, b);
+        })
     }
 }
