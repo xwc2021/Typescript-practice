@@ -13,7 +13,7 @@ export default class App {
         let obj_list = [rect, sphere];
 
         let camera = new Camera(new Vector(0, 10, -10), Vector.zero, 60);
-        let render_target = new RenderTarget(320, 240);
+        let render_target = new RenderTarget(800, 600);
         camera.render(render_target, obj_list);
         render_target.show_buffer('canvas');
     }

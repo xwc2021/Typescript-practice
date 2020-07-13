@@ -39,11 +39,11 @@ export default class Plane implements Hitable {
         let t = A / B;
         let is_hit = t > 0.0;
         let hit_pos = from.add(dir.multiply(t));
-
         return {
             is_hit,
             hit_pos,
-            t
+            t,
+            normal: this.N,
         }
     }
 }

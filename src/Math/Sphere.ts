@@ -30,10 +30,12 @@ export default class Sphere implements Hitable {
             let t = -b / (2 * a);
 
             let hit_pos = F.add(D.multiply(t));
+            let normal = hit_pos.minus(this.C).normalize();
             return {
                 is_hit: true,
                 hit_pos,
-                t
+                t,
+                normal
             }
         }
         else if (k > 0) { // 交於2點
@@ -43,10 +45,12 @@ export default class Sphere implements Hitable {
             let t_list = [(-b - sqrt_k) / (2 * a), (-b + sqrt_k) / (2 * a)].filter(x => x > 0);
             let t = t_list[0];
             let hit_pos = F.add(D.multiply(t));
+            let normal = hit_pos.minus(this.C).normalize();
             return {
                 is_hit: true,
                 hit_pos,
-                t
+                t,
+                normal
             }
         } else { // 沒交點
             return {

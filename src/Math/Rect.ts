@@ -30,7 +30,8 @@ export default class Rect implements Hitable {
             return {
                 is_hit,
                 hit_pos,
-                t: result.t
+                t: result.t,
+                normal: this.plane.N
             }
         } else {
             return {

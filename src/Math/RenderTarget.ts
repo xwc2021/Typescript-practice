@@ -3,7 +3,7 @@ export default class RenderTarget {
     w: number = 320;
     h: number = 240;
     backbuffer: OffscreenCanvas = null;
-    constructor(w: number, h: number) {
+    constructor(w: number = 320, h: number = 240) {
         this.w = w;
         this.h = h;
         this.backbuffer = new OffscreenCanvas(this.w, this.h);
