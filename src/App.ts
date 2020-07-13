@@ -6,8 +6,8 @@ import Plane from './Math/Plane';
 
 export default class App {
 
-    w: number = 512;
-    h: number = 512;
+    w: number = 320;
+    h: number = 240;
     backbuffer: OffscreenCanvas = null;
 
     constructor() {

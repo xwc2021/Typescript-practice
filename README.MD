@@ -1,5 +1,6 @@
 # 從新出發
 使用過cocos creator後，再也無法忍受unity build webgl的龜速
+雖然叫webgl_test 但已經偏離主題了
 
 # 裝nvm (node version manager)
 https://github.com/coreybutler/nvm-windows/releases
