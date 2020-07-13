@@ -68,7 +68,7 @@ tsconfig.json
 ```
 
 webpack.config.js
-重點是enter和output要設對
+重點是entry和output要設對
 ```
 const path = require('path');
 
