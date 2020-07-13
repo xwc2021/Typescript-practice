@@ -49,11 +49,12 @@ export default class RenderTarget {
             }
         }
         context_2d.putImageData(backbuffer_data, 0, 0);
+    }
 
-
+    show_buffer(canvas_id: string) {
         // 設定buffer的大小和css style的大小一樣
         // https://openhome.cc/Gossip/WebGL/Canvas.html
-        let canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        let canvas = document.getElementById(canvas_id) as HTMLCanvasElement;
         canvas.style.width = this.w + 'px';
         canvas.style.height = this.h + 'px';
         canvas.width = canvas.clientWidth;
