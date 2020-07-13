@@ -1,9 +1,11 @@
 import Plane from "./Plane";
 import Ray from "./Ray";
 import Vector from "./Vector";
+import HitInfo from "./HitInfo";
+import Hitable from "./Hitable";
 
 // 小方塊
-export default class Rect {
+export default class Rect implements Hitable {
     plane: Plane;
     w: number;
     h: number;
@@ -14,7 +16,7 @@ export default class Rect {
         this.h = h;
     }
 
-    hit(ray: Ray) {
+    hit(ray: Ray): HitInfo {
         let result = this.plane.hit(ray);
         if (result.is_hit) {
             let hit_pos = result.hit_pos;
@@ -27,12 +29,12 @@ export default class Rect {
             let is_hit = Math.abs(w_value) < this.w && Math.abs(h_value) < this.h;
             return {
                 is_hit,
-                hit_pos
+                hit_pos,
+                t: result.t
             }
         } else {
             return {
                 is_hit: false,
-                hit_pos: null,
             }
         }
     }

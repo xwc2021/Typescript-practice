@@ -1,8 +1,11 @@
 import Vector from './Vector';
 import Ray from './Ray';
+import { number_equal } from './Tool';
+import HitInfo from './HitInfo';
+import Hitable from './Hitable';
 
 // 平面
-export default class Plane {
+export default class Plane implements Hitable {
 
     C: Vector;
     N: Vector;
@@ -18,7 +21,7 @@ export default class Plane {
         return value > 0;
     }
 
-    hit(ray: Ray) {
+    hit(ray: Ray): HitInfo {
         // ray hit plane 
         let from = ray.from;
         let dir = ray.dir;
@@ -30,9 +33,8 @@ export default class Plane {
         let A = Vector.dot_product(Vector.minus(this.C, from), this.N);
 
         // avoid divide by 0
-        let epsilon = 0.001;
-        if (Math.abs(B) < epsilon)
-            return { is_hit: false, hit_pos: null };
+        if (number_equal(B, 0))
+            return { is_hit: false, hit_pos: null, t: -1 };
 
         let t = A / B;
         let is_hit = t > 0.0;
@@ -40,7 +42,8 @@ export default class Plane {
 
         return {
             is_hit,
-            hit_pos
+            hit_pos,
+            t
         }
     }
 }

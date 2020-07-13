@@ -3,6 +3,8 @@ import Camera from './Math/Camera'
 import Ray from './Math/Ray'
 import Rect from './Math/Rect';
 import Plane from './Math/Plane';
+import Sphere from './Math/Sphere';
+import HitInfo from './Math/HitInfo';
 
 export default class App {
 
@@ -21,7 +23,9 @@ export default class App {
         let ratio = this.w / this.h;
 
         let camera = new Camera(new Vector(0, 10, -10), Vector.zero, 60);
-        let rect = new Rect(new Plane(Vector.zero, new Vector(0, 0, -1)), 2, 2)
+        let rect = new Rect(new Plane(Vector.zero, new Vector(0, 0, -1)), 2, 2);
+        let sphere = new Sphere(new Vector(6, 0, 0), 2);
+        let obj_list = [rect, sphere];
 
         // set array value
         for (let y = 0; y < this.h; ++y) {
@@ -41,12 +45,20 @@ export default class App {
                 let y_weight = Y * 2 - 1;
 
                 let ray = camera.create_ray(x_weight, y_weight, ratio);
-                let result = rect.hit(ray);
+
+                let hit_sort_list = obj_list.map(obj => obj.hit(ray))
+                    .filter(info => info.is_hit)
+                    .sort((a: HitInfo, b: HitInfo) => a.t - b.t);
+
+                // 沒射中
+                if (hit_sort_list.length == 0)
+                    continue;
 
                 // let r = X;
                 // let g = Y;
                 // let b = 0;
 
+                let result = hit_sort_list[0];
                 let r = result.is_hit ? 1 : 0;
                 let g = result.is_hit ? 1 : 0;
                 let b = 0;
