@@ -3,7 +3,7 @@ import Ray from './Ray';
 import { number_equal } from './Tool';
 import HitInfo from './HitInfo';
 import Hitable from './Hitable';
-import Material from '../Object/Material';
+import Material from '../Materails/Material';
 
 // 平面
 export default class Plane implements Hitable {

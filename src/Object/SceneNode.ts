@@ -1,4 +1,4 @@
-import Material from "./Material";
+import Material from "../Materails/Material";
 import Hitable from "../Math/Hitable";
 
 export default class SceneNode {

@@ -1,5 +1,5 @@
 import Vector from "./Vector";
-import Material from "../Object/Material";
+import Material from "../Materails/Material";
 
 export default interface HitInfo {
     is_hit: boolean;

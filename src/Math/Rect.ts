@@ -3,7 +3,7 @@ import Ray from "./Ray";
 import Vector from "./Vector";
 import HitInfo from "./HitInfo";
 import Hitable from "./Hitable";
-import Material from "../Object/Material";
+import Material from "../Materails/Material";
 
 // 小方塊
 export default class Rect implements Hitable {

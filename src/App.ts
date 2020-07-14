@@ -6,7 +6,7 @@ import Sphere from './Math/Sphere';
 import RenderTarget from './Math/RenderTarget';
 import Hitable from './Math/Hitable';
 import SceneNode from './Object/SceneNode';
-import Material from './Object/Material';
+import Material from './Materails/Material';
 
 export default class App {
     constructor() {

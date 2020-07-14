@@ -4,7 +4,7 @@ import { degree_to_Rad, clamp } from "./Tool"
 import RenderTarget from "./RenderTarget";
 import HitInfo from "./HitInfo";
 import SceneNode from "../Object/SceneNode";
-import Material from "../Object/Material";
+import Material from "../Materails/Material";
 
 export default class Camera {
     eye: Vector;
