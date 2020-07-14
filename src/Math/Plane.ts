@@ -3,7 +3,7 @@ import Ray from './Ray';
 import { number_equal } from './Tool';
 import HitInfo from './HitInfo';
 import Hitable from './Hitable';
-import Material from '../Materails/Material';
+import Shader from '../Materails/Shader';
 
 // 平面
 export default class Plane implements Hitable {
@@ -22,7 +22,7 @@ export default class Plane implements Hitable {
         return value > 0;
     }
 
-    hit(ray: Ray, m: Material): HitInfo {
+    hit(ray: Ray, s: Shader): HitInfo {
         // ray hit plane 
         let from = ray.from;
         let dir = ray.dir;
@@ -43,9 +43,10 @@ export default class Plane implements Hitable {
         return {
             is_hit,
             hit_pos,
+            i: dir,
             t,
             normal: this.N,
-            m
+            s
         }
     }
 }

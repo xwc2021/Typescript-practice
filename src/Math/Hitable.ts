@@ -1,7 +1,7 @@
 import HitInfo from "./HitInfo";
 import Ray from "./Ray";
-import Material from "../Materails/Material";
+import Shader from "../Materails/Shader";
 
 export default interface Hitable {
-    hit(ray: Ray, m: Material): HitInfo;
+    hit(ray: Ray, s: Shader): HitInfo;
 }

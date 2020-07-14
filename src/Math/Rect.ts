@@ -3,7 +3,7 @@ import Ray from "./Ray";
 import Vector from "./Vector";
 import HitInfo from "./HitInfo";
 import Hitable from "./Hitable";
-import Material from "../Materails/Material";
+import Shader from "../Materails/Shader";
 
 // 小方塊
 export default class Rect implements Hitable {
@@ -17,8 +17,8 @@ export default class Rect implements Hitable {
         this.h = h;
     }
 
-    hit(ray: Ray, m: Material): HitInfo {
-        let result = this.plane.hit(ray, m);
+    hit(ray: Ray, s: Shader): HitInfo {
+        let result = this.plane.hit(ray, s);
         if (result.is_hit) {
             let hit_pos = result.hit_pos;
             let diff = hit_pos.minus(this.plane.C);
@@ -35,9 +35,10 @@ export default class Rect implements Hitable {
             return {
                 is_hit,
                 hit_pos,
+                i: ray.dir,
                 t: result.t,
                 normal: this.plane.N,
-                m
+                s
             }
         } else {
             return {

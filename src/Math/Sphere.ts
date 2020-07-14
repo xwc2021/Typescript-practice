@@ -3,7 +3,7 @@ import Ray from "./Ray";
 import { number_equal } from './Tool';
 import HitInfo from "./HitInfo";
 import Hitable from "./Hitable";
-import Material from "../Materails/Material";
+import Shader from "../Materails/Shader";
 
 export default class Sphere implements Hitable {
 
@@ -15,7 +15,7 @@ export default class Sphere implements Hitable {
         this.R = R;
     }
 
-    hit(ray: Ray, m: Material): HitInfo {
+    hit(ray: Ray, s: Shader): HitInfo {
         // 解2次方程式
         // (X-C)。(X-C) = R*R
         // X=F+t*D
@@ -35,9 +35,10 @@ export default class Sphere implements Hitable {
             return {
                 is_hit: true,
                 hit_pos,
+                i: D,
                 t,
                 normal,
-                m
+                s
             }
         }
         else if (k > 0) { // 交於2點
@@ -51,9 +52,10 @@ export default class Sphere implements Hitable {
             return {
                 is_hit: true,
                 hit_pos,
+                i: D,
                 t,
                 normal,
-                m
+                s
             }
         } else { // 沒交點
             return {

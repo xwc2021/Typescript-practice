@@ -1,10 +1,10 @@
 import Vector from "./Vector";
 import Ray from "./Ray";
-import { degree_to_Rad, clamp } from "./Tool"
+import { degree_to_Rad, get_hit_sort_list } from "./Tool"
 import RenderTarget from "./RenderTarget";
 import HitInfo from "./HitInfo";
 import SceneNode from "../Object/SceneNode";
-import Material from "../Materails/Material";
+import Diffuse from "../Materails/Diffuse";
 
 export default class Camera {
     eye: Vector;
@@ -61,25 +61,22 @@ export default class Camera {
             let rays = multisample_diff.map(diff => {
                 // 對ray_dri作偏移
                 let dir = ray_dir.add(this.x_axis.multiply(diff.x)).add(this.y_axis.multiply(diff.y))
-                return new Ray(this.eye, dir)
+
+                // 雖然和球、平面的hit計算不需要dir作normalize，但為了方便反射的計算還是作normalize
+                return new Ray(this.eye, dir.normalize())
             });
 
             // 每個ray都算color
             let colors = rays.map(ray => {
-                let hit_sort_list = obj_list.map(obj => obj.h.hit(ray, obj.m))
-                    .filter(info => info.is_hit)
-                    .sort((a: HitInfo, b: HitInfo) => a.t - b.t);
+                let hit_sort_list = get_hit_sort_list(obj_list, ray);
 
                 // 有射中嗎
                 let is_hit = hit_sort_list.length != 0;
                 if (is_hit) {
-                    let result = hit_sort_list[0];
-                    let n = result.normal;
-                    let strength = clamp(-Vector.dot(direction_light_dir, n), 0, 1);
-
-                    return result.m.color.multiply(strength);
+                    let hit_info = hit_sort_list[0];
+                    return hit_info.s.shading(hit_info, direction_light_dir, obj_list, 1);
                 } else {
-                    return Material.gray.color;
+                    return Diffuse.gray.color;
                 }
             });
 

@@ -6,6 +6,11 @@ export default class Vector {
     static up = new Vector(0, 1, 0);
     static zero = new Vector(0, 0, 0);
 
+    static reflect(I: Vector, N: Vector) {
+        let L = -2 * Vector.dot(I, N)
+        return N.multiply(L).add(I);
+    }
+
     static add(A: Vector, B: Vector) {
         var temp = new Vector(B.x + A.x, B.y + A.y, B.z + A.z);
         return temp
@@ -19,6 +24,10 @@ export default class Vector {
     static multiply(A: Vector, s: number) {
         var temp = new Vector(A.x * s, A.y * s, A.z * s);
         return temp
+    }
+
+    static multiply3(A: Vector, B: Vector) {
+        return new Vector(A.x * B.x, A.y * B.y, A.z * B.z);
     }
 
     static cross(A: Vector, B: Vector) {
@@ -65,6 +74,10 @@ export default class Vector {
 
     multiply(s: number) {
         return Vector.multiply(this, s);
+    }
+
+    negative() {
+        return Vector.multiply(this, -1);
     }
 
     clone() {
