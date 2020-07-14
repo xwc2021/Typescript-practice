@@ -21,10 +21,14 @@ export default class Rect implements Hitable {
         if (result.is_hit) {
             let hit_pos = result.hit_pos;
             let diff = hit_pos.minus(this.plane.C);
-            let w_axis = Vector.cross_product(Vector.up, this.plane.N).normalize();
-            let h_axis = Vector.cross_product(w_axis, this.plane.N);
-            let w_value = Vector.dot_product(diff, w_axis);
-            let h_value = Vector.dot_product(diff, h_axis);
+
+            // 避開相等的情況
+            let help_v = Vector.equal(this.plane.N, Vector.up) ? new Vector(1, 0, 0) : Vector.up;
+
+            let w_axis = Vector.cross(help_v, this.plane.N).normalize();
+            let h_axis = Vector.cross(w_axis, this.plane.N);
+            let w_value = Vector.dot(diff, w_axis);
+            let h_value = Vector.dot(diff, h_axis);
 
             let is_hit = Math.abs(w_value) < this.w && Math.abs(h_value) < this.h;
             return {

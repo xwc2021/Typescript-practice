@@ -21,9 +21,9 @@ export default class Sphere implements Hitable {
         // t=[(-b-sqrt_k)/2a,(-b+sqrt_k)/2a]
         let D = ray.dir;
         let F = ray.from;
-        let a = Vector.dot_product(D, D);
-        let b = 2 * (Vector.dot_product(D, F) - Vector.dot_product(D, this.C));
-        let c = Vector.dot_product(F, F) - 2 * Vector.dot_product(F, this.C) + Vector.dot_product(this.C, this.C) - this.R * this.R;
+        let a = Vector.dot(D, D);
+        let b = 2 * (Vector.dot(D, F) - Vector.dot(D, this.C));
+        let c = Vector.dot(F, F) - 2 * Vector.dot(F, this.C) + Vector.dot(this.C, this.C) - this.R * this.R;
 
         let k = b * b - 4 * a * c;
         if (number_equal(k, 0)) {  // 交於1點

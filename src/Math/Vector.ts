@@ -1,4 +1,4 @@
-
+import { number_equal } from './Tool'
 
 
 export default class Vector {
@@ -21,13 +21,17 @@ export default class Vector {
         return temp
     }
 
-    static cross_product(A: Vector, B: Vector) {
+    static cross(A: Vector, B: Vector) {
         var temp = new Vector(A.y * B.z - A.z * B.y, -A.x * B.z + A.z * B.x, A.x * B.y - A.y * B.x);
         return temp;
     }
 
-    static dot_product(A: Vector, B: Vector) {
+    static dot(A: Vector, B: Vector) {
         return A.x * B.x + A.y * B.y + A.z * B.z;
+    }
+
+    static equal(A: Vector, B: Vector) {
+        return number_equal(A.x, B.x) && number_equal(A.y, B.y) && number_equal(A.z, B.z);
     }
 
     x: number = 0;

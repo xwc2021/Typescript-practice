@@ -19,8 +19,8 @@ export default class Camera {
         this.z_axis = Vector.minus(look_at, eye).normalize();
 
         let help_v = Vector.up;
-        this.x_axis = Vector.cross_product(help_v, this.z_axis).normalize();
-        this.y_axis = Vector.cross_product(this.z_axis, this.x_axis);
+        this.x_axis = Vector.cross(help_v, this.z_axis).normalize();
+        this.y_axis = Vector.cross(this.z_axis, this.x_axis);
 
         // camera 原點
         this.eye = eye;
@@ -42,7 +42,7 @@ export default class Camera {
     }
 
     render(render_target: RenderTarget, obj_list: Hitable[]) {
-        let direction_light_dir = new Vector(1, 0, 0).normalize();
+        let direction_light_dir = new Vector(1, -1, 0).normalize();
 
         let half_pixel_offset = 0.5 / render_target.h;
         let multisample_diff = [
@@ -62,7 +62,7 @@ export default class Camera {
             let rays = multisample_diff.map(diff => {
                 // 對ray_dri作偏移
                 let dir = ray_dir.add(this.x_axis.multiply(diff.x)).add(this.y_axis.multiply(diff.y))
-                return new Ray(this.eye.clone(), dir)
+                return new Ray(this.eye, dir)
             });
 
             // 每個ray都算color
@@ -76,7 +76,7 @@ export default class Camera {
                 if (is_hit) {
                     let result = hit_sort_list[0];
                     let n = result.normal;
-                    let strength = clamp(-Vector.dot_product(direction_light_dir, n), 0, 1);
+                    let strength = clamp(-Vector.dot(direction_light_dir, n), 0, 1);
 
                     return new Vector(strength, strength, strength);
                 } else {

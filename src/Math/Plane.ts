@@ -17,7 +17,7 @@ export default class Plane implements Hitable {
     // 測試tesp_p和方向量是不是在同一邊
     is_positive(test_p: Vector) {
         let diff = Vector.minus(test_p, this.C);
-        var value = Vector.dot_product(diff, this.N);
+        var value = Vector.dot(diff, this.N);
         return value > 0;
     }
 
@@ -29,8 +29,8 @@ export default class Plane implements Hitable {
         // (F-C)。N + t (D。N) = 0
         // t  = (C-F)。N / (D。N)
         // t  = (A / (B)
-        let B = Vector.dot_product(dir, this.N);
-        let A = Vector.dot_product(Vector.minus(this.C, from), this.N);
+        let B = Vector.dot(dir, this.N);
+        let A = Vector.dot(Vector.minus(this.C, from), this.N);
 
         // avoid divide by 0
         if (number_equal(B, 0))
