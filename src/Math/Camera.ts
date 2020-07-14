@@ -43,16 +43,14 @@ export default class Camera {
 
     render(render_target: RenderTarget, obj_list: Hitable[]) {
         let direction_light_dir = new Vector(1, 0, 0).normalize();
-        let diff_h = 1 / render_target.h;
 
-        let x = 0.5;
-        let y = 0.5;
+        let half_pixel_offset = 0.5 / render_target.h;
         let multisample_diff = [
-            new Vector(0, 0, 0),
-            new Vector(x, y, 0).multiply(diff_h),
-            new Vector(-y, x, 0).multiply(diff_h),
-            new Vector(-x, -y, 0).multiply(diff_h),
-            new Vector(y, -x, 0).multiply(diff_h)
+            { x: 0, y: 0 },
+            { x: half_pixel_offset, y: half_pixel_offset },
+            { x: -half_pixel_offset, y: half_pixel_offset },
+            { x: -half_pixel_offset, y: -half_pixel_offset },
+            { x: half_pixel_offset, y: -half_pixel_offset },
         ];
 
         let grey = new Vector(0.5, 0.5, 0.5);
