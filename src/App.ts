@@ -4,13 +4,17 @@ import Rect from './Math/Rect';
 import Plane from './Math/Plane';
 import Sphere from './Math/Sphere';
 import RenderTarget from './Math/RenderTarget';
+import Hitable from './Math/Hitable';
+import SceneNode from './Object/SceneNode';
+import Material from './Object/Material';
 
 export default class App {
     constructor() {
 
-        let rect = new Rect(new Plane(Vector.zero, Vector.up), 16, 16);
-        let sphere = new Sphere(new Vector(6, 2, 0), 2);
-        let obj_list = [rect, sphere];
+        let floor = new SceneNode(Material.white, new Rect(new Plane(Vector.zero, Vector.up), 16, 16))
+        let obj_list: SceneNode[] = [floor];
+        obj_list.push(new SceneNode(Material.green, new Sphere(new Vector(6, 2, -8), 1)));
+        obj_list.push(new SceneNode(Material.yellow, new Sphere(new Vector(0, 4, -6), 4)));
 
         let camera = new Camera(new Vector(0, 20, -20), Vector.zero, 60);
         let render_target = new RenderTarget(800, 600);

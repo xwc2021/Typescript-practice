@@ -2,8 +2,9 @@ import Vector from "./Vector";
 import Ray from "./Ray";
 import { degree_to_Rad, clamp } from "./Tool"
 import RenderTarget from "./RenderTarget";
-import Hitable from "./Hitable";
 import HitInfo from "./HitInfo";
+import SceneNode from "../Object/SceneNode";
+import Material from "../Object/Material";
 
 export default class Camera {
     eye: Vector;
@@ -41,7 +42,7 @@ export default class Camera {
         return dir;
     }
 
-    render(render_target: RenderTarget, obj_list: Hitable[]) {
+    render(render_target: RenderTarget, obj_list: SceneNode[]) {
         let direction_light_dir = new Vector(1, -1, 0).normalize();
 
         let half_pixel_offset = 0.5 / render_target.h;
@@ -52,8 +53,6 @@ export default class Camera {
             { x: -half_pixel_offset, y: -half_pixel_offset },
             { x: half_pixel_offset, y: -half_pixel_offset },
         ];
-
-        let grey = new Vector(0.5, 0.5, 0.5);
 
         render_target.render_pixel((x_weight: number, y_weight: number, ratio: number) => {
             let ray_dir = this.create_ray_dir(x_weight, y_weight, ratio);
@@ -67,7 +66,7 @@ export default class Camera {
 
             // 每個ray都算color
             let colors = rays.map(ray => {
-                let hit_sort_list = obj_list.map(obj => obj.hit(ray))
+                let hit_sort_list = obj_list.map(obj => obj.h.hit(ray, obj.m))
                     .filter(info => info.is_hit)
                     .sort((a: HitInfo, b: HitInfo) => a.t - b.t);
 
@@ -78,9 +77,9 @@ export default class Camera {
                     let n = result.normal;
                     let strength = clamp(-Vector.dot(direction_light_dir, n), 0, 1);
 
-                    return new Vector(strength, strength, strength);
+                    return result.m.color.multiply(strength);
                 } else {
-                    return grey;
+                    return Material.gray.color;
                 }
             });
 
