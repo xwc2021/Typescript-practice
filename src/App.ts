@@ -14,8 +14,12 @@ export default class App {
         let floor = new SceneNode(Diffuse.white, new Rect(new Plane(Vector.zero, Vector.up), 16, 16))
         let obj_list: SceneNode[] = [floor];
         obj_list.push(new SceneNode(Diffuse.yellow, new Sphere(new Vector(6, 2, -8), 1)));
-        obj_list.push(new SceneNode(Diffuse.yellow, new Sphere(new Vector(-6, 2, -8), 1)));
+        obj_list.push(new SceneNode(Diffuse.green, new Sphere(new Vector(-6, 2, -8), 1)));
+        obj_list.push(new SceneNode(Diffuse.blue, new Sphere(new Vector(0, 2, -12), 1)));
+
         obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(0, 4, -6), 4)));
+        obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(12, 4, -6), 4)));
+        obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(8, 4, 2), 4)));
 
         let camera = new Camera(new Vector(0, 20, -20), Vector.zero, 60);
         let render_target = new RenderTarget(800, 600);

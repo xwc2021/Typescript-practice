@@ -30,6 +30,7 @@ export function clamp(x: number, a: number, b: number) {
 export function get_hit_sort_list(obj_list: SceneNode[], ray: Ray) {
     let hit_sort_list = obj_list.map(obj => obj.h.hit(ray, obj.s))
         .filter(info => info.is_hit)
+        .filter(info => info.t > 0) // 過濾掉t<0的情況
         .sort((a: HitInfo, b: HitInfo) => a.t - b.t);
 
     return hit_sort_list;

@@ -9,9 +9,9 @@ import Diffuse from "./Diffuse";
 export default class Mirror implements Shader {
     shading(hit_info: HitInfo, direction_light_dir: Vector, obj_list: SceneNode[], depth: number) {
 
-        if (depth > 10) {
+        if (depth > 20) {
             console.log('超過上限');
-            return Diffuse.gray.color;
+            return Diffuse.green.color;
         }
 
         let n = hit_info.normal;
@@ -29,7 +29,7 @@ export default class Mirror implements Shader {
         if (is_hit) {
             let hit_info_next = hit_sort_list[0];
             let hit_color = hit_info_next.s.shading(hit_info_next, direction_light_dir, obj_list, ++depth);
-            return Vector.multiply3(color, hit_color.multiply(0.75));
+            return Vector.multiply3(color, hit_color.multiply(0.9));
         } else {
             return Vector.multiply3(color, Diffuse.gray.color);
         }
