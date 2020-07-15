@@ -42,6 +42,12 @@ export default class RenderTarget {
                 let g = color.y;
                 let b = color.z;
 
+                // gamma校正
+                let gamma = 1 / 2.1;
+                r = Math.pow(r, gamma);
+                g = Math.pow(g, gamma);
+                b = Math.pow(b, gamma);
+
                 backbuffer_data_array[index++] = Math.round(r * 255);
                 backbuffer_data_array[index++] = Math.round(g * 255);
                 backbuffer_data_array[index++] = Math.round(b * 255);
