@@ -30,6 +30,9 @@ export default class Sphere implements Hitable {
         if (number_equal(k, 0)) {  // 交於1點
             let t = -b / (2 * a);
 
+            //擋掉
+            if (t < 0) { return { is_hit: false } }
+
             let hit_pos = F.add(D.multiply(t));
             let normal = hit_pos.minus(this.C).normalize();
             return {
@@ -43,9 +46,15 @@ export default class Sphere implements Hitable {
         }
         else if (k > 0) { // 交於2點
 
-            // 過濾出t>0，ray.from在球內球有可能出現t<0
+            // 過濾出t>0
+            // ray.from在球內球有可能出現t<0
+            // 球在ray的後面也可能出現t<0
             let sqrt_k = Math.sqrt(k);
             let t_list = [(-b - sqrt_k) / (2 * a), (-b + sqrt_k) / (2 * a)].filter(x => x > 0);
+
+            // 都是負值
+            if (t_list.length == 0) { return { is_hit: false } }
+
             let t = t_list[0];
             let hit_pos = F.add(D.multiply(t));
             let normal = hit_pos.minus(this.C).normalize();

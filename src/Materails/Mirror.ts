@@ -31,7 +31,7 @@ export default class Mirror implements Shader {
             let hit_color = hit_info_next.s.shading(hit_info_next, direction_light_dir, obj_list, ++depth);
             return Vector.multiply3(color, hit_color.multiply(0.9));
         } else {
-            return Vector.multiply3(color, Diffuse.gray.color);
+            return Vector.multiply3(color, Diffuse.gray.color.multiply(0.9));
         }
     }
 }
