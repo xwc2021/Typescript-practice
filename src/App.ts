@@ -16,12 +16,15 @@ export default class App {
         obj_list.push(new SceneNode(Diffuse.yellow, new Sphere(new Vector(6, 2, -8), 2)));
         obj_list.push(new SceneNode(Diffuse.green, new Sphere(new Vector(-6, 2, -8), 2)));
         obj_list.push(new SceneNode(Diffuse.blue, new Sphere(new Vector(0, 2, -12), 2)));
+        obj_list.push(new SceneNode(Diffuse.yellow, new Sphere(new Vector(-10, 6, 0), 6)));
 
-        obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(0, 4, -6), 4)));
+        obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(0, 2, -2), 2)));
         obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(12, 4, -6), 4)));
         obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(8, 4, 2), 4)));
 
         let camera = new Camera(new Vector(0, 20, -20), Vector.zero, 60);
+        // let render_target = new RenderTarget(4096, 2160);
+        // let render_target = new RenderTarget(1920, 1080);
         let render_target = new RenderTarget(800, 600);
         camera.render(render_target, obj_list);
         render_target.show_buffer('canvas');

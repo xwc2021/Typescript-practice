@@ -18,9 +18,9 @@ export default class Mirror implements Shader {
         let i = hit_info.i;
         let r = Vector.reflect(i, n);
 
+        // 產生反射ray
         let from = hit_info.hit_pos.add(r.multiply(epsilon)); // 偏移一小段距離，避免射中自己
         let ray = new Ray(from, r);
-
         let hit_sort_list = get_hit_sort_list(obj_list, ray);
 
         let color = new Vector(1, 1, 1);

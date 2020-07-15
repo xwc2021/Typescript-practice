@@ -1,6 +1,6 @@
 import Vector from "../Math/Vector";
 import HitInfo from "../Math/HitInfo";
-import { clamp } from "../Math/Tool";
+import { clamp, get_shadow_weight } from "../Math/Tool";
 import Shader from "./Shader";
 import SceneNode from "../Object/SceneNode";
 
@@ -21,6 +21,7 @@ export default class Diffuse implements Shader {
         let n = hit_info.normal;
         let strength = clamp(-Vector.dot(direction_light_dir, n), 0, 1);
 
-        return this.color.multiply(strength);
+        let shadow_weight = get_shadow_weight(hit_info, direction_light_dir, obj_list);
+        return this.color.multiply(strength).multiply(shadow_weight);
     }
 }
