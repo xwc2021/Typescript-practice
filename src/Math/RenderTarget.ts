@@ -25,9 +25,12 @@ export default class RenderTarget {
                 // rgba each color is 4byte
                 let index = 4 * (x + y * this.w);
 
+                // http://www.intro-to-dxr.cwyman.org/presentations/IntroDXR_RaytracingShaders.pdf
+                // page 78
+                // 需要偏移半個像素的長度，才會落在像素的中間(不過肉眼看不太出差別就是了)
                 // remap to 0~1
-                let X = (x / this.w);
-                let Y = (y / this.h);
+                let X = ((x + 0.5) / this.w);
+                let Y = ((y + 0.5) / this.h);
 
                 // change y direction
                 Y = 1 - Y;
