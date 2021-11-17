@@ -103,3 +103,6 @@ npx webpack
 
 # 啟動live server
 點擊index.html，啟動live server就可以看到結果了
+
+# white ray tracing 101
+![image](https://lh3.googleusercontent.com/pw/AM-JKLXYlix1VwYibFBs_r5My3OURC9mVx0IUM5bYLg6wZvDYdnDSdz8cdzBVHaidA9rK_BJZvLLBwT2a2X1wdQmXjNLZx2zJKQDE1vJdTuFlGdACXJ-5HaKqtiFD1h_nPFMTedkI72SPiDb3y9YIC9qiUoH2Q=w800-h600-no?authuser=0)
