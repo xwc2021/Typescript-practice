@@ -1,5 +1,4 @@
 # 從新出發
-使用過cocos creator後，有點無法忍受unity build webgl的龜速
 本來是想學webgl，但好像偏離主題了
 
 # 裝nvm (node version manager)
