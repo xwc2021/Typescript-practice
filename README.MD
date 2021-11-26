@@ -40,6 +40,9 @@ https://www.typescriptlang.org/docs/handbook/react-&-webpack.html
 npm install --save-dev webpack webpack-cli
 ```
 
+# typescript認不出offscreencanvas
+npm install --save @types/offscreencanvas
+
 # 建立index.html
 加入
 ```
@@ -103,5 +106,9 @@ npx webpack
 # 啟動live server
 點擊index.html，啟動live server就可以看到結果了
 
+# 用npm update會出現一堆error?
+把devDependencies、dependencies區塊從package.json拿掉，手動重裝吧，我跟npm也不太熟
+
+
 # white ray tracing 101
-![image](https://lh3.googleusercontent.com/pw/AM-JKLXYlix1VwYibFBs_r5My3OURC9mVx0IUM5bYLg6wZvDYdnDSdz8cdzBVHaidA9rK_BJZvLLBwT2a2X1wdQmXjNLZx2zJKQDE1vJdTuFlGdACXJ-5HaKqtiFD1h_nPFMTedkI72SPiDb3y9YIC9qiUoH2Q=w800-h600-no?authuser=0)
+![image](https://lh3.googleusercontent.com/pw/AM-JKLV1XpuWY-_Dl9b5w7aBOvFXDrahhi94pWDDOUHvbKWJpxywLOEjIp7c0YLzUxHisMANnjY9qha2axIHrjPrmhBfTqFQ-ULakNxqlboYxLp7zyJAoNAWUt3fXMy-fRj8Nlq_XDMgIUdUCu83k_3s9ORCgw=w1568-h882-no?authuser=0)
