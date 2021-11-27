@@ -24,8 +24,8 @@ export default class App {
 
         let camera = new Camera(new Vector(0, 20, -20), Vector.zero, 60);
         // let render_target = new RenderTarget(4096, 2160);
-        let render_target = new RenderTarget(1920, 1080);
-        // let render_target = new RenderTarget(800, 600);
+        // let render_target = new RenderTarget(1920, 1080);
+        let render_target = new RenderTarget(800, 600);
         camera.render(render_target, obj_list);
         render_target.show_buffer('canvas');
     }

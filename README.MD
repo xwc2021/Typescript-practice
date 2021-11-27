@@ -106,7 +106,7 @@ npx webpack
 # 啟動live server
 點擊index.html，啟動live server就可以看到結果了
 
-# 用npm update會出現一堆error?
+# 遇到npm update會出現一堆error?
 把devDependencies、dependencies區塊從package.json拿掉，手動重裝吧，我跟npm也不太熟
 
 
