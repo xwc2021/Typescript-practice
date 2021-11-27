@@ -45,20 +45,20 @@ export default class Box {
 
     update(camera: Camera, worldTransform: Transform) {
 
-        this.triangles_after_clip = [];
-        for (let i = 0; i < this.triangles.length; ++i) {
-            let triangle = this.triangles[i];
-            let nearPlaneZ = 1;
-            let v_clip = clip(triangle, nearPlaneZ);
+        // this.triangles_after_clip = [];
+        // for (let i = 0; i < this.triangles.length; ++i) {
+        //     let triangle = this.triangles[i];
+        //     let nearPlaneZ = 1;
+        //     let v_clip = clip(triangle, nearPlaneZ);
 
-            let count = v_clip.length / 3;
-            // console.log(i, count);
-            for (let k = 0; k < count; ++k) {
-                // 組合三角形
-                let new_triangle = new Triangle(v_clip[k * 3], v_clip[k * 3 + 1], v_clip[k * 3 + 2]);
-                this.triangles_after_clip.push(new_triangle);
-            }
-        }
+        //     let count = v_clip.length / 3;
+        //     // console.log(i, count);
+        //     for (let k = 0; k < count; ++k) {
+        //         // 組合三角形
+        //         let new_triangle = new Triangle(v_clip[k * 3], v_clip[k * 3 + 1], v_clip[k * 3 + 2]);
+        //         this.triangles_after_clip.push(new_triangle);
+        //     }
+        // }
         this.triangles_after_clip = this.triangles;
 
         // 處理正方體的變換

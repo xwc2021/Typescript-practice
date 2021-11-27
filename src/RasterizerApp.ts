@@ -35,7 +35,7 @@ export default class RasterizerApp {
         this.ctx = canvas.getContext('2d');
 
         this.box = new Box();
-        this.camera = new Camera(new Vector(0, 250, -20), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight);
+        this.camera = new Camera(new Vector(0, 250, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight);
         this.start();
     }
 
@@ -84,7 +84,7 @@ export default class RasterizerApp {
         var offsetMatrix = Transform.offset(150, 0, 0);
         var rotateMatrix = Transform.rotateByZ(nowDegree);
         combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
-        this.box.update(this.camera, combineMatrix);
+        this.box.update(this.camera, offsetMatrix);
         this.box.draw(this.ctx);
     }
 

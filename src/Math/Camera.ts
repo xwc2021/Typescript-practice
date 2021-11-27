@@ -81,7 +81,7 @@ export default class Camera {
     }
 
     toScreenSpace = function (A: Vector) {
-        let z = -A.z;
+        let z = A.z;
         let fov_rad = degree_to_Rad(this.fov_degree);
         let half_fov = 0.5 * fov_rad;
         let y_scale = 1 / Math.tan(half_fov);
