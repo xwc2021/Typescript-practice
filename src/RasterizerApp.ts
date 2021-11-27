@@ -67,6 +67,9 @@ export default class RasterizerApp {
 
         // 清空
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = "rgba(180,30,15,0.1)";
+        this.ctx.fillRect(0, 0, this.screenWidth, this.screenHeight);
 
         //畫立方體
         var offsetMatrix = Transform.offset(0, 0, 0);
