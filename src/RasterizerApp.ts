@@ -76,15 +76,15 @@ export default class RasterizerApp {
         var nowDegree = this.sum_t / 1000 * 15 % 360;
         // var nowDegree = 0;
 
-        var rotateMatrix = Transform.rotateByZ(nowDegree);
+        var rotateMatrix = Transform.rotateByY(nowDegree);
         var combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.update(this.camera, combineMatrix);
         this.box.draw(this.ctx);
 
         var offsetMatrix = Transform.offset(150, 0, 0);
-        var rotateMatrix = Transform.rotateByZ(nowDegree);
+        var rotateMatrix = Transform.rotateByY(nowDegree);
         combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
-        this.box.update(this.camera, offsetMatrix);
+        this.box.update(this.camera, combineMatrix);
         this.box.draw(this.ctx);
     }
 
