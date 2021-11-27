@@ -15,30 +15,30 @@ export default class Box {
         this.triangles.push(
             new Triangle(
                 Vertex.build_vertex(new Vector(-10, -10, -10), Vector.uv(0, 0)),
-                Vertex.build_vertex(new Vector(10, -10, 10), Vector.uv(1, 1)),
+                Vertex.build_vertex(new Vector(10, 10, -10), Vector.uv(1, 1)),
                 Vertex.build_vertex(new Vector(10, -10, -10), Vector.uv(1, 0))
             ));
         this.triangles.push(
             new Triangle(
                 Vertex.build_vertex(new Vector(-10, -10, -10), Vector.uv(0, 0)),
-                Vertex.build_vertex(new Vector(-10, -10, 10), Vector.uv(0, 1)),
-                Vertex.build_vertex(new Vector(10, -10, 10), Vector.uv(1, 1))
+                Vertex.build_vertex(new Vector(-10, 10, -10), Vector.uv(0, 1)),
+                Vertex.build_vertex(new Vector(10, 10, -10), Vector.uv(1, 1))
             ));
 
-        let m = [Transform.rotateByZ(90), Transform.rotateByZ(180), Transform.rotateByZ(270), Transform.rotateByX(90), Transform.rotateByX(-90)]
+        let m = [Transform.rotateByY(90), Transform.rotateByY(180), Transform.rotateByY(270), Transform.rotateByX(90), Transform.rotateByX(-90)]
         for (let i = 0; i < m.length; ++i) {
             let rotateMatrix = m[i]
             this.triangles.push(
                 new Triangle(
                     Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, -10)), Vector.uv(0, 0)),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, 10)), Vector.uv(1, 1)),
+                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), Vector.uv(1, 1)),
                     Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, -10)), Vector.uv(1, 0))
                 ));
             this.triangles.push(
                 new Triangle(
                     Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, -10)), Vector.uv(0, 0)),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, 10)), Vector.uv(0, 1)),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, 10)), Vector.uv(1, 1))
+                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, 10, -10)), Vector.uv(0, 1)),
+                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), Vector.uv(1, 1))
                 ));
         }
     }
@@ -48,7 +48,7 @@ export default class Box {
         this.triangles_after_clip = [];
         for (let i = 0; i < this.triangles.length; ++i) {
             let triangle = this.triangles[i];
-            let nearPlaneZ = -1;
+            let nearPlaneZ = 1;
             let v_clip = clip(triangle, nearPlaneZ);
 
             let count = v_clip.length / 3;

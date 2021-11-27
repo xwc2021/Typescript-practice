@@ -21,7 +21,7 @@ export default class Triangle {
         //back face culling
         let v01 = Vector.minus(v1_c, v0_c);
         let v02 = Vector.minus(v2_c, v0_c);
-        let normal = Vector.cross(v02, v01);
+        let normal = Vector.cross(v01, v02);
         normal.normalize();
 
         let center = v0_c.add(v1_c).add(v2_c).multiply(1 / 3);

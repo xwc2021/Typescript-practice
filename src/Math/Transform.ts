@@ -53,6 +53,21 @@ export default class Transform {
         );
     }
 
+    static rotateByY(degree: number) {
+        let radian = degree_to_Rad(degree);
+        let c = Math.cos(radian), s = Math.sin(radian);
+        let zAxis = new Vector(s, 0, c);
+        let xAxis = new Vector(c, 0, -s);
+        let yAxis = new Vector(0, 1, 0);
+
+        return new Transform(
+            xAxis,
+            yAxis,
+            zAxis,
+            Vector.zero,
+        );
+    }
+
     static rotateByX(degree: number) {
         let radian = degree_to_Rad(degree);
         let c = Math.cos(radian), s = Math.sin(radian);
