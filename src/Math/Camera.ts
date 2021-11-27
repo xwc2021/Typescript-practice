@@ -5,6 +5,7 @@ import RenderTarget from "./RenderTarget";
 import HitInfo from "./HitInfo";
 import SceneNode from "../Object/SceneNode";
 import Diffuse from "../Materails/Diffuse";
+import Vertex from "./Vertex";
 
 export default class Camera {
     eye: Vector;
@@ -13,12 +14,31 @@ export default class Camera {
     y_axis: Vector;
     z_axis: Vector;
 
+    ratio: number;
+
+    screenW: number;
+    screenH: number;
+
+    screenCenterX: number;
+    screenCenterY: number;
+    halfW: number;
+    halfH: number;
+
     fov_degree: number;
-    constructor(eye: Vector, look_at: Vector, fov_degree: number) {
+    constructor(eye: Vector, look_at: Vector, fov_degree: number, screenW: number, screenH: number) {
+
+        this.ratio = screenW / screenH;
+        this.screenW = screenW;
+        this.screenH = screenH;
+        this.screenCenterX = this.screenW * 0.5;
+        this.screenCenterY = this.screenH * 0.5;
+        this.halfW = this.screenW * 0.5;
+        this.halfH = this.screenH * 0.5;
 
         // camera 3軸
         this.z_axis = Vector.minus(look_at, eye).normalize();
 
+        // 左手
         let help_v = Vector.up;
         this.x_axis = Vector.cross(help_v, this.z_axis).normalize();
         this.y_axis = Vector.cross(this.z_axis, this.x_axis);
@@ -28,6 +48,18 @@ export default class Camera {
 
         // camera fov
         this.fov_degree = fov_degree;
+    }
+
+    moveEye = function (s: number, A: Vector) {
+        this.eye = Vector.add(this.eye, A.multiply(s));
+    }
+
+    addPitch(degree: number) {
+        // todo: 乘上local matrix
+    }
+
+    addYaw(degree: number) {
+        // todo: 乘上local matrix
     }
 
     create_ray_dir(x_weight: number, y_weight: number, ratio: number) {
@@ -42,6 +74,34 @@ export default class Camera {
         return dir;
     }
 
+    toCameraSpace(A: Vector) {
+        let diff = A.minus(this.eye);
+        let point_in_camera_space = new Vector(Vector.dot(diff, this.x_axis), Vector.dot(diff, this.y_axis), Vector.dot(diff, this.z_axis));
+        return point_in_camera_space;
+    }
+
+    toScreenSpace = function (A: Vector) {
+        let z = -A.z;
+        let fov_rad = degree_to_Rad(this.fov_degree);
+        let half_fov = 0.5 * fov_rad;
+        let y_scale = 1 / Math.tan(half_fov);
+        let x_scale = 1 / (this.ratio * Math.tan(half_fov));
+
+        let NDCx = A.x * x_scale / z;
+        let NDCy = A.y * y_scale / z;
+
+        // 用座標變換來看待從NDC到Screen Space
+        // NDC x軸在screen space 為(w/2,0)
+        // NDC y軸在screen space 為(-h/2,0)
+        let x = this.halfW * NDCx + this.screenCenterX;
+        let y = -this.halfH * NDCy + this.screenCenterY;
+
+        let temp = new Vector(x, y, z);
+        //alert(temp.toString());
+        return temp;
+    }
+
+    // 算圖
     render(render_target: RenderTarget, obj_list: SceneNode[]) {
         let direction_light_dir = new Vector(1, -1, 0).normalize();
 

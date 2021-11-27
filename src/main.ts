@@ -1,3 +1,5 @@
-import App from './App';
+// import App from './App';
+// new App();
 
-new App();
+import RasterizerApp from './RasterizerApp';
+new RasterizerApp();

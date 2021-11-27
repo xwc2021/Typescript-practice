@@ -3,6 +3,10 @@ import { number_equal } from './Tool'
 
 export default class Vector {
 
+    static uv(u: number, v: number) {
+        return new Vector(u, v, 0);
+    }
+
     static up = new Vector(0, 1, 0);
     static zero = new Vector(0, 0, 0);
 
@@ -12,17 +16,17 @@ export default class Vector {
     }
 
     static add(A: Vector, B: Vector) {
-        var temp = new Vector(B.x + A.x, B.y + A.y, B.z + A.z);
+        let temp = new Vector(B.x + A.x, B.y + A.y, B.z + A.z);
         return temp
     }
 
     static minus(A: Vector, B: Vector) {
-        var temp = new Vector(A.x - B.x, A.y - B.y, A.z - B.z);
+        let temp = new Vector(A.x - B.x, A.y - B.y, A.z - B.z);
         return temp
     }
 
     static multiply(A: Vector, s: number) {
-        var temp = new Vector(A.x * s, A.y * s, A.z * s);
+        let temp = new Vector(A.x * s, A.y * s, A.z * s);
         return temp
     }
 
@@ -31,7 +35,7 @@ export default class Vector {
     }
 
     static cross(A: Vector, B: Vector) {
-        var temp = new Vector(A.y * B.z - A.z * B.y, -A.x * B.z + A.z * B.x, A.x * B.y - A.y * B.x);
+        let temp = new Vector(A.y * B.z - A.z * B.y, -A.x * B.z + A.z * B.x, A.x * B.y - A.y * B.x);
         return temp;
     }
 
@@ -57,7 +61,7 @@ export default class Vector {
     }
 
     normalize() {
-        var temp = this.length();
+        let temp = this.length();
         this.x = this.x / temp;
         this.y = this.y / temp;
         this.z = this.z / temp;

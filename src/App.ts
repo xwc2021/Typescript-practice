@@ -22,10 +22,10 @@ export default class App {
         obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(12, 4, -6), 4)));
         obj_list.push(new SceneNode(new Mirror(), new Sphere(new Vector(8, 4, 2), 4)));
 
-        let camera = new Camera(new Vector(0, 20, -20), Vector.zero, 60);
-        // let render_target = new RenderTarget(4096, 2160);
-        // let render_target = new RenderTarget(1920, 1080);
-        let render_target = new RenderTarget(800, 600);
+        let SW = 800;
+        let SH = 600;
+        let camera = new Camera(new Vector(0, 20, -20), Vector.zero, 60, SW, SH);
+        let render_target = new RenderTarget(SW, SH);
         camera.render(render_target, obj_list);
         render_target.show_buffer('canvas');
     }
