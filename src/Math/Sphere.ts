@@ -47,7 +47,7 @@ export default class Sphere implements Hitable {
         else if (k > 0) { // 交於2點
 
             // 過濾出t>0
-            // ray.from在球內球有可能出現t<0
+            // ray.from在球內有可能出現t<0
             // 球在ray的後面也可能出現t<0
             let sqrt_k = Math.sqrt(k);
             let t_list = [(-b - sqrt_k) / (2 * a), (-b + sqrt_k) / (2 * a)].filter(x => x > 0);
