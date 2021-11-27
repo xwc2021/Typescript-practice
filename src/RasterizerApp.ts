@@ -23,7 +23,7 @@ export default class RasterizerApp {
         window.onload = () => {
             this.init();
         };
-        document.onkeydown = this.keyProc;
+        document.onkeydown = this.keyProc.bind(this);
     }
 
     init() {
@@ -35,7 +35,7 @@ export default class RasterizerApp {
         this.ctx = canvas.getContext('2d');
 
         this.box = new Box();
-        this.camera = new Camera(new Vector(0, 250, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight);
+        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight);
         this.start();
     }
 
