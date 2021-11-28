@@ -2,6 +2,17 @@ import { lerp, number_equal } from './Tool'
 
 export default class Vector {
 
+    static calculate_normal(v0: Vector, v1: Vector, v2: Vector) {
+        let v01 = Vector.minus(v1, v0);
+        let v02 = Vector.minus(v2, v0);
+        let normal = Vector.cross(v01, v02);
+        return normal.normalize();
+    }
+
+    static calculate_center(v0: Vector, v1: Vector, v2: Vector) {
+        return v0.add(v1).add(v2).multiply(1 / 3);
+    }
+
     static uv(u: number, v: number) {
         return new Vector(u, v, 0);
     }

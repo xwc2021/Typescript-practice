@@ -39,4 +39,9 @@ export default class Vertex {
         this.p = p;
         return this;
     }
+
+    update_w(w: number) {
+        this.w = w;
+        return this;
+    }
 }

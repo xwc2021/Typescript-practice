@@ -6,8 +6,7 @@ import Camera from './Camera';
 
 export default class Triangle {
 
-    static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform) {
-
+    static MVP_backface_culling_clipping(triangle: Triangle, pcamera: Camera, worldTransform: Transform) {
         // to world space
         let v0_w = Transform.transformPoint(worldTransform, triangle.v0.p);
         let v1_w = Transform.transformPoint(worldTransform, triangle.v1.p);
@@ -18,36 +17,73 @@ export default class Triangle {
         let v1_c = pcamera.toCameraSpace(v1_w);
         let v2_c = pcamera.toCameraSpace(v2_w);
 
-        //back face culling
-        let v01 = Vector.minus(v1_c, v0_c);
-        let v02 = Vector.minus(v2_c, v0_c);
-        let normal = Vector.cross(v01, v02);
-        normal.normalize();
+        let v0_p = pcamera.toProjectionSpace(v0_c);
+        let v1_p = pcamera.toProjectionSpace(v1_c);
+        let v2_p = pcamera.toProjectionSpace(v2_c);
 
-        let center = v0_c.add(v1_c).add(v2_c).multiply(1 / 3);
-        let center_to_eye = Vector.minus(Vector.zero, center);
-        center_to_eye.normalize();
+        // back face culling
+        let normal = Vector.calculate_normal(v0_p, v1_p, v2_p);
+        let center_to_eye = Vector.minus(Vector.zero, Vector.calculate_center(v0_p, v1_p, v2_p)).normalize();
         let cos_value = Vector.dot(normal, center_to_eye);;
         if (cos_value <= 0) {
-            return null;
+            return [];
         }
 
         // 重新綁定uv
+        let v0 = triangle.v0.clone().update_p(v0_p).update_w(v0_c.z);
+        let v1 = triangle.v1.clone().update_p(v1_p).update_w(v1_c.z);
+        let v2 = triangle.v2.clone().update_p(v2_p).update_w(v2_c.z);
 
-        let v0 = triangle.v0.clone().update_p(v0_c);
-        let v1 = triangle.v1.clone().update_p(v1_c);
-        let v2 = triangle.v2.clone().update_p(v2_c);
+        // 執行三角形裁切
+        return Triangle.clip_in_Projection_Space(v0, v1, v2);
+    }
 
-        //do only nearPlane clip
-        let nearPlaneZ = 1;
-        let v_clip = clip(new Triangle(v0, v1, v2), nearPlaneZ);
+    static clip_in_Projection_Space(v0: Vertex, v1: Vertex, v2: Vertex) {
+        // Todo:執行三角形裁切
+        // 和y軸夾45度的2個平面、和x軸夾45度的2個平面
+        return [new Triangle(v0, v1, v2)];
+    }
 
-        // to screen space
-        let v_s: Vector[] = [];
-        for (let i = 0; i < v_clip.length; ++i) {
-            v_s[i] = pcamera.toScreenSpace(v_clip[i].p);
+    static clip_in_NDC(v0: Vector, v1: Vector, v2: Vector) {
+        // Todo:NDC裁切(可能產生多個)
+        return [[v0, v1, v2]];
+    }
+
+    static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform) {
+
+        // to MVP
+        let triangle_list = Triangle.MVP_backface_culling_clipping(triangle, pcamera, worldTransform);
+
+        // to NDC
+        for (let T of triangle_list) {
+            let v0_ndc = pcamera.toNDC(T.v0.p);
+            let v1_ndc = pcamera.toNDC(T.v1.p);
+            let v2_ndc = pcamera.toNDC(T.v2.p);
+
+            // 執行三角形裁切 
+            let parts = Triangle.clip_in_NDC(v0_ndc, v1_ndc, v2_ndc);
+            for (let part of parts) {
+
+                // 對每個part 
+                // to screen space
+
+                let v0_s = pcamera.toScreenSpace(part[0]);
+                let v1_s = pcamera.toScreenSpace(part[1]);
+                let v2_s = pcamera.toScreenSpace(part[2]);
+
+                // 為了和本來的code相容，暫時先傳出去
+                return [v0_s, v1_s, v2_s];
+
+                // 找出包圍的矩形
+
+                // 對矩形裡的每個點p
+                // 判定是否位在screen space三角形
+                // if yes 
+                // (1)重新把點p映射到NDC,
+                // (2)在NDC進行內插，乘上w回到projection space
+                // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
+            }
         }
-        return v_s;
     }
 
     v0: Vertex;

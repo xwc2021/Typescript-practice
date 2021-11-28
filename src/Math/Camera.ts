@@ -24,8 +24,15 @@ export default class Camera {
     halfW: number;
     halfH: number;
 
+    // 視錐的 近平面和遠平面
+    // a、b和投影矩陣有關
+    N: number;
+    F: number;
+    a: number;
+    b: number;
+
     fov_degree: number;
-    constructor(eye: Vector, look_at: Vector, fov_degree: number, screenW: number, screenH: number) {
+    constructor(eye: Vector, look_at: Vector, fov_degree: number, screenW: number, screenH: number, N: number, F: number) {
 
         this.ratio = screenW / screenH;
         this.screenW = screenW;
@@ -48,6 +55,15 @@ export default class Camera {
 
         // camera fov
         this.fov_degree = fov_degree;
+
+        // 視錐的 近平面和遠平面
+        this.N = N;
+        this.F = F;
+
+        // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
+        // 投影矩陣對z的修正，這裡使用左手
+        this.a = F / (F - N);
+        this.b = -N * F / (F - N);
     }
 
     moveEye = function (s: number, A: Vector) {
@@ -80,24 +96,28 @@ export default class Camera {
         return point_in_camera_space;
     }
 
-    toScreenSpace = function (A: Vector) {
-        let z = A.z;
+    toProjectionSpace(A: Vector) {
         let fov_rad = degree_to_Rad(this.fov_degree);
         let half_fov = 0.5 * fov_rad;
         let y_scale = 1 / Math.tan(half_fov);
         let x_scale = 1 / (this.ratio * Math.tan(half_fov));
 
-        let NDCx = A.x * x_scale / z;
-        let NDCy = A.y * y_scale / z;
+        return new Vector(A.x * x_scale, A.y * y_scale, A.z * this.a + this.b);
+    }
 
+    toNDC(A: Vector) {
+        let s = 1 / A.z;
+        return A.multiply(s);
+    }
+
+    toScreenSpace(NDC_A: Vector) {
         // 用座標變換來看待從NDC到Screen Space
         // NDC x軸在screen space 為(w/2,0)
         // NDC y軸在screen space 為(-h/2,0)
-        let x = this.halfW * NDCx + this.screenCenterX;
-        let y = -this.halfH * NDCy + this.screenCenterY;
+        let x = this.halfW * NDC_A.x + this.screenCenterX;
+        let y = -this.halfH * NDC_A.y + this.screenCenterY;
 
-        let temp = new Vector(x, y, z);
-        //alert(temp.toString());
+        let temp = new Vector(x, y, NDC_A.z);
         return temp;
     }
 
