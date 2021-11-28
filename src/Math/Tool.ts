@@ -64,16 +64,8 @@ export function clip(triangle: Triangle, nearPlaneZ: number) {
         let pv0 = v0.p;
         let pv1 = v1.p;
         let t = (pz - pv0.z) / (pv1.z - pv0.z);
-        let x = lerp(pv0.x, pv1.x, t);
-        let y = lerp(pv0.y, pv1.y, t);
 
-        // uv也要插值
-        let uv0 = v0.uv;
-        let uv1 = v1.uv;
-        let u = lerp(uv0.x, uv1.x, t);
-        let v = lerp(uv0.y, uv1.y, t);
-
-        return new Vertex(x, y, pz, u, v);
+        return Vertex.lerp(v0, v1, t);
     }
 
     //pvo in 
@@ -95,7 +87,7 @@ export function clip(triangle: Triangle, nearPlaneZ: number) {
         v_clip[1] = cross1;
         v_clip[2] = cross2;
 
-        v_clip[3] = pv2.copy();
+        v_clip[3] = pv2;
         v_clip[4] = cross2;
         v_clip[5] = pv1;
     }

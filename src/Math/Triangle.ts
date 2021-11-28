@@ -33,13 +33,14 @@ export default class Triangle {
         }
 
         // 重新綁定uv
-        let v0_c_uv = Vertex.build_vertex(v0_c, triangle.v0.uv);
-        let v1_c_uv = Vertex.build_vertex(v1_c, triangle.v1.uv);
-        let v2_c_uv = Vertex.build_vertex(v2_c, triangle.v2.uv);
+
+        let v0 = triangle.v0.clone().update_p(v0_c);
+        let v1 = triangle.v1.clone().update_p(v1_c);
+        let v2 = triangle.v2.clone().update_p(v2_c);
 
         //do only nearPlane clip
         let nearPlaneZ = 1;
-        let v_clip = clip(new Triangle(v0_c_uv, v1_c_uv, v2_c_uv), nearPlaneZ);
+        let v_clip = clip(new Triangle(v0, v1, v2), nearPlaneZ);
 
         // to screen space
         let v_s: Vector[] = [];

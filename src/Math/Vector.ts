@@ -1,5 +1,4 @@
-import { number_equal } from './Tool'
-
+import { lerp, number_equal } from './Tool'
 
 export default class Vector {
 
@@ -45,6 +44,13 @@ export default class Vector {
 
     static equal(A: Vector, B: Vector) {
         return number_equal(A.x, B.x) && number_equal(A.y, B.y) && number_equal(A.z, B.z);
+    }
+
+    static lerp(A: Vector, B: Vector, t: number) {
+        return new Vector(
+            lerp(A.x, B.x, t),
+            lerp(A.y, B.y, t),
+            lerp(A.z, B.z, t));
     }
 
     x: number = 0;
