@@ -47,6 +47,7 @@ export default class Box {
 
     update(camera: Camera, worldTransform: Transform) {
 
+        // 測試裁切三角形的code
         // this.triangles_after_clip = [];
         // for (let i = 0; i < this.triangles.length; ++i) {
         //     let triangle = this.triangles[i];

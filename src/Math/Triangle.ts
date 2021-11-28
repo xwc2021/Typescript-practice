@@ -41,6 +41,7 @@ export default class Triangle {
     static clip_in_Projection_Space(v0: Vertex, v1: Vertex, v2: Vertex) {
         // Todo:執行三角形裁切
         // 和y軸夾45度的2個平面、和x軸夾45度的2個平面
+        // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
         return [new Triangle(v0, v1, v2)];
     }
 
@@ -66,7 +67,6 @@ export default class Triangle {
 
                 // 對每個part 
                 // to screen space
-
                 let v0_s = pcamera.toScreenSpace(part[0]);
                 let v1_s = pcamera.toScreenSpace(part[1]);
                 let v2_s = pcamera.toScreenSpace(part[2]);
