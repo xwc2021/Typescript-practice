@@ -4,6 +4,7 @@ import HitInfo from "./HitInfo";
 import Vector from "./Vector";
 import Triangle from "./Triangle";
 import Vertex from "./Vertex";
+import Plane from "./Plane";
 
 export function degree_to_Rad(d: number) {
     return Math.PI * d / 180;
@@ -55,50 +56,47 @@ export function lerp(a: number, b: number, t: number) {
     return a + t * (b - a);
 }
 
-export function clip(triangle: Triangle, nearPlaneZ: number) {
+export function clip(triangle: Triangle,
+    v0_out: (triangle: Triangle) => boolean,
+    v1_out: (triangle: Triangle) => boolean,
+    v2_out: (triangle: Triangle) => boolean,
+    plane: Plane) {
 
-    let v_clip: Vertex[] = [];
+    let v_clip: Triangle[] = [];
 
-    let getCrossPoint = function (v0: Vertex, v1: Vertex, pz: number) {
-
-        let pv0 = v0.p;
-        let pv1 = v1.p;
-        let t = (pz - pv0.z) / (pv1.z - pv0.z);
-
+    let getCrossPoint = function (v0: Vertex, v1: Vertex) {
+        let dir = Vector.minus(v1.p, v0.p);
+        let ray = new Ray(v0.p, dir);
+        let result = Plane.hit(ray, plane);
+        let t = Vector.minus(result.hit_pos, v0.p).length() / dir.length();
         return Vertex.lerp(v0, v1, t);
     }
 
-    //pvo in 
-    let clip_first_in = function (pv0: Vertex, pv1: Vertex, pv2: Vertex) {
-        // 1 triangle 1 one triangle
-        v_clip[0] = pv0;
-        v_clip[1] = getCrossPoint(pv0, pv1, nearPlaneZ);
-        v_clip[2] = getCrossPoint(pv0, pv2, nearPlaneZ);
+    // vo in 
+    let clip_first_in = function (v0: Vertex, v1: Vertex, v2: Vertex) {
+        // 1 triangle to 1 triangle
+        // console.log('one');
+        v_clip[0] = new Triangle(v0, getCrossPoint(v0, v1), getCrossPoint(v0, v2))
     }
 
-    //pvo out
-    let clip_first_out = function (pv0: Vertex, pv1: Vertex, pv2: Vertex) {
-
+    // vo out
+    let clip_first_out = function (v0: Vertex, v1: Vertex, v2: Vertex) {
+        // console.log('tow');
         // 1 triangle to 2 triangle
-        let cross1 = getCrossPoint(pv2, pv0, nearPlaneZ);
-        let cross2 = getCrossPoint(pv0, pv1, nearPlaneZ);
+        let cross1 = getCrossPoint(v2, v0);
+        let cross2 = getCrossPoint(v0, v1);
 
-        v_clip[0] = pv2;
-        v_clip[1] = cross1;
-        v_clip[2] = cross2;
-
-        v_clip[3] = pv2;
-        v_clip[4] = cross2;
-        v_clip[5] = pv1;
+        v_clip[0] = new Triangle(v2, cross1, cross2);
+        v_clip[1] = new Triangle(v2, cross2, v1);
     }
 
 
     // 有8種情況
-    if (triangle.v0.p.z < nearPlaneZ)//out
+    if (v0_out(triangle)/*triangle.v0.p.z < nearPlaneZ*/)//out
     {
-        if (triangle.v1.p.z < nearPlaneZ) //out out
+        if (v1_out(triangle) /* triangle.v1.p.z < nearPlaneZ */)// out out
         {
-            if (triangle.v2.p.z < nearPlaneZ)//full out of nearPlaneZ (no clip)
+            if (v2_out(triangle) /*triangle.v2.p.z < nearPlaneZ*/)//full out of nearPlaneZ (no clip)
             {
                 // console.log('full out');
             }
@@ -107,7 +105,7 @@ export function clip(triangle: Triangle, nearPlaneZ: number) {
         }
         else //out in 
         {
-            if (triangle.v2.p.z < nearPlaneZ)//out in out
+            if (v2_out(triangle) /*triangle.v2.p.z < nearPlaneZ*/)//out in out
                 clip_first_in(triangle.v1, triangle.v2, triangle.v0);
             else // out in in
                 clip_first_out(triangle.v0, triangle.v1, triangle.v2);
@@ -115,25 +113,22 @@ export function clip(triangle: Triangle, nearPlaneZ: number) {
     }
     else // in
     {
-        if (triangle.v1.p.z < nearPlaneZ)// in out 
+        if (v1_out(triangle) /*triangle.v1.p.z < nearPlaneZ*/)// in out 
         {
-            if (triangle.v2.p.z < nearPlaneZ)// in out out
+            if (v2_out(triangle) /*triangle.v2.p.z < nearPlaneZ*/)// in out out
                 clip_first_in(triangle.v0, triangle.v1, triangle.v2);
             else // in out in
                 clip_first_out(triangle.v1, triangle.v2, triangle.v0);
         }
         else // in in
         {
-            if (triangle.v2.p.z < nearPlaneZ)// in in out
+            if (v2_out(triangle) /*triangle.v2.p.z < nearPlaneZ*/)// in in out
                 clip_first_out(triangle.v2, triangle.v0, triangle.v1);
             else // in in in (no clip)
             {
-                v_clip[0] = triangle.v0;
-                v_clip[1] = triangle.v1;
-                v_clip[2] = triangle.v2;
+                v_clip[0] = triangle;
             }
         }
     }
-
     return v_clip;
 }

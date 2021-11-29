@@ -23,6 +23,13 @@ export default class Plane implements Hitable {
     }
 
     hit(ray: Ray, s: Shader): HitInfo {
+        let result = Plane.hit(ray, this);
+        if (result.is_hit)
+            result.s = s;
+        return result;
+    }
+
+    static hit(ray: Ray, plane: Plane): HitInfo {
         // ray hit plane 
         let from = ray.from;
         let dir = ray.dir;
@@ -30,8 +37,8 @@ export default class Plane implements Hitable {
         // (F-C)。N + t (D。N) = 0
         // t  = (C-F)。N / (D。N)
         // t  = (A / (B)
-        let B = Vector.dot(dir, this.N);
-        let A = Vector.dot(Vector.minus(this.C, from), this.N);
+        let B = Vector.dot(dir, plane.N);
+        let A = Vector.dot(Vector.minus(plane.C, from), plane.N);
 
         // avoid divide by 0
         if (number_equal(B, 0))
@@ -45,8 +52,7 @@ export default class Plane implements Hitable {
             hit_pos,
             i: dir,
             t,
-            normal: this.N,
-            s
+            normal: plane.N
         }
     }
 }

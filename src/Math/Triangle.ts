@@ -3,6 +3,7 @@ import Vector from './Vector'
 import Vertex from './Vertex'
 import { clip } from './Tool';
 import Camera from './Camera';
+import Plane from './Plane';
 
 export default class Triangle {
 
@@ -35,14 +36,26 @@ export default class Triangle {
         let v2 = triangle.v2.clone().update_p(v2_p).update_w(v2_c.z);
 
         // 執行三角形裁切
-        return Triangle.clip_in_Projection_Space(v0, v1, v2);
+        return Triangle.clip_in_Projection_Space(v0, v1, v2, pcamera);
     }
 
-    static clip_in_Projection_Space(v0: Vertex, v1: Vertex, v2: Vertex) {
+    static clip_in_Projection_Space(v0: Vertex, v1: Vertex, v2: Vertex, pcamera: Camera) {
         // Todo:執行6個平面的三角形裁切
         // 和y軸夾45度的2個平面、和x軸夾45度的2個平面、還有Nc和Fc
         // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
-        return [new Triangle(v0, v1, v2)];
+        // let result = clip(new Triangle(v0, v1, v2),
+        //     (T: Triangle) => { return T.v0.p.z < 50; },
+        //     (T: Triangle) => { return T.v1.p.z < 50; },
+        //     (T: Triangle) => { return T.v2.p.z < 50; },
+        //     new Plane(new Vector(0, 0, 50), new Vector(0, 0, 1)));
+
+        let result = clip(new Triangle(v0, v1, v2),
+            (T: Triangle) => { return T.v0.p.x < 0; },
+            (T: Triangle) => { return T.v1.p.x < 0; },
+            (T: Triangle) => { return T.v2.p.x < 0; },
+            new Plane(new Vector(0, 0, 0), new Vector(1, 0, 0)));
+
+        return result;
     }
 
     static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform) {
@@ -50,6 +63,7 @@ export default class Triangle {
         // to MVP
         let triangle_list = Triangle.MVP_backface_culling_clipping(triangle, pcamera, worldTransform);
 
+        let list = [];
         // to NDC
         for (let T of triangle_list) {
             let v0 = pcamera.toNDC(T.v0.p);
@@ -62,7 +76,9 @@ export default class Triangle {
             let v2_s = pcamera.toScreenSpace(v2);
 
             // 為了和本來的code相容，暫時先傳出去
-            return [v0_s, v1_s, v2_s];
+            list.push(v0_s);
+            list.push(v1_s);
+            list.push(v2_s);
 
             // 找出包圍的矩形
 
@@ -74,6 +90,7 @@ export default class Triangle {
             // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
 
         }
+        return list;
     }
 
     v0: Vertex;
