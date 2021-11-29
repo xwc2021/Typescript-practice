@@ -31,6 +31,10 @@ export default class Camera {
     a: number;
     b: number;
 
+    // in clip space (before /w space)
+    Nc: number;
+    Fc: number;
+
     fov_degree: number;
     constructor(eye: Vector, look_at: Vector, fov_degree: number, screenW: number, screenH: number, N: number, F: number) {
 
@@ -64,6 +68,10 @@ export default class Camera {
         // 投影矩陣對z的修正，這裡使用左手
         this.a = F / (F - N);
         this.b = -N * F / (F - N);
+
+        // 我們不是Opengl或Directx，所以可以把Nc、Fc算出來
+        this.Nc = N * this.a + this.b;
+        this.Fc = F * this.a + this.b;
     }
 
     moveEye = function (s: number, A: Vector) {
