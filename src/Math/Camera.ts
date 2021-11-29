@@ -72,6 +72,9 @@ export default class Camera {
         // 我們不是Opengl或Directx，所以可以把Nc、Fc算出來
         this.Nc = N * this.a + this.b;
         this.Fc = F * this.a + this.b;
+
+        console.log(this.a, this.b);
+        console.log(this.Nc, this.Fc);
     }
 
     moveEye = function (s: number, A: Vector) {
@@ -113,8 +116,8 @@ export default class Camera {
         return new Vector(A.x * x_scale, A.y * y_scale, A.z * this.a + this.b);
     }
 
-    toNDC(A: Vector) {
-        let s = 1 / A.z;
+    toNDC(A: Vector, w: number) {
+        let s = 1 / w;
         return A.multiply(s);
     }
 

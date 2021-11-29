@@ -22,11 +22,13 @@ export default class Triangle {
         let v1_p = pcamera.toProjectionSpace(v1_c);
         let v2_p = pcamera.toProjectionSpace(v2_c);
 
-        // back face culling
-        let normal = Vector.calculate_normal(v0_p, v1_p, v2_p);
-        let center_to_eye = Vector.minus(Vector.zero, Vector.calculate_center(v0_p, v1_p, v2_p)).normalize();
+        // back face culling 
+        // 在view space做，不然在clip space做，還要把z用w取代掉，有點搞工
+        let normal = Vector.calculate_normal(v0_c, v1_c, v2_c);
+        let center_to_eye = Vector.minus(Vector.zero, Vector.calculate_center(v0_c, v1_c, v2_c)).normalize();
         let cos_value = Vector.dot(normal, center_to_eye);;
         if (cos_value <= 0) {
+            console.log('culling')
             return [];
         }
 
@@ -36,26 +38,63 @@ export default class Triangle {
         let v2 = triangle.v2.clone().update_p(v2_p).update_w(v2_c.z);
 
         // 執行三角形裁切
+
+
+        // console.log(v0.p.z);
         return Triangle.clip_in_Projection_Space(v0, v1, v2, pcamera);
+    }
+
+    static clip(in_list: Triangle[],
+        v0_out: (triangle: Triangle) => boolean,
+        v1_out: (triangle: Triangle) => boolean,
+        v2_out: (triangle: Triangle) => boolean,
+        plane: Plane) {
+
+        let out_list: Triangle[] = [];
+        for (let T of in_list) {
+            let result = clip(T, v0_out, v1_out, v2_out, plane);
+            for (let t of result)
+                out_list.push(t);
+        }
+        return out_list;
     }
 
     static clip_in_Projection_Space(v0: Vertex, v1: Vertex, v2: Vertex, pcamera: Camera) {
         // Todo:執行6個平面的三角形裁切
         // 和y軸夾45度的2個平面、和x軸夾45度的2個平面、還有Nc和Fc
         // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
-        // let result = clip(new Triangle(v0, v1, v2),
+
+
+        let in_list = [new Triangle(v0, v1, v2)];
+
+        // test
+
+        // let out_list = Triangle.clip(in_list,
         //     (T: Triangle) => { return T.v0.p.z < 50; },
         //     (T: Triangle) => { return T.v1.p.z < 50; },
         //     (T: Triangle) => { return T.v2.p.z < 50; },
-        //     new Plane(new Vector(0, 0, 50), new Vector(0, 0, 1)));
+        //     new Plane(new Vector(0, 0, 50), new Vector(0, 0, -1)));
 
-        let result = clip(new Triangle(v0, v1, v2),
-            (T: Triangle) => { return T.v0.p.x < 0; },
-            (T: Triangle) => { return T.v1.p.x < 0; },
-            (T: Triangle) => { return T.v2.p.x < 0; },
-            new Plane(new Vector(0, 0, 0), new Vector(1, 0, 0)));
+        // out_list = Triangle.clip(out_list,
+        //     (T: Triangle) => { return T.v0.p.z > 60; },
+        //     (T: Triangle) => { return T.v1.p.z > 60; },
+        //     (T: Triangle) => { return T.v2.p.z > 60; },
+        //     new Plane(new Vector(0, 0, 60), new Vector(0, 0, -1)));
 
-        return result;
+
+        let out_list = Triangle.clip(in_list,
+            (T: Triangle) => { return T.v0.p.z < pcamera.Nc; },
+            (T: Triangle) => { return T.v1.p.z < pcamera.Nc; },
+            (T: Triangle) => { return T.v2.p.z < pcamera.Nc; },
+            new Plane(new Vector(0, 0, pcamera.Nc), new Vector(0, 0, -1)));
+
+        out_list = Triangle.clip(out_list,
+            (T: Triangle) => { return T.v0.p.z > pcamera.Fc; },
+            (T: Triangle) => { return T.v1.p.z > pcamera.Fc; },
+            (T: Triangle) => { return T.v2.p.z > pcamera.Fc; },
+            new Plane(new Vector(0, 0, pcamera.Fc), new Vector(0, 0, -1)));
+
+        return out_list;
     }
 
     static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform) {
@@ -66,9 +105,9 @@ export default class Triangle {
         let list = [];
         // to NDC
         for (let T of triangle_list) {
-            let v0 = pcamera.toNDC(T.v0.p);
-            let v1 = pcamera.toNDC(T.v1.p);
-            let v2 = pcamera.toNDC(T.v2.p);
+            let v0 = pcamera.toNDC(T.v0.p, T.v0.w);
+            let v1 = pcamera.toNDC(T.v1.p, T.v1.w);
+            let v2 = pcamera.toNDC(T.v2.p, T.v2.w);
 
             // to screen space
             let v0_s = pcamera.toScreenSpace(v0);
