@@ -39,15 +39,10 @@ export default class Triangle {
     }
 
     static clip_in_Projection_Space(v0: Vertex, v1: Vertex, v2: Vertex) {
-        // Todo:執行三角形裁切
+        // Todo:執行三角形裁切6個平面
         // 和y軸夾45度的2個平面、和x軸夾45度的2個平面
         // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
         return [new Triangle(v0, v1, v2)];
-    }
-
-    static clip_in_NDC(v0: Vector, v1: Vector, v2: Vector) {
-        // Todo:NDC裁切(可能產生多個)
-        return [[v0, v1, v2]];
     }
 
     static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform) {
@@ -57,32 +52,27 @@ export default class Triangle {
 
         // to NDC
         for (let T of triangle_list) {
-            let v0_ndc = pcamera.toNDC(T.v0.p);
-            let v1_ndc = pcamera.toNDC(T.v1.p);
-            let v2_ndc = pcamera.toNDC(T.v2.p);
+            let v0 = pcamera.toNDC(T.v0.p);
+            let v1 = pcamera.toNDC(T.v1.p);
+            let v2 = pcamera.toNDC(T.v2.p);
 
-            // 執行三角形裁切 
-            let parts = Triangle.clip_in_NDC(v0_ndc, v1_ndc, v2_ndc);
-            for (let part of parts) {
+            // 對每個part 
+            // to screen space
+            let v0_s = pcamera.toScreenSpace(v0);
+            let v1_s = pcamera.toScreenSpace(v1);
+            let v2_s = pcamera.toScreenSpace(v2);
 
-                // 對每個part 
-                // to screen space
-                let v0_s = pcamera.toScreenSpace(part[0]);
-                let v1_s = pcamera.toScreenSpace(part[1]);
-                let v2_s = pcamera.toScreenSpace(part[2]);
+            // 為了和本來的code相容，暫時先傳出去
+            return [v0_s, v1_s, v2_s];
 
-                // 為了和本來的code相容，暫時先傳出去
-                return [v0_s, v1_s, v2_s];
+            // 找出包圍的矩形
 
-                // 找出包圍的矩形
-
-                // 對矩形裡的每個點p
-                // 判定是否位在screen space三角形
-                // if yes 
-                // (1)重新把點p映射到NDC,
-                // (2)在NDC進行內插，乘上w回到projection space
-                // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
-            }
+            // 對矩形裡的每個點p
+            // 判定是否位在screen space三角形
+            // if yes 
+            // (1)重新把點p映射到NDC,
+            // (2)在NDC進行內插，乘上w回到projection space
+            // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
         }
     }
 
