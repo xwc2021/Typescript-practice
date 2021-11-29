@@ -35,7 +35,7 @@ export default class RasterizerApp {
         this.ctx = canvas.getContext('2d');
 
         this.box = new Box();
-        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 100, 500);
+        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 50, 500);
         this.start();
     }
 

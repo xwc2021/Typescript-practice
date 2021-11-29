@@ -23,12 +23,18 @@ export default class Triangle {
         let v2_p = pcamera.toProjectionSpace(v2_c);
 
         // back face culling 
+        // let v0_test = new Vector(v0_p.x, v0_p.y, v0_c.z);
+        // let v1_test = new Vector(v1_p.x, v1_p.y, v1_c.z);
+        // let v2_test = new Vector(v2_p.x, v2_p.y, v2_c.z);
+        // let normal = Vector.calculate_normal(v0_test, v1_test, v2_test);
+        // let center_to_eye = Vector.minus(Vector.zero, Vector.calculate_center(v0_test, v1_test, v2_test)).normalize();
+
         // 在view space做，不然在clip space做，還要把z用w取代掉，有點搞工
         let normal = Vector.calculate_normal(v0_c, v1_c, v2_c);
         let center_to_eye = Vector.minus(Vector.zero, Vector.calculate_center(v0_c, v1_c, v2_c)).normalize();
         let cos_value = Vector.dot(normal, center_to_eye);;
         if (cos_value <= 0) {
-            console.log('culling')
+            // console.log('culling')
             return [];
         }
 
