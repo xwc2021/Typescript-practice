@@ -68,7 +68,9 @@ export function clip(triangle: Triangle,
         let dir = Vector.minus(v1.p, v0.p);
         let ray = new Ray(v0.p, dir);
         let result = Plane.hit(ray, plane);
-        let t = Vector.minus(result.hit_pos, v0.p).length() / dir.length();
+        // let t = Vector.minus(result.hit_pos, v0.p).length() / dir.length();
+
+        let t = (result.hit_pos.z - v0.p.z) / (dir.z);
         return Vertex.lerp(v0, v1, t);
     }
 
