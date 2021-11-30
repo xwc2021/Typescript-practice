@@ -5,6 +5,7 @@ import Vector from "./Math/Vector";
 import RenderTarget from './Math/RenderTarget';
 import Buffer2D from "./Math/Buffer2D";
 import RGBA from "./Math/RGBA";
+import Rasterizer from "./Math/Rasterizer";
 
 export default class RasterizerApp {
 
@@ -21,8 +22,6 @@ export default class RasterizerApp {
     sum_t: number;
     ctx: CanvasRenderingContext2D;
     render_target: RenderTarget;
-    color_buffer: Buffer2D<RGBA>;
-    z_buffer: Buffer2D<number>;
 
     constructor() {
 
@@ -33,7 +32,8 @@ export default class RasterizerApp {
     }
 
     init() {
-        this.color_buffer = new Buffer2D<RGBA>(this.screenWidth, this.screenHeight);
+        Rasterizer.color_buffer = new Buffer2D<RGBA>(this.screenWidth, this.screenHeight);
+        Rasterizer.z_buffer = new Buffer2D<number>(this.screenWidth, this.screenHeight);
         this.render_target = new RenderTarget(this.screenWidth, this.screenHeight);
 
         let canvas = document.getElementById('canvas') as HTMLCanvasElement;
