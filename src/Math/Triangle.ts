@@ -1,7 +1,7 @@
 import Transform from './Transform';
 import Vector from './Vector'
 import Vertex from './Vertex'
-import { clip } from './Tool';
+import { ClipPlane, clip } from './Tool';
 import Camera from './Camera';
 import Plane from './Plane';
 
@@ -18,6 +18,7 @@ export default class Triangle {
         let v1_c = pcamera.toCameraSpace(v1_w);
         let v2_c = pcamera.toCameraSpace(v2_w);
 
+        // to projection space (clip space)
         let v0_p = pcamera.toProjectionSpace(v0_c);
         let v1_p = pcamera.toProjectionSpace(v1_c);
         let v2_p = pcamera.toProjectionSpace(v2_c);
@@ -50,11 +51,11 @@ export default class Triangle {
         return Triangle.clip_in_Projection_Space(v0, v1, v2, pcamera);
     }
 
-    static clip(in_list: Triangle[],
+    static clip_helper(in_list: Triangle[],
         v0_out: (triangle: Triangle) => boolean,
         v1_out: (triangle: Triangle) => boolean,
         v2_out: (triangle: Triangle) => boolean,
-        plane: Plane) {
+        plane: ClipPlane) {
 
         let out_list: Triangle[] = [];
         for (let T of in_list) {
@@ -73,32 +74,19 @@ export default class Triangle {
 
         let in_list = [new Triangle(v0, v1, v2)];
 
-        // test
+        // Far
+        let out_list = Triangle.clip_helper(in_list,
+            (T: Triangle) => { return T.v0.w < T.v0.p.z; },
+            (T: Triangle) => { return T.v1.w < T.v1.p.z; },
+            (T: Triangle) => { return T.v2.w < T.v2.p.z; },
+            ClipPlane.Far);
 
-        // let out_list = Triangle.clip(in_list,
-        //     (T: Triangle) => { return T.v0.p.z < 50; },
-        //     (T: Triangle) => { return T.v1.p.z < 50; },
-        //     (T: Triangle) => { return T.v2.p.z < 50; },
-        //     new Plane(new Vector(0, 0, 50), new Vector(0, 0, -1)));
-
-        // out_list = Triangle.clip(out_list,
-        //     (T: Triangle) => { return T.v0.p.z > 60; },
-        //     (T: Triangle) => { return T.v1.p.z > 60; },
-        //     (T: Triangle) => { return T.v2.p.z > 60; },
-        //     new Plane(new Vector(0, 0, 60), new Vector(0, 0, -1)));
-
-
-        let out_list = Triangle.clip(in_list,
-            (T: Triangle) => { return T.v0.p.z < pcamera.Nc; },
-            (T: Triangle) => { return T.v1.p.z < pcamera.Nc; },
-            (T: Triangle) => { return T.v2.p.z < pcamera.Nc; },
-            new Plane(new Vector(0, 0, pcamera.Nc), new Vector(0, 0, -1)));
-
-        out_list = Triangle.clip(out_list,
-            (T: Triangle) => { return T.v0.p.z > pcamera.Fc; },
-            (T: Triangle) => { return T.v1.p.z > pcamera.Fc; },
-            (T: Triangle) => { return T.v2.p.z > pcamera.Fc; },
-            new Plane(new Vector(0, 0, pcamera.Fc), new Vector(0, 0, -1)));
+        // Near
+        out_list = Triangle.clip_helper(out_list,
+            (T: Triangle) => { return 0 > T.v0.p.z; },
+            (T: Triangle) => { return 0 > T.v1.p.z; },
+            (T: Triangle) => { return 0 > T.v2.p.z; },
+            ClipPlane.Near);
 
         return out_list;
     }

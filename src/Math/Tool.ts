@@ -1,5 +1,6 @@
 import SceneNode from "../Object/SceneNode";
 import Ray from "./Ray";
+import Ray4D from "./Ray4D";
 import HitInfo from "./HitInfo";
 import Vector from "./Vector";
 import Triangle from "./Triangle";
@@ -56,19 +57,36 @@ export function lerp(a: number, b: number, t: number) {
     return a + t * (b - a);
 }
 
+export enum ClipPlane {
+    Near,
+    Far,
+    Right,
+    Left,
+    Top,
+    Bottom
+}
+
 export function clip(triangle: Triangle,
     v0_out: (triangle: Triangle) => boolean,
     v1_out: (triangle: Triangle) => boolean,
     v2_out: (triangle: Triangle) => boolean,
-    plane: Plane) {
+    plane: ClipPlane) {
 
     let v_clip: Triangle[] = [];
 
     let getCrossPoint = function (v0: Vertex, v1: Vertex) {
-        let dir = Vector.minus(v1.p, v0.p);
-        let ray = new Ray(v0.p, dir);
-        let result = Plane.hit(ray, plane);
-        let t = (result.hit_pos.z - v0.p.z) / (dir.z);
+        let ray = new Ray4D(v0.get_Vector4D(), v1.get_Vector4D());
+
+        let t = 0;
+        switch (plane) {
+            case ClipPlane.Far:
+                t = ray.t_when_z_equal_w();
+                break;
+            case ClipPlane.Near:
+                t = ray.t_when_z_equal_zero_w();
+                break;
+        }
+
         return Vertex.lerp(v0, v1, t);
     }
 
@@ -81,7 +99,7 @@ export function clip(triangle: Triangle,
 
     // vo out
     let clip_first_out = function (v0: Vertex, v1: Vertex, v2: Vertex) {
-        // console.log('tow');
+        // console.log('two');
         // 1 triangle to 2 triangle
         let cross1 = getCrossPoint(v2, v0);
         let cross2 = getCrossPoint(v0, v1);

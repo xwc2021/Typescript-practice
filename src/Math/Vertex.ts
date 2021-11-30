@@ -1,6 +1,7 @@
 
 import { lerp } from './Tool';
 import Vector from './Vector'
+import Vector4D from './Vector4D';
 
 export default class Vertex {
     static build_vertex(p: Vector, n: Vector, w: number, u: number, v: number) {
@@ -43,5 +44,9 @@ export default class Vertex {
     update_w(w: number) {
         this.w = w;
         return this;
+    }
+
+    get_Vector4D() {
+        return new Vector4D(this.p, this.w);
     }
 }
