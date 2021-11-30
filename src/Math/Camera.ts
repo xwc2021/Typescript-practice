@@ -2,10 +2,9 @@ import Vector from "./Vector";
 import Ray from "./Ray";
 import { degree_to_Rad, get_hit_sort_list } from "./Tool"
 import RenderTarget from "./RenderTarget";
-import HitInfo from "./HitInfo";
 import SceneNode from "../Object/SceneNode";
 import Diffuse from "../Materails/Diffuse";
-import Vertex from "./Vertex";
+
 
 export default class Camera {
     eye: Vector;
@@ -119,7 +118,7 @@ export default class Camera {
         let x = this.halfW * NDC_A.x + this.screenCenterX;
         let y = -this.halfH * NDC_A.y + this.screenCenterY;
 
-        let temp = new Vector(x, y, NDC_A.z);
+        let temp = new Vector(x, y, 0);
         return temp;
     }
 

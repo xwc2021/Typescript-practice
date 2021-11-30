@@ -168,17 +168,34 @@ export default class Rasterizer {
                     let P = new Vector(x + 0.5, y + 0.5, 0)
 
                     // 對矩形裡的每個點P
-                    // 判定是否位在screen space三角形
-                    let { α, β, γ } = Triangle.calculate_α_β_γ(s0.Vector2D(), s1.Vector2D(), s2.Vector2D(), P);
+                    // 判定是否位在screen space三角形裡面
+                    let { α, β, γ } = Triangle.calculate_α_β_γ(s0, s1, s2, P);
                     if (!Triangle.is_in_triangle(α, β, γ))
                         continue;
 
                     Rasterizer.color_buffer.set(x, y, RGBA.yellow);
                     // if yes 
-                    // (1)重新把點P映射到NDC(從NDC到Screen Space是仿射變換，不會改變內插權重α、β、γ)
+                    // (1)重新把點P映射到NDC(從NDC到Screen Space是仿射變換，內插權重α、β、γ一樣)
 
+                    // 計算z值
+                    let z = Triangle.interpolation(γ, α, β, n0.z, n1.z, n2.z);
+                    // z test
+                    let buffer_z = Rasterizer.z_buffer.get(x, y);
+                    if (z > buffer_z)
+                        continue;
+
+                    // 寫入z值
+                    Rasterizer.z_buffer.set(x, y, z);
 
                     // (2)在NDC進行內插，乘上w回到projection space
+                    let w = 1 / Triangle.interpolation(γ, α, β, 1 / T.v0.w, 1 / T.v1.w, 1 / T.v2.w);
+                    let u = Triangle.interpolation(γ, α, β, T.v0.u / T.v0.w, T.v1.u / T.v1.w, T.v2.u / T.v2.w);
+                    let v = Triangle.interpolation(γ, α, β, T.v0.v / T.v0.w, T.v1.v / T.v1.w, T.v2.v / T.v2.w);
+
+                    // projection space 
+                    let u_p = u * w;
+                    let v_p = v * w;
+
                     // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
                 }
             }

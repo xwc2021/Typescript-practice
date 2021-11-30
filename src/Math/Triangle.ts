@@ -34,6 +34,11 @@ export default class Triangle {
         return (α >= 0 && β >= 0 && γ >= 0);
     }
 
+    // 因為calculate_α_β_γ實作的方式，所以順序是γ、α、β 😝
+    static interpolation(γ: number, α: number, β: number, v0: number, v1: number, v2: number) {
+        return v0 * γ + v1 * α + v2 * β;
+    }
+
     v0: Vertex;
     v1: Vertex;
     v2: Vertex;
