@@ -4,6 +4,7 @@ import Vertex from './Vertex'
 import { ClipPlane, clip } from './Tool';
 import Camera from './Camera';
 import Plane from './Plane';
+import Ray from './Ray';
 
 export default class Triangle {
 
@@ -116,6 +117,32 @@ export default class Triangle {
         return out_list;
     }
 
+    // 這些點z都是0
+    static calculate_α_β_γ(s0: Vector, s1: Vector, s2: Vector, P: Vector) {
+        let diff = Vector.minus(P, s0);
+
+        // 求ray(P,S0-S2)和ray(S0,S1-S2)的交點
+        // 等同於求ray(P,S0-S2)和平面的交點
+        let dir01 = Vector.minus(s1, s0);
+        let dir02 = Vector.minus(s2, s0);
+        let n = new Vector(-dir01.y, dir01.x, 0);
+        let ray = new Ray(P, dir02.multiply(-1));
+        let result = Plane.hit(ray, new Plane(s0, n));
+        let p_on_dir01 = result.hit_pos;
+        let vector_α = Vector.minus(p_on_dir01, s0);
+        let vector_β = Vector.minus(diff, vector_α);
+
+        let α = vector_α.x / dir01.x;
+        let β = vector_β.x / dir02.x;
+        let γ = 1 - α - β;
+
+        return { α, β, γ }
+    }
+
+    static is_in_triangle(α: number, β: number, γ: number) {
+        return (α >= 0 && β >= 0 && γ >= 0);
+    }
+
     static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform) {
 
         // to MVP
@@ -124,28 +151,46 @@ export default class Triangle {
         let list = [];
         // to NDC
         for (let T of triangle_list) {
-            let v0 = pcamera.toNDC(T.v0.p, T.v0.w);
-            let v1 = pcamera.toNDC(T.v1.p, T.v1.w);
-            let v2 = pcamera.toNDC(T.v2.p, T.v2.w);
+            let n0 = pcamera.toNDC(T.v0.p, T.v0.w);
+            let n1 = pcamera.toNDC(T.v1.p, T.v1.w);
+            let n2 = pcamera.toNDC(T.v2.p, T.v2.w);
 
             // to screen space
-            let v0_s = pcamera.toScreenSpace(v0);
-            let v1_s = pcamera.toScreenSpace(v1);
-            let v2_s = pcamera.toScreenSpace(v2);
+            let s0 = pcamera.toScreenSpace(n0);
+            let s1 = pcamera.toScreenSpace(n1);
+            let s2 = pcamera.toScreenSpace(n2);
 
             // 為了和本來的code相容，暫時先傳出去
-            list.push(v0_s);
-            list.push(v1_s);
-            list.push(v2_s);
+            list.push(s0);
+            list.push(s1);
+            list.push(s2);
 
             // 找出包圍的矩形
+            let { min, max } = Vector.min_max(s0, s1, s2);
+            // console.log(min.x, max.x, '|', min.y, max.y);
+            let min_x = Math.floor(min.x);
+            let max_x = Math.floor(max.x);
+            let min_y = Math.floor(min.y);
+            let max_y = Math.floor(max.y);
+            for (let x = min_x; x <= max_x; ++x) {
+                for (let y = min_y; y <= max_y; ++y) {
+                    // 移動半個像素
+                    let P = new Vector(x + 0.5, y + 0.5, 0)
 
-            // 對矩形裡的每個點p
-            // 判定是否位在screen space三角形
-            // if yes 
-            // (1)重新把點p映射到NDC(其實從NDC到Screen Space是仿射變換，不會改變內插權重α、β、γ)
-            // (2)在NDC進行內插，乘上w回到projection space
-            // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
+                    // 對矩形裡的每個點P
+                    // 判定是否位在screen space三角形
+                    let { α, β, γ } = Triangle.calculate_α_β_γ(s0.Vector2D(), s1.Vector2D(), s2.Vector2D(), P);
+                    if (!Triangle.is_in_triangle(α, β, γ))
+                        continue;
+
+                    // if yes 
+                    // (1)重新把點P映射到NDC(從NDC到Screen Space是仿射變換，不會改變內插權重α、β、γ)
+
+
+                    // (2)在NDC進行內插，乘上w回到projection space
+                    // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
+                }
+            }
 
         }
         return list;

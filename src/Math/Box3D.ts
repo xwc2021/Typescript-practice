@@ -19,29 +19,29 @@ export default class Box {
                 new Vertex(new Vector(10, 10, -10), n, 1, 1, 1),
                 new Vertex(new Vector(10, -10, -10), n, 1, 1, 0)
             ));
-        this.triangles.push(
-            new Triangle(
-                new Vertex(new Vector(-10, -10, -10), n, 1, 0, 0),
-                new Vertex(new Vector(-10, 10, -10), n, 1, 0, 1),
-                new Vertex(new Vector(10, 10, -10), n, 1, 1, 1)
-            ));
+        // this.triangles.push(
+        //     new Triangle(
+        //         new Vertex(new Vector(-10, -10, -10), n, 1, 0, 0),
+        //         new Vertex(new Vector(-10, 10, -10), n, 1, 0, 1),
+        //         new Vertex(new Vector(10, 10, -10), n, 1, 1, 1)
+        //     ));
 
         let m = [Transform.rotateByY(90), Transform.rotateByY(180), Transform.rotateByY(270), Transform.rotateByX(90), Transform.rotateByX(-90)]
         for (let i = 0; i < m.length; ++i) {
             let rotateMatrix = m[i];
             let n2 = Transform.transformPoint(rotateMatrix, n);
-            this.triangles.push(
-                new Triangle(
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(- 10, -10, -10)), n2, 1, 0, 0),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, -10)), n2, 1, 1, 0)
-                ));
-            this.triangles.push(
-                new Triangle(
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, -10)), n2, 1, 0, 0),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, 10, -10)), n2, 1, 0, 1),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1)
-                ));
+            // this.triangles.push(
+            //     new Triangle(
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(- 10, -10, -10)), n2, 1, 0, 0),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, -10)), n2, 1, 1, 0)
+            //     ));
+            // this.triangles.push(
+            //     new Triangle(
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, -10)), n2, 1, 0, 0),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, 10, -10)), n2, 1, 0, 1),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1)
+            //     ));
         }
     }
 

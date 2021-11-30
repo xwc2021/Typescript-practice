@@ -40,7 +40,42 @@ export default class RenderTarget {
                 let y_weight = Y * 2 - 1;
 
                 let color = func(x_weight, y_weight, ratio);
+                let r = color.x;
+                let g = color.y;
+                let b = color.z;
 
+                // gamma校正
+                let gamma = 1 / 2.1;
+                r = Math.pow(r, gamma);
+                g = Math.pow(g, gamma);
+                b = Math.pow(b, gamma);
+
+                backbuffer_data_array[index++] = Math.round(r * 255);
+                backbuffer_data_array[index++] = Math.round(g * 255);
+                backbuffer_data_array[index++] = Math.round(b * 255);
+                backbuffer_data_array[index] = 255;
+            }
+        }
+        context_2d.putImageData(backbuffer_data, 0, 0);
+    }
+
+    set_pixel(func: (x: number, y: number) => Vector) {
+
+        let context_2d = this.backbuffer.getContext('2d');
+
+        // get source data array
+        let backbuffer_data = context_2d.getImageData(0, 0, this.w, this.h);
+        let backbuffer_data_array = backbuffer_data.data;
+
+        let ratio = this.w / this.h;
+
+        // set array value
+        for (let y = 0; y < this.h; ++y) {
+            for (let x = 0; x < this.w; ++x) {
+                // rgba each color is 4byte
+                let index = 4 * (x + y * this.w);
+
+                let color = func(x, y);
                 let r = color.x;
                 let g = color.y;
                 let b = color.z;

@@ -122,11 +122,11 @@ export function clip(triangle: Triangle,
 
 
     // 有8種情況
-    if (v0_out(triangle)/*triangle.v0.p.z < nearPlaneZ*/)//out
+    if (v0_out(triangle))//out
     {
-        if (v1_out(triangle) /* triangle.v1.p.z < nearPlaneZ */)// out out
+        if (v1_out(triangle))// out out
         {
-            if (v2_out(triangle) /*triangle.v2.p.z < nearPlaneZ*/)//full out of nearPlaneZ (no clip)
+            if (v2_out(triangle))// out out out (no clip)
             {
                 // console.log('full out');
             }
@@ -135,7 +135,7 @@ export function clip(triangle: Triangle,
         }
         else //out in 
         {
-            if (v2_out(triangle) /*triangle.v2.p.z < nearPlaneZ*/)//out in out
+            if (v2_out(triangle))//out in out
                 clip_first_in(triangle.v1, triangle.v2, triangle.v0);
             else // out in in
                 clip_first_out(triangle.v0, triangle.v1, triangle.v2);
@@ -143,16 +143,16 @@ export function clip(triangle: Triangle,
     }
     else // in
     {
-        if (v1_out(triangle) /*triangle.v1.p.z < nearPlaneZ*/)// in out 
+        if (v1_out(triangle))// in out 
         {
-            if (v2_out(triangle) /*triangle.v2.p.z < nearPlaneZ*/)// in out out
+            if (v2_out(triangle))// in out out
                 clip_first_in(triangle.v0, triangle.v1, triangle.v2);
             else // in out in
                 clip_first_out(triangle.v1, triangle.v2, triangle.v0);
         }
         else // in in
         {
-            if (v2_out(triangle) /*triangle.v2.p.z < nearPlaneZ*/)// in in out
+            if (v2_out(triangle))// in in out
                 clip_first_out(triangle.v2, triangle.v0, triangle.v1);
             else // in in in (no clip)
             {

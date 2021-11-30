@@ -2,6 +2,13 @@ import { lerp, number_equal } from './Tool'
 
 export default class Vector {
 
+    static min_max(v0: Vector, v1: Vector, v2: Vector) {
+
+        let min = new Vector(Math.min(Math.min(v0.x, v1.x), v2.x), Math.min(Math.min(v0.y, v1.y), v2.y), Math.min(Math.min(v0.z, v1.z), v2.z));
+        let max = new Vector(Math.max(Math.max(v0.x, v1.x), v2.x), Math.max(Math.max(v0.y, v1.y), v2.y), Math.max(Math.max(v0.z, v1.z), v2.z));
+        return { min, max };
+    }
+
     static calculate_normal(v0: Vector, v1: Vector, v2: Vector) {
         let v01 = Vector.minus(v1, v0);
         let v02 = Vector.minus(v2, v0);
@@ -99,6 +106,11 @@ export default class Vector {
 
     negative() {
         return Vector.multiply(this, -1);
+    }
+
+    Vector2D() {
+        this.z = 0;
+        return this;
     }
 
     clone() {

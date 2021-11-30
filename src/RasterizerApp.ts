@@ -2,6 +2,9 @@ import Box from "./Math/Box3D";
 import Camera from "./Math/Camera";
 import Transform from "./Math/Transform";
 import Vector from "./Math/Vector";
+import RenderTarget from './Math/RenderTarget';
+import Buffer2D from "./Math/Buffer2D";
+import RGBA from "./Math/RGBA";
 
 export default class RasterizerApp {
 
@@ -17,6 +20,9 @@ export default class RasterizerApp {
     last_t: number;
     sum_t: number;
     ctx: CanvasRenderingContext2D;
+    render_target: RenderTarget;
+    color_buffer: Buffer2D<RGBA>;
+    z_buffer: Buffer2D<number>;
 
     constructor() {
 
@@ -27,6 +33,9 @@ export default class RasterizerApp {
     }
 
     init() {
+        this.color_buffer = new Buffer2D<RGBA>(this.screenWidth, this.screenHeight);
+        this.render_target = new RenderTarget(this.screenWidth, this.screenHeight);
+
         let canvas = document.getElementById('canvas') as HTMLCanvasElement;
         canvas.style.width = this.screenWidth + 'px';
         canvas.style.height = this.screenHeight + 'px';
@@ -76,16 +85,17 @@ export default class RasterizerApp {
         var nowDegree = this.sum_t / 1000 * 15 % 360;
         // var nowDegree = 0;
 
-        var rotateMatrix = Transform.rotateByY(nowDegree);
+        // var rotateMatrix = Transform.rotateByY(nowDegree);
+        var rotateMatrix = Transform.rotateByY(45);
         var combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.update(this.camera, combineMatrix);
         this.box.draw(this.ctx);
 
-        var offsetMatrix = Transform.offset(0, 0, 150);
-        var rotateMatrix = Transform.rotateByY(nowDegree);
-        combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
-        this.box.update(this.camera, combineMatrix);
-        this.box.draw(this.ctx);
+        // var offsetMatrix = Transform.offset(0, 0, 150);
+        // var rotateMatrix = Transform.rotateByY(nowDegree);
+        // combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
+        // this.box.update(this.camera, combineMatrix);
+        // this.box.draw(this.ctx);
     }
 
     keyProc(event: KeyboardEvent) {
