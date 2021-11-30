@@ -29,6 +29,7 @@ export default class RasterizerApp {
             this.init();
         };
         document.onkeydown = this.keyProc.bind(this);
+        this.drawScene = this.drawScene.bind(this);
     }
 
     init() {
@@ -42,6 +43,7 @@ export default class RasterizerApp {
 
         this.box = new Box();
         this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 100, 500);
+
         this.start();
     }
 
@@ -50,26 +52,28 @@ export default class RasterizerApp {
         this.sum_t = 0;
         let d = new Date();
         this.last_t = d.getTime();
-        this.thandle = window.setInterval(() => { this.drawScene(); }, 16);
+        this.thandle = window.requestAnimationFrame(this.drawScene);
     }
 
     resume() {
         let d = new Date();
         this.last_t = d.getTime();
-        this.thandle = window.setInterval(() => { this.drawScene(); }, 16);
+        this.thandle = window.requestAnimationFrame(this.drawScene);
     }
 
     stop() {
-        window.clearInterval(this.thandle);
+        window.cancelAnimationFrame(this.thandle);
         this.thandle = null;
     }
 
-    drawScene() {
+    drawScene(timestamp: number) {
+
         let d = new Date();
         let t = d.getTime();
         let diff = t - this.last_t;
         this.last_t = t;
         this.sum_t = this.sum_t + diff;
+        document.title = diff.toString();
 
         // 清空
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
@@ -84,8 +88,8 @@ export default class RasterizerApp {
         var nowDegree = this.sum_t / 1000 * 15 % 360;
         // var nowDegree = 0;
 
-        // var rotateMatrix = Transform.rotateByY(nowDegree);
-        var rotateMatrix = Transform.rotateByY(45);
+        var rotateMatrix = Transform.rotateByY(nowDegree);
+        // var rotateMatrix = Transform.rotateByY(45);
         var combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.update(this.camera, combineMatrix);
         this.box.draw(this.ctx);
@@ -98,6 +102,8 @@ export default class RasterizerApp {
 
         // 顯示到render target
         Rasterizer.show(this.render_target);
+
+        this.thandle = window.requestAnimationFrame(this.drawScene);
     }
 
     keyProc(event: KeyboardEvent) {
