@@ -1,7 +1,15 @@
 import Vector from "./Vector";
 import Vecor4D from "./Vector4D";
 
-export default class Ray {
+// 在3D space裁切的話
+// 還要考慮什麼時候要用(x,y,w)裁切
+// 什麼時候要用(x,y,z)裁切
+// 
+// 不如直接在4D space裁切
+// https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
+// 圖 4D space clip
+// 這裡用Directx的NDC
+export default class Ray4D {
     from: Vecor4D;
     dir: Vecor4D;
 
@@ -10,9 +18,6 @@ export default class Ray {
         this.dir = new Vecor4D(Vector.minus(to.p, from.p), to.w - from.w);
     }
 
-    // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
-    // 圖 4D space clip
-    // 這裡用Directx的NDC
     t_when_x_equal_w() {
         // from.x + t * dir.x= from.w + t * dir.w;
         let t = (this.from.w - this.from.p.x) / (this.dir.p.x - this.dir.w);
