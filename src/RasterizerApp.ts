@@ -81,11 +81,11 @@ export default class RasterizerApp {
         this.box.update(this.camera, combineMatrix);
         this.box.draw(this.ctx);
 
-        // var offsetMatrix = Transform.offset(150, 0, 0);
-        // var rotateMatrix = Transform.rotateByY(nowDegree);
-        // combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
-        // this.box.update(this.camera, combineMatrix);
-        // this.box.draw(this.ctx);
+        var offsetMatrix = Transform.offset(0, 0, 150);
+        var rotateMatrix = Transform.rotateByY(nowDegree);
+        combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
+        this.box.update(this.camera, combineMatrix);
+        this.box.draw(this.ctx);
     }
 
     keyProc(event: KeyboardEvent) {

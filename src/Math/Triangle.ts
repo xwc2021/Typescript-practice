@@ -85,6 +85,34 @@ export default class Triangle {
             (T: Triangle) => { return 0 > T.v2.p.z; },
             ClipPlane.Near);
 
+        // Right
+        out_list = Triangle.clip_helper(out_list,
+            (T: Triangle) => { return T.v0.w < T.v0.p.x; },
+            (T: Triangle) => { return T.v1.w < T.v1.p.x; },
+            (T: Triangle) => { return T.v2.w < T.v2.p.x; },
+            ClipPlane.Right);
+
+        // Left
+        out_list = Triangle.clip_helper(out_list,
+            (T: Triangle) => { return -T.v0.w > T.v0.p.x; },
+            (T: Triangle) => { return -T.v1.w > T.v1.p.x; },
+            (T: Triangle) => { return -T.v2.w > T.v2.p.x; },
+            ClipPlane.Right);
+
+        // Top
+        out_list = Triangle.clip_helper(out_list,
+            (T: Triangle) => { return T.v0.w < T.v0.p.y; },
+            (T: Triangle) => { return T.v1.w < T.v1.p.y; },
+            (T: Triangle) => { return T.v2.w < T.v2.p.y; },
+            ClipPlane.Top);
+
+        // Bottom
+        out_list = Triangle.clip_helper(out_list,
+            (T: Triangle) => { return -T.v0.w > T.v0.p.y; },
+            (T: Triangle) => { return -T.v1.w > T.v1.p.y; },
+            (T: Triangle) => { return -T.v2.w > T.v2.p.y; },
+            ClipPlane.Bottom);
+
         return out_list;
     }
 

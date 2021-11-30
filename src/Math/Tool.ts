@@ -85,6 +85,18 @@ export function clip(triangle: Triangle,
             case ClipPlane.Near:
                 t = ray.t_when_z_equal_zero_w();
                 break;
+            case ClipPlane.Right:
+                t = ray.t_when_x_equal_w();
+                break;
+            case ClipPlane.Left:
+                t = ray.t_when_x_equal_minus_w();
+                break;
+            case ClipPlane.Top:
+                t = ray.t_when_y_equal_w();
+                break;
+            case ClipPlane.Bottom:
+                t = ray.t_when_y_equal_minus_w();
+                break;
         }
 
         return Vertex.lerp(v0, v1, t);
