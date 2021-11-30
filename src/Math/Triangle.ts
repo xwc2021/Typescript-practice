@@ -143,7 +143,7 @@ export default class Triangle {
             // 對矩形裡的每個點p
             // 判定是否位在screen space三角形
             // if yes 
-            // (1)重新把點p映射到NDC,
+            // (1)重新把點p映射到NDC(其實從NDC到Screen Space是仿射變換，不會改變內插權重α、β、γ)
             // (2)在NDC進行內插，乘上w回到projection space
             // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
 
