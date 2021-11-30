@@ -45,9 +45,6 @@ export default class Triangle {
         let v2 = triangle.v2.clone().update_p(v2_p).update_w(v2_c.z);
 
         // 執行三角形裁切
-
-
-        // console.log(v0.p.z);
         return Triangle.clip_in_Projection_Space(v0, v1, v2, pcamera);
     }
 

@@ -10,6 +10,9 @@ export default class Ray {
         this.dir = new Vecor4D(Vector.minus(to.p, from.p), to.w - from.w);
     }
 
+    // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
+    // 圖 4D space clip
+    // 這裡用Directx的NDC
     t_when_x_equal_w() {
         // from.x + t * dir.x= from.w + t * dir.w;
         let t = (this.from.w - this.from.p.x) / (this.dir.p.x - this.dir.w);
