@@ -1,3 +1,4 @@
+import RGBA from "./RGBA";
 import Vector from "./Vector";
 export default class RenderTarget {
     w: number = 320;
@@ -59,7 +60,7 @@ export default class RenderTarget {
         context_2d.putImageData(backbuffer_data, 0, 0);
     }
 
-    set_pixel(func: (x: number, y: number) => Vector) {
+    set_pixel(func: (x: number, y: number) => RGBA) {
 
         let context_2d = this.backbuffer.getContext('2d');
 
@@ -76,9 +77,9 @@ export default class RenderTarget {
                 let index = 4 * (x + y * this.w);
 
                 let color = func(x, y);
-                let r = color.x;
-                let g = color.y;
-                let b = color.z;
+                let r = color.r;
+                let g = color.g;
+                let b = color.b;
 
                 // gamma校正
                 let gamma = 1 / 2.1;

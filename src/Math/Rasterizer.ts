@@ -6,10 +6,23 @@ import Camera from './Camera';
 import Vector from './Vector';
 import Buffer2D from "./Buffer2D";
 import RGBA from "./RGBA";
+import RenderTarget from './RenderTarget';
 
 export default class Rasterizer {
     static color_buffer: Buffer2D<RGBA>;
     static z_buffer: Buffer2D<number>;
+
+    static clear(color: RGBA, z: number) {
+        Rasterizer.color_buffer.clear(color);
+        Rasterizer.z_buffer.clear(z);
+    }
+
+    static show(render_target: RenderTarget) {
+        render_target.set_pixel((x: number, y: number) => {
+            return Rasterizer.color_buffer.get(x, y);
+        });
+        render_target.show_buffer('canvas');
+    }
 
     static clip_helper(in_list: Triangle[],
         v0_out: (triangle: Triangle) => boolean,
@@ -160,6 +173,7 @@ export default class Rasterizer {
                     if (!Triangle.is_in_triangle(α, β, γ))
                         continue;
 
+                    Rasterizer.color_buffer.set(x, y, RGBA.yellow);
                     // if yes 
                     // (1)重新把點P映射到NDC(從NDC到Screen Space是仿射變換，不會改變內插權重α、β、γ)
 

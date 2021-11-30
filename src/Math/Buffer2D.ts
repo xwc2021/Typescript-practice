@@ -9,8 +9,8 @@ export default class Buffer2D<T> {
         this.h = h;
         this.buffer = new Array<Array<T>>(this.h);
         // console.log(this.buffer.length);
-        for (let row of this.buffer) {
-            row = new Array<T>(this.w);
+        for (let y = 0; y < this.h; ++y) {
+            this.buffer[y] = new Array<T>(this.w);
         }
     }
 
@@ -20,5 +20,13 @@ export default class Buffer2D<T> {
 
     get(x: number, y: number) {
         return this.buffer[y][x];
+    }
+
+    clear(value: T) {
+        for (let y = 0; y < this.h; ++y) {
+            for (let x = 0; x < this.w; ++x) {
+                this.buffer[y][x] = value;
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import RenderTarget from './Math/RenderTarget';
 import Buffer2D from "./Math/Buffer2D";
 import RGBA from "./Math/RGBA";
 import Rasterizer from "./Math/Rasterizer";
+import CavnasHelper from "./Math/CanvasHelper";
 
 export default class RasterizerApp {
 
@@ -24,7 +25,6 @@ export default class RasterizerApp {
     render_target: RenderTarget;
 
     constructor() {
-
         window.onload = () => {
             this.init();
         };
@@ -36,12 +36,9 @@ export default class RasterizerApp {
         Rasterizer.z_buffer = new Buffer2D<number>(this.screenWidth, this.screenHeight);
         this.render_target = new RenderTarget(this.screenWidth, this.screenHeight);
 
-        let canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        canvas.style.width = this.screenWidth + 'px';
-        canvas.style.height = this.screenHeight + 'px';
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-        this.ctx = canvas.getContext('2d');
+        // 不能對同1個canvas取不同的context
+        this.ctx = CavnasHelper.set_canvas('canvas_line', this.screenWidth, this.screenHeight).getContext('2d');
+        CavnasHelper.set_canvas('canvas', this.screenWidth, this.screenHeight);
 
         this.box = new Box();
         this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 100, 500);
@@ -80,6 +77,8 @@ export default class RasterizerApp {
         this.ctx.fillStyle = "rgba(180,30,15,0.1)";
         this.ctx.fillRect(0, 0, this.screenWidth, this.screenHeight);
 
+        Rasterizer.clear(RGBA.black, 1);
+
         //畫立方體
         var offsetMatrix = Transform.offset(0, 0, 0);
         var nowDegree = this.sum_t / 1000 * 15 % 360;
@@ -96,6 +95,9 @@ export default class RasterizerApp {
         // combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
         // this.box.update(this.camera, combineMatrix);
         // this.box.draw(this.ctx);
+
+        // 顯示到render target
+        Rasterizer.show(this.render_target);
     }
 
     keyProc(event: KeyboardEvent) {
