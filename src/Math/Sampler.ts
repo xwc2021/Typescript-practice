@@ -6,7 +6,11 @@ import { MathHelper } from "./Tool";
 
 export default class Sampler {
 
-    static texture2D(u: number, v: number, w: number, h: number, buffer: Buffer2D<RGBA>) {
+    static texture2D(uv: Vector2D, w: number, h: number, buffer: Buffer2D<RGBA>) {
+
+        let buffer_uv = Vector2D.uv_to_buffer_space(uv);
+        let u = buffer_uv.x;
+        let v = buffer_uv.y;
 
         //先找出最近點
         let grid_u = 1 / w;

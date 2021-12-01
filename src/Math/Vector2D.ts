@@ -1,5 +1,13 @@
 export default class Vector2D {
 
+    static uv_to_buffer_space(uv: Vector2D) {
+        return new Vector2D(uv.x, 1 - uv.y);
+    }
+
+    static buffer_to_uv_space(uv: Vector2D) {
+        return new Vector2D(uv.x, 1 - uv.y);
+    }
+
     static add(A: Vector2D, B: Vector2D) {
         let temp = new Vector2D(B.x + A.x, B.y + A.y);
         return temp

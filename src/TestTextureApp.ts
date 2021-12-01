@@ -39,13 +39,13 @@ export default class TestTextureApp {
             };
 
             this.$('canvas').onclick = (event) => {
-                this.reBulid(new Vector2D(event.offsetX, event.offsetY))
+                this.reBulid(new Vector2D(event.offsetX, event.offsetY));
             };
         };
     }
 
-    texture2D(u: number, v: number) {
-        let { rectUV, NW, NE, SW, SE, color } = Sampler.texture2D(u, v, this.colume_count, this.row_count, this.buffer);
+    texture2D(uv: Vector2D) {
+        let { rectUV, NW, NE, SW, SE, color } = Sampler.texture2D(uv, this.colume_count, this.row_count, this.buffer);
 
         //畫4個鄰近點
         this.drawPointByGridIndex(NW);
@@ -65,7 +65,7 @@ export default class TestTextureApp {
     drawUV() {
         var u = parseFloat(this.$("u").value);
         var v = parseFloat(this.$("v").value);
-        this.texture2D(u, v);
+        this.texture2D(new Vector2D(u, v));
     }
 
     reBulid2() {
@@ -91,11 +91,13 @@ export default class TestTextureApp {
     }
 
     reBulid(P: Vector2D) {
-        var u = P.x / this.canvas_width;
-        var v = P.y / this.canvas_height;
+        let u = P.x / this.canvas_width;
+        let v = P.y / this.canvas_height;
+        let buffer_uv = new Vector2D(u, v);
+        let uv = Vector2D.buffer_to_uv_space(buffer_uv);
 
-        this.$("u").value = u.toString();
-        this.$("v").value = v.toString();
+        this.$("u").value = uv.x.toString();
+        this.$("v").value = uv.y.toString();
 
         this.Render();
     }
