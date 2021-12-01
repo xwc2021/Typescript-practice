@@ -8,6 +8,8 @@ export default class Sampler {
 
     static texture2D(u: number, v: number, w: number, h: number, buffer: Buffer2D<RGBA>) {
         //先找出最近點
+        // let grid_u = MathHelper.accDiv(1, w);
+        // let grid_v = MathHelper.accDiv(1, h);
         let grid_u = 1 / w;
         let grid_v = 1 / h;
 
@@ -15,10 +17,10 @@ export default class Sampler {
         let half_grid_v = grid_v * 0.5;
 
         //以下是有4個鄰點的情況..
-        let nearest_point_u_float = MathHelper.accDiv(u, grid_u);
-        let nearest_point_v_float = MathHelper.accDiv(v, grid_v);
-        // let nearest_point_u_float = u / grid_u;
-        // let nearest_point_v_float = v / grid_v;
+        // let nearest_point_u_float = MathHelper.accDiv(u, grid_u);
+        // let nearest_point_v_float = MathHelper.accDiv(v, grid_v);
+        let nearest_point_u_float = u / grid_u;
+        let nearest_point_v_float = v / grid_v;
 
         let nearest_point_u = Math.floor(nearest_point_u_float);
         let nearest_point_v = Math.floor(nearest_point_v_float);
@@ -38,10 +40,10 @@ export default class Sampler {
 
             if (nearest_point_v_float == nearest_point_v)
                 nearest_point_v = nearest_point_v - 1;
-
             let P = new Vector2D(nearest_point_u, nearest_point_v);
 
             // 右上
+            // console.log('右上', u, v, P);
             let BR = new Vector2D(P.x + 1, P.y);
             let TL = new Vector2D(P.x, P.y + 1);
             let TR = new Vector2D(P.x + 1, P.y + 1);
@@ -52,14 +54,12 @@ export default class Sampler {
         else if (s_u <= half_grid_u && s_v >= half_grid_v)//相鄰3點在左上
         {
             //剛好整除時要做修正
-
             if (nearest_point_v_float == nearest_point_v)
                 nearest_point_v = nearest_point_v - 1;
-
             let P = new Vector2D(nearest_point_u, nearest_point_v);
 
-
             // 左上
+            // console.log('左上', u, v, P);
             let BL = new Vector2D(P.x - 1, P.y);
             let TL = new Vector2D(P.x - 1, P.y + 1);
             let TR = new Vector2D(P.x, P.y + 1);
@@ -72,6 +72,7 @@ export default class Sampler {
             let P = new Vector2D(nearest_point_u, nearest_point_v);
 
             // 左下
+            // console.log('左下', u, v, P);
             let BL = new Vector2D(P.x - 1, P.y - 1);
             let BR = new Vector2D(P.x, P.y - 1);
             let TL = new Vector2D(P.x - 1, P.y);
@@ -84,10 +85,10 @@ export default class Sampler {
             //剛好整除時要做修正
             if (nearest_point_u_float == nearest_point_u)
                 nearest_point_u = nearest_point_u - 1;
-
             let P = new Vector2D(nearest_point_u, nearest_point_v);
 
             // 右下
+            // console.log('右下', u, v, P);
             let BL = new Vector2D(P.x, P.y - 1);
             let BR = new Vector2D(P.x + 1, P.y - 1);
             let TR = new Vector2D(P.x + 1, P.y);
