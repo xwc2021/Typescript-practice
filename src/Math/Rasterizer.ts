@@ -46,7 +46,6 @@ export default class Rasterizer {
         // 和y軸夾45度的2個平面、和x軸夾45度的2個平面、還有Nc和Fc
         // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
 
-
         let in_list = [new Triangle(v0, v1, v2)];
 
         // Far
@@ -75,7 +74,7 @@ export default class Rasterizer {
             (T: Triangle) => { return -T.v0.w > T.v0.p.x; },
             (T: Triangle) => { return -T.v1.w > T.v1.p.x; },
             (T: Triangle) => { return -T.v2.w > T.v2.p.x; },
-            ClipPlane.Right);
+            ClipPlane.Left);
 
         // Top
         out_list = Rasterizer.clip_helper(out_list,
@@ -166,6 +165,7 @@ export default class Rasterizer {
             let max_y = Math.floor(max.y);
             for (let x = min_x; x <= max_x; ++x) {
                 for (let y = min_y; y <= max_y; ++y) {
+
                     // 移動半個像素
                     let P = new Vector(x + 0.5, y + 0.5, 0)
 
@@ -186,7 +186,7 @@ export default class Rasterizer {
                         continue;
 
                     // 寫入z值
-                    // Rasterizer.z_buffer.set(x, y, z);
+                    Rasterizer.z_buffer.set(x, y, z);
 
                     // (2)在NDC進行內插，乘上w回到projection space
                     // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html

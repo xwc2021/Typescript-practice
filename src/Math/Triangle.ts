@@ -20,6 +20,11 @@ export default class Triangle {
         let n = new Vector(-dir01.y, dir01.x, 0);
         let ray = new Ray(P, dir02.multiply(-1));
         let result = Plane.hit(ray, new Plane(s0, n));
+        if (!result.is_hit) {
+            // Todo 這裡有bug
+            // return { α: 0, β: 1, γ: 0 }
+        }
+
         let p_on_dir01 = result.hit_pos;
         let vector_α = Vector.minus(p_on_dir01, s0);
         let vector_β = Vector.minus(diff, vector_α);

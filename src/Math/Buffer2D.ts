@@ -10,18 +10,31 @@ export default class Buffer2D<T> {
         this.w = w;
         this.h = h;
         this.buffer = new Array<Array<T>>(this.h);
-        // console.log(this.buffer.length);
+        console.log(w, h);
         for (let y = 0; y < this.h; ++y) {
             this.buffer[y] = new Array<T>(this.w);
         }
     }
 
     set(x: number, y: number, value: T) {
-        this.buffer[y][x] = value;
+        if (this.is_legal_index(x, y))
+            this.buffer[y][x] = value;
+        else {
+            // Todo
+            console.log('set', this.w, this.h, x, y);
+            return RGBA.debug;
+        }
     }
 
     get(x: number, y: number) {
-        return this.buffer[y][x];
+        if (this.is_legal_index(x, y))
+            return this.buffer[y][x];
+        else {
+            // Todo
+            console.log(x, y);
+            return RGBA.debug;
+        }
+
     }
 
     clear(value: T) {

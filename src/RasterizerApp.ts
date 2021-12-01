@@ -96,11 +96,11 @@ export default class RasterizerApp {
         this.box.rasterize(this.camera, combineMatrix, this.texture);
         this.box.draw_line(this.ctx);
 
-        // let offsetMatrix = Transform.offset(0, 0, 150);
-        // let rotateMatrix = Transform.rotateByY(nowDegree);
-        // combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
-        // this.box.update(this.camera, combineMatrix);
-        // this.box.draw(this.ctx);
+        offsetMatrix = Transform.offset(0, 0, 150);
+        rotateMatrix = Transform.rotateByY(nowDegree);
+        combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
+        this.box.rasterize(this.camera, combineMatrix, this.texture);
+        this.box.draw_line(this.ctx);
 
         // 顯示到render target
         Rasterizer.show(this.render_target);
