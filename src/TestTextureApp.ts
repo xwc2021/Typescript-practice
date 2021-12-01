@@ -11,8 +11,8 @@ export default class TestTextureApp {
     canvas_width = 600;
     canvas_height = 600;
 
-    row_count = 100;
-    colume_count = 100;
+    row_count = 20;
+    colume_count = 20;
 
     rect_w: number;
     rect_h: number;
@@ -112,7 +112,7 @@ export default class TestTextureApp {
 
     init() {
         this.reset();
-        DrawHelper.drawCircle(RGBA.golden, this.buffer);
+        DrawHelper.drawStar(RGBA.golden, this.buffer);
         this.Render();
     }
 

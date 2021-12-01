@@ -309,10 +309,10 @@ export class DrawHelper {
     }
 
     static drawCircle(value: RGBA, buffer: Buffer2D<RGBA>) {
-        let it = 500;
+        let it = 50;
         let delta = 2 * Math.PI / it;
-        let R = 49;
-        let center = new Vector2D(50, 50);
+        let R = 9;
+        let center = new Vector2D(10, 10);
         let startTheda = -Math.PI / 3;
 
         //畫圓
