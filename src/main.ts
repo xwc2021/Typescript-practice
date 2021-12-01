@@ -1,10 +1,8 @@
-// import App from './App';
-// new App();
-
-
+// import WhiteRayTracingApp from './WhiteRayTracingApp';
+// new WhiteRayTracingApp();
 
 // import RasterizerApp from './RasterizerApp';
 // new RasterizerApp();
 
-import TestTextureApp from "./TestTextureApp";
-new TestTextureApp();
+// import TestTextureApp from "./TestTextureApp";
+// new TestTextureApp();

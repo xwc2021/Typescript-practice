@@ -92,7 +92,3 @@ export default class Transform {
         );
     }
 }
-
-
-
-

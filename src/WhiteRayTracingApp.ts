@@ -8,7 +8,7 @@ import SceneNode from './Object/SceneNode';
 import Diffuse from './Materails/Diffuse';
 import Mirror from './Materails/Mirror';
 
-export default class App {
+export default class WhiteRayTracingApp {
     constructor() {
 
         let floor = new SceneNode(Diffuse.white, new Rect(new Plane(Vector.zero, Vector.up), 16, 16))
@@ -30,4 +30,6 @@ export default class App {
         render_target.show_buffer('canvas');
     }
 }
+
+new WhiteRayTracingApp();
 

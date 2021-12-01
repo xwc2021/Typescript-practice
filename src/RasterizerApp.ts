@@ -162,3 +162,5 @@ export default class RasterizerApp {
         }
     }
 }
+
+new RasterizerApp();

@@ -177,3 +177,5 @@ export default class TestTextureApp {
         ctx.stroke();
     }
 }
+
+new TestTextureApp();

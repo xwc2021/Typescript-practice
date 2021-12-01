@@ -1,7 +1,26 @@
 const path = require('path');
 
+let target = '';
+let out = '';
+
+let app = 2;
+switch (app) {
+    case 0:
+        target = './src/WhiteRayTracingApp.ts';
+        out = 'WhiteRayTracingApp.js';
+        break;
+    case 1:
+        target = './src/RasterizerApp.ts';
+        out = 'RasterizerApp.js';
+        break;
+    case 2:
+        target = './src/TestTextureApp.ts';
+        out = 'TestTextureApp.js';
+        break;
+}
+
 module.exports = {
-    entry: './src/main.ts',
+    entry: target,
     devtool: 'inline-source-map',
     module: {
         rules: [
@@ -16,7 +35,7 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        filename: 'build.js',
+        filename: out,
         path: path.resolve(__dirname, 'dist'),
     },
 };

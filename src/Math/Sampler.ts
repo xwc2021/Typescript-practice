@@ -114,5 +114,4 @@ export default class Sampler {
         let middleRGB = RGBA.lerp(nRGB, sRGB, rectUV.y);
         return middleRGB;
     }
-
 }

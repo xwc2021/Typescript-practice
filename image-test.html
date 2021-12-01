@@ -27,9 +27,13 @@
         img.onload = function () {
             set_canvas('canvas', 1024, 1024);
             ctx.drawImage(img, 0, 0);
-
-            img.style.display = 'none';
         };
+
+        function test(x, y) {
+            // (0~w-1,0~h-1) 可取值
+            let pixel = ctx.getImageData(x, y, 1, 1);
+            console.log(pixel);
+        }
         let color = document.getElementById('color');
         function pick(event) {
             let x = event.layerX;
