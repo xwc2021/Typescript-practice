@@ -4,6 +4,7 @@ import Vector from './Vector';
 import Transform from './Transform';
 import { clip } from './Tool';
 import Camera from './Camera';
+import Texture2D from './Texture2D';
 
 export default class Box {
     triangles: Triangle[];
@@ -45,7 +46,7 @@ export default class Box {
         }
     }
 
-    update(camera: Camera, worldTransform: Transform) {
+    rasterize(camera: Camera, worldTransform: Transform, texture: Texture2D) {
 
         // 測試裁切三角形的code
         // this.triangles_after_clip = [];
@@ -66,11 +67,11 @@ export default class Box {
 
         // 處理正方體的變換
         for (let i = 0; i < this.triangles_after_clip.length; ++i) {
-            this.triangles_after_clip[i].process(camera, worldTransform);
+            this.triangles_after_clip[i].rasterize(camera, worldTransform, texture);
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D) {
+    draw_line(ctx: CanvasRenderingContext2D) {
         // 畫三角形
         ctx.globalCompositeOperation = 'destination-over';
 

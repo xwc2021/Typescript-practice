@@ -7,6 +7,7 @@ import Buffer2D from "./Math/Buffer2D";
 import RGBA from "./Math/RGBA";
 import Rasterizer from "./Math/Rasterizer";
 import CavnasHelper from "./Math/CanvasHelper";
+import Texture2D from "./Math/Texture2D";
 
 export default class RasterizerApp {
 
@@ -23,6 +24,7 @@ export default class RasterizerApp {
     sum_t: number;
     ctx: CanvasRenderingContext2D;
     render_target: RenderTarget;
+    texture: Texture2D;
 
     constructor() {
         window.onload = () => {
@@ -42,8 +44,8 @@ export default class RasterizerApp {
         CavnasHelper.set_canvas('canvas', this.screenWidth, this.screenHeight);
 
         this.box = new Box();
-        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 100, 500);
-
+        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 10, 500);
+        this.texture = new Texture2D('/texture/smoking_2.jpg');
         this.start();
     }
 
@@ -91,8 +93,8 @@ export default class RasterizerApp {
         let rotateMatrix = Transform.rotateByY(nowDegree);
         // let rotateMatrix = Transform.rotateByY(45);
         let combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
-        this.box.update(this.camera, combineMatrix);
-        this.box.draw(this.ctx);
+        this.box.rasterize(this.camera, combineMatrix, this.texture);
+        this.box.draw_line(this.ctx);
 
         // let offsetMatrix = Transform.offset(0, 0, 150);
         // let rotateMatrix = Transform.rotateByY(nowDegree);

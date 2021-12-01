@@ -7,6 +7,8 @@ import Vector from './Vector';
 import Buffer2D from "./Buffer2D";
 import RGBA from "./RGBA";
 import RenderTarget from './RenderTarget';
+import Texture2D from './Texture2D';
+import Vector2D from './Vector2D';
 
 export default class Rasterizer {
     static color_buffer: Buffer2D<RGBA>;
@@ -133,7 +135,7 @@ export default class Rasterizer {
         return Rasterizer.clip_in_Projection_Space(v0, v1, v2, pcamera);
     }
 
-    static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform) {
+    static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
 
         // to MVP
         let triangle_list = Rasterizer.MVP_backface_culling_clipping(triangle, pcamera, worldTransform);
@@ -173,7 +175,6 @@ export default class Rasterizer {
                     if (!Triangle.is_in_triangle(α, β, γ))
                         continue;
 
-                    Rasterizer.color_buffer.set(x, y, RGBA.yellow);
                     // if yes 
                     // (1)從NDC到Screen Space是仿射變換，內插權重α、β、γ一樣)
 
@@ -192,15 +193,18 @@ export default class Rasterizer {
                     let w = 1 / Triangle.interpolation(γ, α, β, 1 / T.v0.w, 1 / T.v1.w, 1 / T.v2.w);
 
                     // 要在NDC插值，所以除以w
-                    let u = Triangle.interpolation(γ, α, β, T.v0.u / T.v0.w, T.v1.u / T.v1.w, T.v2.u / T.v2.w);
-                    let v = Triangle.interpolation(γ, α, β, T.v0.v / T.v0.w, T.v1.v / T.v1.w, T.v2.v / T.v2.w);
+                    let u_ndc = Triangle.interpolation(γ, α, β, T.v0.u / T.v0.w, T.v1.u / T.v1.w, T.v2.u / T.v2.w);
+                    let v_ndc = Triangle.interpolation(γ, α, β, T.v0.v / T.v0.w, T.v1.v / T.v1.w, T.v2.v / T.v2.w);
 
                     // projection space 
-                    let u_p = u * w;
-                    let v_p = v * w;
+                    let u = u_ndc * w;
+                    let v = v_ndc * w;
+
+                    let { color } = texture.get(new Vector2D(u, v));
+                    // Rasterizer.color_buffer.set(x, y, RGBA.yellow);
+                    Rasterizer.color_buffer.set(x, y, color);
                 }
             }
-
         }
         return list;
     }

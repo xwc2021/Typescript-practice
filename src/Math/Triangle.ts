@@ -5,6 +5,7 @@ import Camera from './Camera';
 import Plane from './Plane';
 import Ray from './Ray';
 import Rasterizer from './Rasterizer';
+import Texture2D from './Texture2D';
 
 export default class Triangle {
 
@@ -49,8 +50,8 @@ export default class Triangle {
     }
 
     v_s: Vector[];
-    process(pcamera: Camera, worldTransform: Transform) {
-        this.v_s = Rasterizer.process(this, pcamera, worldTransform);
+    rasterize(pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
+        this.v_s = Rasterizer.process(this, pcamera, worldTransform, texture);
     }
 
     draw(ctx: CanvasRenderingContext2D) {
