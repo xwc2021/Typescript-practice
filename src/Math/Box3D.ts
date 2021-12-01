@@ -31,18 +31,18 @@ export default class Box {
         for (let i = 0; i < m.length; ++i) {
             let rotateMatrix = m[i];
             let n2 = Transform.transformPoint(rotateMatrix, n);
-            this.triangles.push(
-                new Triangle(
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(- 10, -10, -10)), n2, 1, 0, 0),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, -10)), n2, 1, 1, 0)
-                ));
-            this.triangles.push(
-                new Triangle(
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, -10)), n2, 1, 0, 0),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, 10, -10)), n2, 1, 0, 1),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1)
-                ));
+            // this.triangles.push(
+            //     new Triangle(
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(- 10, -10, -10)), n2, 1, 0, 0),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, -10)), n2, 1, 1, 0)
+            //     ));
+            // this.triangles.push(
+            //     new Triangle(
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, -10)), n2, 1, 0, 0),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, 10, -10)), n2, 1, 0, 1),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1)
+            //     ));
         }
     }
 

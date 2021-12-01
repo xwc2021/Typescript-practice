@@ -25,8 +25,16 @@ export default class Triangle {
         let vector_α = Vector.minus(p_on_dir01, s0);
         let vector_β = Vector.minus(diff, vector_α);
 
-        let α = vector_α.x / dir01.x;
-        let β = vector_β.x / dir02.x;
+        // 擋掉dir01、dir02是y軸平行的情況
+        let α = (dir01.x == 0) ? vector_α.y / dir01.y : vector_α.x / dir01.x;
+        let β = (dir02.x == 0) ? vector_β.y / dir02.y : vector_β.x / dir02.x;
+        if (isNaN(α)) {
+            console.log(vector_α.x, dir01.x);
+        }
+
+        if (isNaN(β)) {
+            console.log(vector_β.x, dir02.x);
+        }
         let γ = 1 - α - β;
 
         return { α, β, γ }

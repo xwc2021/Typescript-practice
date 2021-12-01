@@ -122,7 +122,8 @@ export default class Rasterizer {
         let cos_value = Vector.dot(normal, center_to_eye);;
         if (cos_value <= 0) {
             // console.log('culling')
-            return [];
+            // 先關掉
+            // return [];
         }
 
         // 重新綁定uv
@@ -134,17 +135,27 @@ export default class Rasterizer {
         return Rasterizer.clip_in_Projection_Space(v0, v1, v2, pcamera);
     }
 
+
     static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
 
         // to MVP
         let triangle_list = Rasterizer.MVP_backface_culling_clipping(triangle, pcamera, worldTransform);
 
         let list = [];
+        let count = 0;
         // to NDC
         for (let T of triangle_list) {
+
             let n0 = pcamera.toNDC(T.v0.p, T.v0.w);
             let n1 = pcamera.toNDC(T.v1.p, T.v1.w);
             let n2 = pcamera.toNDC(T.v2.p, T.v2.w);
+
+            // NDC應該要落在
+            // -1 ≤ x ≤ 1, -1 ≤ y ≤ 1
+            // 但奇怪的是javascript算出來的結果，有可能是這種1.0000000000000002
+            n0.clamp_x(-1, 1).clamp_y(-1, 1);
+            n1.clamp_x(-1, 1).clamp_y(-1, 1);
+            n2.clamp_x(-1, 1).clamp_y(-1, 1);
 
             // to screen space
             // 0 ≤ x ≤ w, 0 ≤ y ≤ h
@@ -164,6 +175,9 @@ export default class Rasterizer {
             let max_x = Math.min(Math.floor(max.x), this.color_buffer.w - 1); // clamp 
             let min_y = Math.floor(min.y);
             let max_y = Math.min(Math.floor(max.y), this.color_buffer.h - 1); // clamp
+
+            let all = (max_x - min_x) * (max_y - min_y);
+            let draw = 0;
             for (let x = min_x; x <= max_x; ++x) {
                 for (let y = min_y; y <= max_y; ++y) {
 
@@ -173,8 +187,9 @@ export default class Rasterizer {
                     // 對矩形裡的每個點P
                     // 判定是否位在screen space三角形裡面
                     let { α, β, γ } = Triangle.calculate_α_β_γ(s0, s1, s2, P);
-                    if (!Triangle.is_in_triangle(α, β, γ))
+                    if (!Triangle.is_in_triangle(α, β, γ)) {
                         continue;
+                    }
 
                     // if yes 
                     // (1)從NDC到Screen Space是仿射變換，內插權重α、β、γ一樣)
@@ -205,8 +220,11 @@ export default class Rasterizer {
                     let { color } = texture.get(new Vector2D(u, v));
                     // Rasterizer.color_buffer.set(x, y, RGBA.yellow);
                     Rasterizer.color_buffer.set(x, y, color);
+                    draw++;
                 }
             }
+            count++;
+            // console.log(count, Math.floor(100 * draw / all));
         }
         return list;
     }

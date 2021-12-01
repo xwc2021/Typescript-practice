@@ -16,8 +16,11 @@ export default class RasterizerApp {
     camera: Camera = null;
     thandle: number;
 
-    screenWidth = 800;
-    screenHeight = 600;
+    // screenWidth = 800;
+    // screenHeight = 600;
+
+    screenWidth = 320;
+    screenHeight = 240;
     box: Box = null;
 
     last_t: number;
@@ -52,7 +55,7 @@ export default class RasterizerApp {
         CavnasHelper.set_canvas('canvas', this.screenWidth, this.screenHeight);
 
         this.box = new Box();
-        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 1, 500);
+        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 10, 500);
         this.texture = new Texture2D('/texture/smoking_2.jpg');
         this.start();
     }
@@ -98,17 +101,17 @@ export default class RasterizerApp {
         let nowDegree = this.sum_t / 1000 * 15 % 360;
         // let nowDegree = 0;
 
-        let rotateMatrix = Transform.rotateByY(nowDegree);
+        let rotateMatrix = Transform.rotateByY(336.55499999999995);
         // let rotateMatrix = Transform.rotateByY(45);
         let combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.rasterize(this.camera, combineMatrix, this.texture);
         this.box.draw_line(this.ctx);
 
-        offsetMatrix = Transform.offset(0, 0, 150);
-        rotateMatrix = Transform.rotateByY(nowDegree);
-        combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
-        this.box.rasterize(this.camera, combineMatrix, this.texture);
-        this.box.draw_line(this.ctx);
+        // offsetMatrix = Transform.offset(0, 0, 150);
+        // rotateMatrix = Transform.rotateByY(nowDegree);
+        // combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
+        // this.box.rasterize(this.camera, combineMatrix, this.texture);
+        // this.box.draw_line(this.ctx);
 
         // 顯示到render target
         Rasterizer.show(this.render_target);

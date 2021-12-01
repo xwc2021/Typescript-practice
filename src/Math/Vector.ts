@@ -1,4 +1,4 @@
-import { lerp, number_equal } from './Tool'
+import { lerp, number_equal, clamp } from './Tool'
 
 export default class Vector {
 
@@ -78,6 +78,16 @@ export default class Vector {
         this.x = px;
         this.y = py;
         this.z = pz;
+    }
+
+    clamp_x(min: number, max: number) {
+        this.x = clamp(this.x, min, max);
+        return this;
+    }
+
+    clamp_y(min: number, max: number) {
+        this.y = clamp(this.y, min, max);
+        return this;
     }
 
     length() {
