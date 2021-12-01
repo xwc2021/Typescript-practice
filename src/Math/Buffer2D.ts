@@ -20,7 +20,6 @@ export default class Buffer2D<T> {
         if (this.is_legal_index(x, y))
             this.buffer[y][x] = value;
         else {
-            // Todo
             console.log('set', this.w, this.h, x, y);
             return RGBA.debug;
         }
@@ -30,7 +29,6 @@ export default class Buffer2D<T> {
         if (this.is_legal_index(x, y))
             return this.buffer[y][x];
         else {
-            // Todo
             console.log('get', this.w, this.h, x, y);
             return RGBA.debug;
         }

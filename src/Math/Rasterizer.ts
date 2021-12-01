@@ -147,6 +147,7 @@ export default class Rasterizer {
             let n2 = pcamera.toNDC(T.v2.p, T.v2.w);
 
             // to screen space
+            // 0 ≤ x ≤ w, 0 ≤ y ≤ h
             let s0 = pcamera.toScreenSpace(n0);
             let s1 = pcamera.toScreenSpace(n1);
             let s2 = pcamera.toScreenSpace(n2);
@@ -160,9 +161,9 @@ export default class Rasterizer {
             let { min, max } = Vector.min_max(s0, s1, s2);
             // console.log(min.x, max.x, '|', min.y, max.y);
             let min_x = Math.floor(min.x);
-            let max_x = Math.floor(max.x);
+            let max_x = Math.min(Math.floor(max.x), this.color_buffer.w - 1); // clamp 
             let min_y = Math.floor(min.y);
-            let max_y = Math.floor(max.y);
+            let max_y = Math.min(Math.floor(max.y), this.color_buffer.h - 1); // clamp
             for (let x = min_x; x <= max_x; ++x) {
                 for (let y = min_y; y <= max_y; ++y) {
 
@@ -181,6 +182,7 @@ export default class Rasterizer {
                     // 計算z值
                     let z = Triangle.interpolation(γ, α, β, n0.z, n1.z, n2.z);
                     // z test
+
                     let buffer_z = Rasterizer.z_buffer.get(x, y);
                     if (z > buffer_z)
                         continue;
