@@ -45,15 +45,15 @@ export default class TestTextureApp {
     }
 
     texture2D(u: number, v: number) {
-        let { rectUV, NW, NE, SW, SE, color } = Sampler.texture2D(u, v, this.colume_count, this.row_count, this.buffer);
+        let { rectUV, BL, BR, TL, TR, color } = Sampler.texture2D(u, v, this.colume_count, this.row_count, this.buffer);
 
         //畫4個鄰近點
-        this.drawPointByGridIndex(NW);
-        this.drawPointByGridIndex(NE);
-        this.drawPointByGridIndex(SW);
-        this.drawPointByGridIndex(SE);
-        this.drawRect(NW);
-        this.drawPointByRectUV(NW, rectUV);
+        this.drawPointByGridIndex(BL);
+        this.drawPointByGridIndex(BR);
+        this.drawPointByGridIndex(TL);
+        this.drawPointByGridIndex(TR);
+        this.drawRect(BL);
+        this.drawPointByRectUV(BL, rectUV);
 
         // 顯示最後的結果
         var ctx = CavnasHelper.get_context('canvas2');
