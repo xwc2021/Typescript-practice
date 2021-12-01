@@ -106,10 +106,10 @@ export default class Sampler {
         */
 
         //對4個點顏色作內插
-        let NWcolor = buffer.get(NW.x, NW.y);
-        let NEcolor = buffer.get(NE.x, NE.y);
-        let SWcolor = buffer.get(SW.x, SW.y);
-        let SEcolor = buffer.get(SE.x, SE.y);
+        let NWcolor = buffer.get_Buffer(NW.x, NW.y);
+        let NEcolor = buffer.get_Buffer(NE.x, NE.y);
+        let SWcolor = buffer.get_Buffer(SW.x, SW.y);
+        let SEcolor = buffer.get_Buffer(SE.x, SE.y);
 
         let topRGB = RGBA.lerp(NWcolor, NEcolor, rectUV.x);
         let downRGB = RGBA.lerp(SWcolor, SEcolor, rectUV.x);

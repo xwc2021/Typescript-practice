@@ -3,9 +3,14 @@
 <head>
 
   <title>Canvas javascript api demo</title>
-  <style type="text/css">
+
+  <style>
     canvas {
       border: 1px #000 solid;
+    }
+
+    body {
+      background: #c0a154 url(//www.blogblog.com/1kt/watermark/body_background_birds.png) repeat scroll top left;
     }
   </style>
 </head>
@@ -13,19 +18,20 @@
 <body>
   UV座標<input id="u" type="text" value="0.55" />
   <input id="v" type="text" value="0.35" />
-  <input onclick="reBulid2()" type="button" value="reset" />
-  <input onclick="moveRight();reBulid2();" type="button" value="右移" />
-  <input onclick="moveDown();reBulid2();" type="button" value="下移" />
+  <input id="btn_reset" type="button" value="reset" />
+  <input id="move_right" type="button" value="右移" />
+  <input id="move_down" type="button" value="下移" />
   <br />
-  <canvas height="600" id="canvas" onclick="reBulid(new Point2D(event.offsetX,event.offsetY))" width="600">this browser
+  <canvas height="600" id="canvas" width="600">this browser
     does not support canvas...</canvas>
 
   <div>
     4個最近像素的內插結果
-    <canvas height="30" id="canvas2" width="30">this browser does not support canvas...</canvas>
+    <canvas height="30" id="canvas2" width="30"></canvas>
     <br />
 
   </div>
+  <script src='./dist/build.js'></script>
 </body>
 
 </html>

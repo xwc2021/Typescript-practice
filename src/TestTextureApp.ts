@@ -23,6 +23,24 @@ export default class TestTextureApp {
     constructor() {
         window.onload = () => {
             this.init();
+
+            this.$('btn_reset').onclick = () => {
+                this.reBulid2();
+            };
+
+            this.$('move_right').onclick = () => {
+                this.moveRight();
+                this.reBulid2()
+            };
+
+            this.$('move_down').onclick = () => {
+                this.moveDown();
+                this.reBulid2();
+            };
+
+            this.$('canvas').onclick = (event) => {
+                this.reBulid(new Vector2D(event.offsetX, event.offsetY))
+            };
         };
     }
 
@@ -96,7 +114,7 @@ export default class TestTextureApp {
 
     init() {
         this.reset();
-        DrawHelper.drawStar(RGBA.yellow, this.buffer);
+        DrawHelper.drawStar(RGBA.golden, this.buffer);
         this.Render();
     }
 

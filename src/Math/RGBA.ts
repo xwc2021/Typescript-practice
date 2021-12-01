@@ -2,8 +2,11 @@ import Vector from "./Vector";
 import { lerp } from "./Tool";
 
 export default class RGBA {
+    static golden = new RGBA(1, 215 / 255, 0, 1);
     static yellow = new RGBA(1, 1, 0, 1);
+    static pink = new RGBA(1, 192 / 255, 203 / 255, 1);
     static black = new RGBA(0, 0, 0, 1);
+    static red = new RGBA(1, 0, 0, 1);
 
     r: number;
     g: number;
