@@ -25,17 +25,17 @@ export default class TestTextureApp {
             this.init();
 
             this.$('btn_reset').onclick = () => {
-                this.reBulid2();
+                this.Render();
             };
 
             this.$('move_right').onclick = () => {
                 this.moveRight();
-                this.reBulid2()
+                this.Render();
             };
 
             this.$('move_up').onclick = () => {
                 this.moveUp();
-                this.reBulid2();
+                this.Render();
             };
 
             this.$('canvas').onclick = (event) => {
@@ -66,10 +66,6 @@ export default class TestTextureApp {
         let u = parseFloat(this.$("u").value);
         let v = parseFloat(this.$("v").value);
         this.texture2D(new Vector2D(u, v));
-    }
-
-    reBulid2() {
-        this.Render();
     }
 
     moveRight() {
