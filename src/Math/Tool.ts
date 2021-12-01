@@ -308,23 +308,32 @@ export class DrawHelper {
 
     }
 
-    static drawStar(value: RGBA, buffer: Buffer2D<RGBA>) {
-        let it = 5;
+    static drawCircle(value: RGBA, buffer: Buffer2D<RGBA>) {
+        let it = 50;
         let delta = 2 * Math.PI / it;
         let R = 9;
         let center = new Vector2D(10, 10);
         let startTheda = -Math.PI / 3;
 
         //畫圓
-        // for (let i = 0; i < 500; i++) {
-        //     let nowX = Math.floor(center.x + R * Math.cos(startTheda + delta * i));
-        //     let nowY = Math.floor(center.y + R * Math.sin(startTheda + delta * i));
+        for (let i = 0; i < it; i++) {
+            let nowX = Math.floor(center.x + R * Math.cos(startTheda + delta * i));
+            let nowY = Math.floor(center.y + R * Math.sin(startTheda + delta * i));
 
-        //     let nextX = Math.floor(center.x + R * Math.cos(startTheda + delta * (i + 1)));
-        //     let nextY = Math.floor(center.y + R * Math.sin(startTheda + delta * (i + 1)));
+            let nextX = Math.floor(center.x + R * Math.cos(startTheda + delta * (i + 1)));
+            let nextY = Math.floor(center.y + R * Math.sin(startTheda + delta * (i + 1)));
 
-        //     DrawHelper.drawLineWrapper(new Vector2D(nowX, nowY), new Vector2D(nextX, nextY), value, buffer);
-        // }
+            DrawHelper.drawLineWrapper(new Vector2D(nowX, nowY), new Vector2D(nextX, nextY), value, buffer);
+        }
+    }
+
+
+    static drawStar(value: RGBA, buffer: Buffer2D<RGBA>) {
+        let it = 5;
+        let delta = 2 * Math.PI / it;
+        let R = 9;
+        let center = new Vector2D(10, 10);
+        let startTheda = -Math.PI / 3;
 
         //畫星星
         let k = 0;
