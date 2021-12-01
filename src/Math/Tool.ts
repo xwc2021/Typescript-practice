@@ -218,7 +218,7 @@ export class DrawHelper {
             for (var i = 1; i < step; i++) {
                 //左畫到右
                 now.x = now.x + 1;
-                if (!buffer.checkIndex(now.x, now.y))
+                if (!buffer.is_legal_index(now.x, now.y))
                     break;
 
                 if (now.x > toX)
@@ -234,7 +234,7 @@ export class DrawHelper {
             for (var i = 1; i < step; i++) {
                 //上畫到下
                 now.y = now.y + 1;
-                if (!buffer.checkIndex(now.x, now.y))
+                if (!buffer.is_legal_index(now.x, now.y))
                     break;
 
                 if (now.y > toY)
@@ -248,7 +248,7 @@ export class DrawHelper {
         var ratio = child / parent;
         var abs_r = Math.abs(ratio);
 
-        if (buffer.checkIndex(intX, now.y))
+        if (buffer.is_legal_index(intX, now.y))
             buffer.set(now.x, now.y, value);
 
         if (ratio > 0) {
@@ -257,10 +257,10 @@ export class DrawHelper {
                     now.y = now.y + 1;
                     now.x = now.x + abs_r;
                     var intX = Math.floor(now.x);
-                    if (!buffer.checkIndex(intX, now.y))
+                    if (!buffer.is_legal_index(intX, now.y))
                         break;
 
-                    if (buffer.isOverPositive(now.x, now.y, toX, toY))
+                    if (buffer.is_over_positive(now.x, now.y, toX, toY))
                         break;
 
                     buffer.set(intX, now.y, value);
@@ -271,10 +271,10 @@ export class DrawHelper {
                     now.y = now.y + 1 / abs_r;
                     now.x = now.x + 1;
                     var intY = Math.floor(now.y);
-                    if (!buffer.checkIndex(now.x, intY))
+                    if (!buffer.is_legal_index(now.x, intY))
                         break;
 
-                    if (buffer.isOverPositive(now.x, now.y, toX, toY))
+                    if (buffer.is_over_positive(now.x, now.y, toX, toY))
                         break;
 
                     buffer.set(now.x, intY, value);
@@ -287,10 +287,10 @@ export class DrawHelper {
                     now.y = now.y + 1;
                     now.x = now.x - abs_r;
                     var intX = Math.floor(now.x);
-                    if (!buffer.checkIndex(intX, now.y))
+                    if (!buffer.is_legal_index(intX, now.y))
                         break;
 
-                    if (buffer.isOverNegative(now.x, now.y, toX, toY))
+                    if (buffer.is_over_negative(now.x, now.y, toX, toY))
                         break;
 
                     buffer.set(intX, now.y, value);
@@ -301,10 +301,10 @@ export class DrawHelper {
                     now.y = now.y + 1 / abs_r;
                     now.x = now.x - 1;
                     var intY = Math.floor(now.y);
-                    if (!buffer.checkIndex(now.x, intY))
+                    if (!buffer.is_legal_index(now.x, intY))
                         break;
 
-                    if (buffer.isOverNegative(now.x, now.y, toX, toY))
+                    if (buffer.is_over_negative(now.x, now.y, toX, toY))
                         break;
 
                     buffer.set(now.x, intY, value);

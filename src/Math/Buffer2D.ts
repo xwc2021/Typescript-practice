@@ -33,27 +33,27 @@ export default class Buffer2D<T> {
     }
 
     // 超過邊界就使用邊界值
-    get_Buffer(x: number, y: number) {
+    get_clamp_mode(x: number, y: number) {
         let nx = clamp(x, 0, this.w - 1);
         let ny = clamp(y, 0, this.h - 1);
 
         return this.buffer[ny][nx];
     }
 
-    checkIndex(x: number, y: number) {
+    is_legal_index(x: number, y: number) {
         if (x >= 0 && x < this.w && y >= 0 && y < this.h)
             return true;
         else return false;
     }
 
-    isOverNegative(x: number, y: number, endX: number, endY: number) {
+    is_over_negative(x: number, y: number, endX: number, endY: number) {
         if (y > endY || x < endX)
             return true;
         else
             return false;
     }
 
-    isOverPositive(x: number, y: number, endX: number, endY: number) {
+    is_over_positive(x: number, y: number, endX: number, endY: number) {
         if (y > endY || x > endX)
             return true;
         else

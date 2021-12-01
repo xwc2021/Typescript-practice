@@ -97,19 +97,11 @@ export default class Sampler {
 
     static Bilinear_Sampler(rectUV: Vector2D, NW: Vector2D, NE: Vector2D, SW: Vector2D, SE: Vector2D, buffer: Buffer2D<RGBA>) {
 
-        /*
-        alert(rectUV.toString());
-        alert(NW.toString());
-        alert(NE.toString());
-        alert(SW.toString());
-        alert(SE.toString());
-        */
-
         //對4個點顏色作內插
-        let NWcolor = buffer.get_Buffer(NW.x, NW.y);
-        let NEcolor = buffer.get_Buffer(NE.x, NE.y);
-        let SWcolor = buffer.get_Buffer(SW.x, SW.y);
-        let SEcolor = buffer.get_Buffer(SE.x, SE.y);
+        let NWcolor = buffer.get_clamp_mode(NW.x, NW.y);
+        let NEcolor = buffer.get_clamp_mode(NE.x, NE.y);
+        let SWcolor = buffer.get_clamp_mode(SW.x, SW.y);
+        let SEcolor = buffer.get_clamp_mode(SE.x, SE.y);
 
         let topRGB = RGBA.lerp(NWcolor, NEcolor, rectUV.x);
         let downRGB = RGBA.lerp(SWcolor, SEcolor, rectUV.x);
