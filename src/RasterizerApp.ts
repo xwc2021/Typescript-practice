@@ -44,7 +44,7 @@ export default class RasterizerApp {
         CavnasHelper.set_canvas('canvas', this.screenWidth, this.screenHeight);
 
         this.box = new Box();
-        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 10, 500);
+        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 50, 500);
         this.texture = new Texture2D('/texture/smoking_2.jpg');
         this.start();
     }

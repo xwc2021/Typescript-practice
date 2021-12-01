@@ -186,7 +186,7 @@ export default class Rasterizer {
                         continue;
 
                     // 寫入z值
-                    Rasterizer.z_buffer.set(x, y, z);
+                    // Rasterizer.z_buffer.set(x, y, z);
 
                     // (2)在NDC進行內插，乘上w回到projection space
                     // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
