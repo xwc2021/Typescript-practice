@@ -313,23 +313,18 @@ export class DrawHelper {
         let delta = 2 * Math.PI / it;
         let R = 9;
         let center = new Vector2D(10, 10);
-
-
         let startTheda = -Math.PI / 3;
 
         //畫圓
-        /*
-        for(let i=0;i<it;i++)
-        {
-        let nowX = parseInt(center.x+R*Math.cos(startTheda+delta*i));
-        let nowY = parseInt(center.y+R*Math.sin(startTheda+delta*i));
-        
-        let nextX = parseInt(center.x+R*Math.cos(startTheda+delta*(i+1)));
-        let nextY = parseInt(center.y+R*Math.sin(startTheda+delta*(i+1)));
-        
-        drawLineWrapper(new Point2D(nowX,nowY),new Point2D(nextX,nextY));
-        }
-        */
+        // for (let i = 0; i < 500; i++) {
+        //     let nowX = Math.floor(center.x + R * Math.cos(startTheda + delta * i));
+        //     let nowY = Math.floor(center.y + R * Math.sin(startTheda + delta * i));
+
+        //     let nextX = Math.floor(center.x + R * Math.cos(startTheda + delta * (i + 1)));
+        //     let nextY = Math.floor(center.y + R * Math.sin(startTheda + delta * (i + 1)));
+
+        //     DrawHelper.drawLineWrapper(new Vector2D(nowX, nowY), new Vector2D(nextX, nextY), value, buffer);
+        // }
 
         //畫星星
         let k = 0;
@@ -340,7 +335,6 @@ export class DrawHelper {
             let nextX = Math.floor(center.x + R * Math.cos(startTheda + delta * (k + 2)));
             let nextY = Math.floor(center.y + R * Math.sin(startTheda + delta * (k + 2)));
 
-            //alert(nowX+","+nowY+" "+nextX+","+nextY);
             DrawHelper.drawLineWrapper(new Vector2D(nowX, nowY), new Vector2D(nextX, nextY), value, buffer);
             k = k + 2;
         }
