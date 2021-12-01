@@ -12,7 +12,10 @@ export default class Sampler {
         return new Vector2D(uv.x, 1 - uv.y);
     }
 
-    static texture2D(uv: Vector2D, w: number, h: number, buffer: Buffer2D<RGBA>) {
+    static texture2D(uv: Vector2D, buffer: Buffer2D<RGBA>) {
+
+        let w = buffer.w;
+        let h = buffer.h;
 
         let buffer_uv = Sampler.uv_to_buffer_space(uv);
         let u = buffer_uv.x;

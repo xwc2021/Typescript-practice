@@ -32,7 +32,7 @@
         function test(x, y) {
             // (0~w-1,0~h-1) 可取值
             let pixel = ctx.getImageData(x, y, 1, 1);
-            console.log(pixel);
+            return pixel;
         }
         let color = document.getElementById('color');
         function pick(event) {

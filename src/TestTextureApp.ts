@@ -45,7 +45,7 @@ export default class TestTextureApp {
     }
 
     texture2D(uv: Vector2D) {
-        let { rectUV, NW, NE, SW, SE, color } = Sampler.texture2D(uv, this.colume_count, this.row_count, this.buffer);
+        let { rectUV, NW, NE, SW, SE, color } = Sampler.texture2D(uv, this.buffer);
 
         //畫4個鄰近點
         this.drawPointByGridIndex(NW);
@@ -102,7 +102,11 @@ export default class TestTextureApp {
         this.rect_w = this.canvas_width / this.colume_count;
         this.rect_h = this.canvas_height / this.row_count;
 
-        this.buffer = new Buffer2D(this.colume_count, this.row_count);
+        if (this.buffer == null) {
+            this.buffer = new Buffer2D(this.colume_count, this.row_count);
+            console.log('init buffer');
+        }
+
 
         for (let x = 0; x < this.colume_count; x++)
             for (let y = 0; y < this.row_count; y++)
