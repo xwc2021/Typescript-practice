@@ -122,8 +122,7 @@ export default class Rasterizer {
         let cos_value = Vector.dot(normal, center_to_eye);;
         if (cos_value <= 0) {
             // console.log('culling')
-            // 先關掉
-            // return [];
+            return [];
         }
 
         // 重新綁定uv

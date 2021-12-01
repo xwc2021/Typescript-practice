@@ -21,6 +21,7 @@ export default class Triangle {
         let ray = new Ray(P, dir02.multiply(-1));
         let result = Plane.hit(ray, new Plane(s0, n));
 
+        // Todo 這裡可能是null？
         let p_on_dir01 = result.hit_pos;
         let vector_α = Vector.minus(p_on_dir01, s0);
         let vector_β = Vector.minus(diff, vector_α);

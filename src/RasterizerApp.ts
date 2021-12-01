@@ -101,7 +101,8 @@ export default class RasterizerApp {
         let nowDegree = this.sum_t / 1000 * 15 % 360;
         // let nowDegree = 0;
 
-        let rotateMatrix = Transform.rotateByY(336.55499999999995);
+        let rotateMatrix = Transform.rotateByY(nowDegree);
+        // let rotateMatrix = Transform.rotateByY(336.55499999999995);
         // let rotateMatrix = Transform.rotateByY(45);
         let combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.rasterize(this.camera, combineMatrix, this.texture);
