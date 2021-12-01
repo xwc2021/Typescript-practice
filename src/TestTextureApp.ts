@@ -90,7 +90,7 @@ export default class TestTextureApp {
         let u = P.x / this.canvas_width;
         let v = P.y / this.canvas_height;
         let buffer_uv = new Vector2D(u, v);
-        let uv = Vector2D.buffer_to_uv_space(buffer_uv);
+        let uv = Sampler.buffer_to_uv_space(buffer_uv);
 
         this.$("u").value = uv.x.toString();
         this.$("v").value = uv.y.toString();

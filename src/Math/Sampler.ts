@@ -1,14 +1,20 @@
 import Buffer2D from "./Buffer2D";
-import CavnasHelper from "./CanvasHelper";
 import RGBA from "./RGBA";
 import Vector2D from "./Vector2D";
-import { MathHelper } from "./Tool";
 
 export default class Sampler {
 
+    static uv_to_buffer_space(uv: Vector2D) {
+        return new Vector2D(uv.x, 1 - uv.y);
+    }
+
+    static buffer_to_uv_space(uv: Vector2D) {
+        return new Vector2D(uv.x, 1 - uv.y);
+    }
+
     static texture2D(uv: Vector2D, w: number, h: number, buffer: Buffer2D<RGBA>) {
 
-        let buffer_uv = Vector2D.uv_to_buffer_space(uv);
+        let buffer_uv = Sampler.uv_to_buffer_space(uv);
         let u = buffer_uv.x;
         let v = buffer_uv.y;
 
