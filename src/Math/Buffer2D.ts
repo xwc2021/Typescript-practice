@@ -31,7 +31,7 @@ export default class Buffer2D<T> {
             return this.buffer[y][x];
         else {
             // Todo
-            console.log(x, y);
+            console.log('get', this.w, this.h, x, y);
             return RGBA.debug;
         }
 

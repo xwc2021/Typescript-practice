@@ -29,6 +29,14 @@ export default class RasterizerApp {
     constructor() {
         window.onload = () => {
             this.init();
+
+            document.getElementById('btn_timeout').onclick = () => {
+                this.stop();
+            };
+
+            document.getElementById('btn_resume').onclick = () => {
+                this.resume();
+            };
         };
         document.onkeydown = this.keyProc.bind(this);
         this.drawScene = this.drawScene.bind(this);
