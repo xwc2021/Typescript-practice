@@ -33,8 +33,8 @@ export default class TestTextureApp {
                 this.reBulid2()
             };
 
-            this.$('move_down').onclick = () => {
-                this.moveDown();
+            this.$('move_up').onclick = () => {
+                this.moveUp();
                 this.reBulid2();
             };
 
@@ -56,15 +56,15 @@ export default class TestTextureApp {
         this.drawPointByRectUV(NW, rectUV);
 
         // 顯示最後的結果
-        var ctx = CavnasHelper.get_context('canvas2');
+        let ctx = CavnasHelper.get_context('canvas2');
         ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = CavnasHelper.convert(color);
         ctx.fillRect(0, 0, 30, 30);
     }
 
     drawUV() {
-        var u = parseFloat(this.$("u").value);
-        var v = parseFloat(this.$("v").value);
+        let u = parseFloat(this.$("u").value);
+        let v = parseFloat(this.$("v").value);
         this.texture2D(new Vector2D(u, v));
     }
 
@@ -73,18 +73,18 @@ export default class TestTextureApp {
     }
 
     moveRight() {
-        var u = parseFloat(this.$("u").value);
+        let u = parseFloat(this.$("u").value);
 
-        var grid_u = 1 / this.colume_count;
+        let grid_u = 1 / this.colume_count;
         u = MathHelper.accAdd(u, grid_u);
 
         this.$("u").value = u.toString();
     }
 
-    moveDown() {
-        var v = parseFloat(this.$("v").value);
+    moveUp() {
+        let v = parseFloat(this.$("v").value);
 
-        var grid_v = 1 / this.row_count;
+        let grid_v = 1 / this.row_count;
         v = MathHelper.accAdd(v, grid_v);
 
         this.$("v").value = v.toString();
@@ -108,8 +108,8 @@ export default class TestTextureApp {
 
         this.buffer = new Buffer2D(this.colume_count, this.row_count);
 
-        for (var x = 0; x < this.colume_count; x++)
-            for (var y = 0; y < this.row_count; y++)
+        for (let x = 0; x < this.colume_count; x++)
+            for (let y = 0; y < this.row_count; y++)
                 this.buffer.set(x, y, new RGBA(0, 0, 0, 1));
 
     }
@@ -126,14 +126,14 @@ export default class TestTextureApp {
     }
 
     drawBuffer() {
-        var ctx = CavnasHelper.get_context('canvas');
+        let ctx = CavnasHelper.get_context('canvas');
         ctx.clearRect(0, 0, 600, 600);
 
-        for (var y = 0; y < this.row_count; y++) {
-            for (var x = 0; x < this.colume_count; x++) {
+        for (let y = 0; y < this.row_count; y++) {
+            for (let x = 0; x < this.colume_count; x++) {
                 ctx.beginPath();
                 ctx.fillStyle = CavnasHelper.convert(this.buffer.get(x, y));
-                var r = 1;
+                let r = 1;
                 ctx.fillRect(x * this.rect_w + r, y * this.rect_h + r, this.rect_w - r, this.rect_h - r);
                 ctx.stroke();
             }
@@ -152,7 +152,7 @@ export default class TestTextureApp {
 
         ctx.beginPath();
         ctx.fillStyle = 'rgba(255,255,0,1)';
-        var r = 6;
+        let r = 6;
         ctx.fillRect((P.x + 0.5) * this.rect_w - 0.5 * r, (P.y + 0.5) * this.rect_h - 0.5 * r, r, r);
         ctx.stroke();
     }
@@ -175,8 +175,8 @@ export default class TestTextureApp {
         ctx.beginPath();
         ctx.fillStyle = 'rgba(0,255,0,1)';
 
-        var targetP = new Vector2D((P.x + 0.5) * this.rect_w + this.rect_w * rectUV.x, (P.y + 0.5) * this.rect_h + this.rect_h * rectUV.y);
-        var r = 6;
+        let targetP = new Vector2D((P.x + 0.5) * this.rect_w + this.rect_w * rectUV.x, (P.y + 0.5) * this.rect_h + this.rect_h * rectUV.y);
+        let r = 6;
         ctx.fillRect(targetP.x - 0.5 * r, targetP.y - 0.5 * r, r, r);
         ctx.stroke();
     }

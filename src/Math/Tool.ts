@@ -309,36 +309,36 @@ export class DrawHelper {
     }
 
     static drawStar(value: RGBA, buffer: Buffer2D<RGBA>) {
-        var it = 5;
-        var delta = 2 * Math.PI / it;
-        var R = 9;
-        var center = new Vector2D(10, 10);
+        let it = 5;
+        let delta = 2 * Math.PI / it;
+        let R = 9;
+        let center = new Vector2D(10, 10);
 
 
-        var startTheda = -Math.PI / 3;
+        let startTheda = -Math.PI / 3;
 
         //畫圓
         /*
-        for(var i=0;i<it;i++)
+        for(let i=0;i<it;i++)
         {
-        var nowX = parseInt(center.x+R*Math.cos(startTheda+delta*i));
-        var nowY = parseInt(center.y+R*Math.sin(startTheda+delta*i));
+        let nowX = parseInt(center.x+R*Math.cos(startTheda+delta*i));
+        let nowY = parseInt(center.y+R*Math.sin(startTheda+delta*i));
         
-        var nextX = parseInt(center.x+R*Math.cos(startTheda+delta*(i+1)));
-        var nextY = parseInt(center.y+R*Math.sin(startTheda+delta*(i+1)));
+        let nextX = parseInt(center.x+R*Math.cos(startTheda+delta*(i+1)));
+        let nextY = parseInt(center.y+R*Math.sin(startTheda+delta*(i+1)));
         
         drawLineWrapper(new Point2D(nowX,nowY),new Point2D(nextX,nextY));
         }
         */
 
         //畫星星
-        var k = 0;
-        for (var i = 0; i < it; i++) {
-            var nowX = Math.floor(center.x + R * Math.cos(startTheda + delta * k));
-            var nowY = Math.floor(center.y + R * Math.sin(startTheda + delta * k));
+        let k = 0;
+        for (let i = 0; i < it; i++) {
+            let nowX = Math.floor(center.x + R * Math.cos(startTheda + delta * k));
+            let nowY = Math.floor(center.y + R * Math.sin(startTheda + delta * k));
 
-            var nextX = Math.floor(center.x + R * Math.cos(startTheda + delta * (k + 2)));
-            var nextY = Math.floor(center.y + R * Math.sin(startTheda + delta * (k + 2)));
+            let nextX = Math.floor(center.x + R * Math.cos(startTheda + delta * (k + 2)));
+            let nextY = Math.floor(center.y + R * Math.sin(startTheda + delta * (k + 2)));
 
             //alert(nowX+","+nowY+" "+nextX+","+nextY);
             DrawHelper.drawLineWrapper(new Vector2D(nowX, nowY), new Vector2D(nextX, nextY), value, buffer);

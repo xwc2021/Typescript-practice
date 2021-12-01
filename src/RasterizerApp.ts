@@ -84,18 +84,18 @@ export default class RasterizerApp {
         Rasterizer.clear(RGBA.black, 1);
 
         //畫立方體
-        var offsetMatrix = Transform.offset(0, 0, 0);
-        var nowDegree = this.sum_t / 1000 * 15 % 360;
-        // var nowDegree = 0;
+        let offsetMatrix = Transform.offset(0, 0, 0);
+        let nowDegree = this.sum_t / 1000 * 15 % 360;
+        // let nowDegree = 0;
 
-        var rotateMatrix = Transform.rotateByY(nowDegree);
-        // var rotateMatrix = Transform.rotateByY(45);
-        var combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
+        let rotateMatrix = Transform.rotateByY(nowDegree);
+        // let rotateMatrix = Transform.rotateByY(45);
+        let combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.update(this.camera, combineMatrix);
         this.box.draw(this.ctx);
 
-        // var offsetMatrix = Transform.offset(0, 0, 150);
-        // var rotateMatrix = Transform.rotateByY(nowDegree);
+        // let offsetMatrix = Transform.offset(0, 0, 150);
+        // let rotateMatrix = Transform.rotateByY(nowDegree);
         // combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
         // this.box.update(this.camera, combineMatrix);
         // this.box.draw(this.ctx);
@@ -123,8 +123,8 @@ export default class RasterizerApp {
             a_right: 39
         };
 
-        var moveS = 1;
-        var rotateS = 0.1;
+        let moveS = 1;
+        let rotateS = 0.1;
         switch (event.keyCode) {
             case KepMap.w:
                 this.camera.moveEye(moveS, this.camera.z_axis);
