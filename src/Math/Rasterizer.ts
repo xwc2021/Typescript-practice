@@ -207,7 +207,7 @@ export default class Rasterizer {
 
             let half_w_pixel = 0.5 / Rasterizer.color_buffer.w;
             let half_h_pixel = 0.5 / Rasterizer.color_buffer.h;
-            console.log(half_w_pixel, half_h_pixel);
+            // console.log(half_w_pixel, half_h_pixel);
             for (let x = min_x; x <= max_x; ++x) {
                 for (let y = min_y; y <= max_y; ++y) {
 
