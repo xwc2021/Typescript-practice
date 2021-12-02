@@ -82,11 +82,10 @@ export default class RenderTarget {
                 let b = color.b;
 
                 // 沒去gamma，也不用gamma校正
-                // 不過這樣圖看起來比較亮，我喜歡
-                let gamma = 1 / 2.1;
-                r = Math.pow(r, gamma);
-                g = Math.pow(g, gamma);
-                b = Math.pow(b, gamma);
+                // let gamma = 1 / 2.1;
+                // r = Math.pow(r, gamma);
+                // g = Math.pow(g, gamma);
+                // b = Math.pow(b, gamma);
 
                 backbuffer_data_array[index++] = Math.round(r * 255);
                 backbuffer_data_array[index++] = Math.round(g * 255);

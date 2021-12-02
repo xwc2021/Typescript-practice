@@ -64,7 +64,7 @@ export default class Rasterizer {
 
         // 不對Right 、Left、Top、Bottom作裁切了
         // 反正在screen space光柵化三角形時也會用邊界裁切
-        // return out_list;
+        return out_list;
 
         // Right
         out_list = Rasterizer.clip_helper(out_list,
@@ -210,14 +210,12 @@ export default class Rasterizer {
 
                     // 對矩形裡的每個點P
                     // 判定是否位在screen space三角形裡面
-                    let { success, α, β, γ, vector_α, vector_β, dir01, dir02 } = Triangle.calculate_α_β_γ(s0, s1, s2, P);
+                    let { success, α, β, γ } = Triangle.calculate_α_β_γ(s0, s1, s2, P);
                     if (!success)
                         continue
 
                     if (Rasterizer.print_once && x == Rasterizer.peek_screen_pos.x && y == Rasterizer.peek_screen_pos.y) {
                         console.log('is_in_triangle', Triangle.is_in_triangle(α, β, γ), α, β, γ);
-                        console.log('vector', vector_α, vector_β);
-                        console.log('vector', dir01, dir02);
                     }
 
                     if (!Triangle.is_in_triangle(α, β, γ))

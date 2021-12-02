@@ -46,7 +46,7 @@ export default class Triangle {
         }
         let γ = 1 - α - β;
 
-        return { success: true, α, β, γ, vector_α, vector_β, dir01, dir02 }
+        return { success: true, α, β, γ }
     }
 
     static is_in_triangle(α: number, β: number, γ: number) {
