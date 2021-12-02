@@ -46,7 +46,7 @@ export default class Box {
         }
     }
 
-    rasterize(camera: Camera, worldTransform: Transform, texture: Texture2D) {
+    rasterize(camera: Camera, worldTransform: Transform, texture: Texture2D, use_solid_color: boolean, ndc_clamp_effect: boolean) {
 
         // 測試裁切三角形的code
         // this.triangles_after_clip = [];
@@ -67,7 +67,7 @@ export default class Box {
 
         // 處理正方體的變換
         for (let i = 0; i < this.triangles_after_clip.length; ++i) {
-            this.triangles_after_clip[i].rasterize(camera, worldTransform, texture);
+            this.triangles_after_clip[i].rasterize(camera, worldTransform, texture, use_solid_color, ndc_clamp_effect);
         }
     }
 

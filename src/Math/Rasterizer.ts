@@ -62,6 +62,11 @@ export default class Rasterizer {
             (T: Triangle) => { return 0 > T.v2.p.z; },
             ClipPlane.Near);
 
+        // 不對Right 、Left、Top、Bottom作裁切了
+        // 裁切後反而會有bug，圖：bug/bug_when_clipping_2
+        // 反正在screen space光柵化三角形時也會用邊界裁切
+        return out_list;
+
         // Right
         out_list = Rasterizer.clip_helper(out_list,
             (T: Triangle) => { return T.v0.w < T.v0.p.x; },
@@ -70,11 +75,11 @@ export default class Rasterizer {
             ClipPlane.Right);
 
         // Left
-        // out_list = Rasterizer.clip_helper(out_list,
-        //     (T: Triangle) => { return -T.v0.w > T.v0.p.x; },
-        //     (T: Triangle) => { return -T.v1.w > T.v1.p.x; },
-        //     (T: Triangle) => { return -T.v2.w > T.v2.p.x; },
-        //     ClipPlane.Left);
+        out_list = Rasterizer.clip_helper(out_list,
+            (T: Triangle) => { return -T.v0.w > T.v0.p.x; },
+            (T: Triangle) => { return -T.v1.w > T.v1.p.x; },
+            (T: Triangle) => { return -T.v2.w > T.v2.p.x; },
+            ClipPlane.Left);
 
         // Top
         out_list = Rasterizer.clip_helper(out_list,
@@ -135,7 +140,7 @@ export default class Rasterizer {
     }
 
 
-    static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
+    static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform, texture: Texture2D, use_solid_color: boolean, ndc_clamp_effect: boolean) {
 
         // to MVP
         let triangle_list = Rasterizer.MVP_backface_culling_clipping(triangle, pcamera, worldTransform);
@@ -152,10 +157,12 @@ export default class Rasterizer {
             // NDC應該要落在
             // -1 ≤ x ≤ 1, -1 ≤ y ≤ 1
 
-            // 不裁切，clamp ndc也算是一種特殊效果
-            // n0.clamp_x(-1, 1).clamp_y(-1, 1);
-            // n1.clamp_x(-1, 1).clamp_y(-1, 1);
-            // n2.clamp_x(-1, 1).clamp_y(-1, 1);
+            // 不裁切left、right、top、bottom，然後clamp ndc也算是一種特殊效果
+            if (ndc_clamp_effect) {
+                n0.clamp_x(-1, 1).clamp_y(-1, 1);
+                n1.clamp_x(-1, 1).clamp_y(-1, 1);
+                n2.clamp_x(-1, 1).clamp_y(-1, 1);
+            }
 
             // to screen space
             // 0 ≤ x ≤ w, 0 ≤ y ≤ h
@@ -225,8 +232,10 @@ export default class Rasterizer {
                     let v = v_ndc * w;
 
                     let { color } = texture.get(new Vector2D(u, v));
-                    // Rasterizer.color_buffer.set(x, y, RGBA.yellow);
-                    Rasterizer.color_buffer.set(x, y, color);
+                    if (use_solid_color)
+                        Rasterizer.color_buffer.set(x, y, RGBA.yellow);
+                    else
+                        Rasterizer.color_buffer.set(x, y, color);
                     draw++;
                 }
             }
