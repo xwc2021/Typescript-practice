@@ -187,6 +187,8 @@ export default class Rasterizer {
             list.push(s2);
 
             // 找出包圍的矩形
+            // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
+            // 圖 Screen Space
             let { min, max } = Vector.min_max(s0, s1, s2);
             // console.log(min.x, max.x, '|', min.y, max.y);
             let min_x = Math.floor(min.x);
@@ -202,11 +204,16 @@ export default class Rasterizer {
 
             let all = (max_x - min_x) * (max_y - min_y);
             let draw = 0;
+
+            let half_w_pixel = 0.5 / Rasterizer.color_buffer.w;
+            let half_h_pixel = 0.5 / Rasterizer.color_buffer.h;
+            console.log(half_w_pixel, half_h_pixel);
             for (let x = min_x; x <= max_x; ++x) {
                 for (let y = min_y; y <= max_y; ++y) {
 
-                    // 移動半個像素
-                    let P = new Vector(x + 0.5, y + 0.5, 0)
+                    // 移動半個像素 (忘了用像素長度偏移，不過也看不出來 🤭
+                    // let P = new Vector(x + 0.5, y + 0.5, 0)
+                    let P = new Vector(x + half_w_pixel, y + half_h_pixel, 0)
 
                     // 對矩形裡的每個點P
                     // 判定是否位在screen space三角形裡面
