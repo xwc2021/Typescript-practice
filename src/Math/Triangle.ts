@@ -6,6 +6,7 @@ import Plane from './Plane';
 import Ray from './Ray';
 import Rasterizer from './Rasterizer';
 import Texture2D from './Texture2D';
+import { number_equal } from './Tool';
 
 export default class Triangle {
 
@@ -32,8 +33,10 @@ export default class Triangle {
         let vector_β = Vector.minus(diff, vector_α);
 
         // 擋掉dir01、dir02是y軸平行的情況
-        let α = (dir01.x == 0) ? vector_α.y / dir01.y : vector_α.x / dir01.x;
-        let β = (dir02.x == 0) ? vector_β.y / dir02.y : vector_β.x / dir02.x;
+        // 浮點數請用 number_equal，不然會GG
+        // 見圖：bug/float_point_compaire_error(fixed)/bug_when_clipping_2.jpg
+        let α = number_equal(dir01.x, 0) ? vector_α.y / dir01.y : vector_α.x / dir01.x;
+        let β = number_equal(dir02.x, 0) ? vector_β.y / dir02.y : vector_β.x / dir02.x;
         if (isNaN(α)) {
             console.log(vector_α.x, dir01.x);
         }
@@ -43,7 +46,7 @@ export default class Triangle {
         }
         let γ = 1 - α - β;
 
-        return { success: true, α, β, γ }
+        return { success: true, α, β, γ, vector_α, vector_β, dir01, dir02 }
     }
 
     static is_in_triangle(α: number, β: number, γ: number) {
