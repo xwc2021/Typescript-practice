@@ -18,11 +18,12 @@ export default class RasterizerApp {
     camera: Camera = null;
     thandle: number;
 
-    screenWidth = 256;
-    screenHeight = 256;
+    screenWidth = 512;
+    screenHeight = 512;
 
-    // screenWidth = 320;
-    // screenHeight = 240;
+    // screenWidth = 256;
+    // screenHeight = 256;
+
     box: Box = null;
 
     last_t: number;
@@ -31,6 +32,8 @@ export default class RasterizerApp {
     render_target: RenderTarget;
     texture: Texture2D;
     peek_screen_pos = new Vector2D(45, 60);
+    keybord_event: KeyboardEvent;
+    keybord_use = false;
 
     constructor() {
         window.onload = () => {
@@ -66,7 +69,8 @@ export default class RasterizerApp {
                 Rasterizer.print_peek_position();
             };
         };
-        document.onkeydown = this.keyProc.bind(this);
+        document.onkeydown = this.key_down.bind(this);
+        document.onkeyup = this.key_up.bind(this);
         this.drawScene = this.drawScene.bind(this);
         Rasterizer.set_peek_screen_pos(this.peek_screen_pos);
     }
@@ -118,6 +122,9 @@ export default class RasterizerApp {
         this.sum_t = this.sum_t + diff;
         document.title = diff.toString();
 
+
+        this.process_input(diff);
+
         // 清空
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
         this.ctx.beginPath();
@@ -157,7 +164,10 @@ export default class RasterizerApp {
         this.thandle = window.requestAnimationFrame(this.drawScene);
     }
 
-    keyProc(event: KeyboardEvent) {
+    process_input(delta_time: number) {
+        if (!this.keybord_use)
+            return;
+
         let KepMap =
         {
             w: 87,
@@ -174,9 +184,9 @@ export default class RasterizerApp {
             a_right: 39
         };
 
-        let moveS = 1;
-        let rotateS = 0.1;
-        switch (event.keyCode) {
+        let moveS = 50 * delta_time / 1000;
+        let rotateS = 0.1 * delta_time / 1000;
+        switch (this.keybord_event.keyCode) {
             case KepMap.w:
                 this.camera.moveEye(moveS, this.camera.z_axis);
                 break;
@@ -211,6 +221,15 @@ export default class RasterizerApp {
                 this.camera.addYaw(rotateS);
                 break;
         }
+    }
+
+    key_down(event: KeyboardEvent) {
+        this.keybord_event = event;
+        this.keybord_use = true;
+    }
+
+    key_up(event: KeyboardEvent) {
+        this.keybord_use = false;
     }
 }
 
