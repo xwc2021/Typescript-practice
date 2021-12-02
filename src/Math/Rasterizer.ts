@@ -211,9 +211,9 @@ export default class Rasterizer {
             for (let x = min_x; x <= max_x; ++x) {
                 for (let y = min_y; y <= max_y; ++y) {
 
-                    // 移動半個像素 (忘了用像素長度偏移，不過也看不出來 🤭
-                    // let P = new Vector(x + 0.5, y + 0.5, 0)
-                    let P = new Vector(x + half_w_pixel, y + half_h_pixel, 0)
+                    // https://gpnnotes.blogspot.com/2021/11/blog-post_28.html
+                    // 圖 Screen Space
+                    let P = new Vector(x + 0.5, y + 0.5, 0)
 
                     // 對矩形裡的每個點P
                     // 判定是否位在screen space三角形裡面
