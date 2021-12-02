@@ -183,7 +183,7 @@ export default class Rasterizer {
             let min_y = Math.floor(min.y);
             let max_y = Math.floor(max.y);
 
-            // clamp
+            // clamp by screen size
             min_x = Math.max(0, min_x);
             min_y = Math.max(0, min_y);
             max_x = Math.min(this.color_buffer.w - 1, max_x);
