@@ -207,6 +207,7 @@ export default class Rasterizer {
 
                     // if yes 
                     // (1)從NDC到Screen Space是仿射變換，內插權重α、β、γ一樣)
+                    // https://gpnnotes.blogspot.com/2019/11/blog-post_30.html
 
                     // 計算z值
                     let z = Triangle.interpolation(γ, α, β, n0.z, n1.z, n2.z);
