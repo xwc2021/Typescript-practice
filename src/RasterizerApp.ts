@@ -19,6 +19,9 @@ export default class RasterizerApp {
     // screenWidth = 800;
     // screenHeight = 600;
 
+    // screenWidth = 640;
+    // screenHeight = 480;
+
     screenWidth = 320;
     screenHeight = 240;
     box: Box = null;
@@ -56,7 +59,10 @@ export default class RasterizerApp {
 
         this.box = new Box();
         this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 10, 500);
+        // this.texture = new Texture2D('/texture/Collage 2021-11-13 14_17_54.jpg');
         this.texture = new Texture2D('/texture/smoking_2.jpg');
+        // this.texture = new Texture2D('/texture/Pom_Pom_Purin.png');
+
         this.start();
     }
 

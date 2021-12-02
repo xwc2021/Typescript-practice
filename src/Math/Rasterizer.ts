@@ -70,11 +70,11 @@ export default class Rasterizer {
             ClipPlane.Right);
 
         // Left
-        out_list = Rasterizer.clip_helper(out_list,
-            (T: Triangle) => { return -T.v0.w > T.v0.p.x; },
-            (T: Triangle) => { return -T.v1.w > T.v1.p.x; },
-            (T: Triangle) => { return -T.v2.w > T.v2.p.x; },
-            ClipPlane.Left);
+        // out_list = Rasterizer.clip_helper(out_list,
+        //     (T: Triangle) => { return -T.v0.w > T.v0.p.x; },
+        //     (T: Triangle) => { return -T.v1.w > T.v1.p.x; },
+        //     (T: Triangle) => { return -T.v2.w > T.v2.p.x; },
+        //     ClipPlane.Left);
 
         // Top
         out_list = Rasterizer.clip_helper(out_list,
@@ -151,10 +151,11 @@ export default class Rasterizer {
 
             // NDC應該要落在
             // -1 ≤ x ≤ 1, -1 ≤ y ≤ 1
-            // 但奇怪的是javascript算出來的結果，有可能是這種1.0000000000000002
-            n0.clamp_x(-1, 1).clamp_y(-1, 1);
-            n1.clamp_x(-1, 1).clamp_y(-1, 1);
-            n2.clamp_x(-1, 1).clamp_y(-1, 1);
+
+            // 不裁切，clamp ndc也算是一種特殊效果
+            // n0.clamp_x(-1, 1).clamp_y(-1, 1);
+            // n1.clamp_x(-1, 1).clamp_y(-1, 1);
+            // n2.clamp_x(-1, 1).clamp_y(-1, 1);
 
             // to screen space
             // 0 ≤ x ≤ w, 0 ≤ y ≤ h
@@ -171,9 +172,15 @@ export default class Rasterizer {
             let { min, max } = Vector.min_max(s0, s1, s2);
             // console.log(min.x, max.x, '|', min.y, max.y);
             let min_x = Math.floor(min.x);
-            let max_x = Math.min(Math.floor(max.x), this.color_buffer.w - 1); // clamp 
+            let max_x = Math.floor(max.x);
             let min_y = Math.floor(min.y);
-            let max_y = Math.min(Math.floor(max.y), this.color_buffer.h - 1); // clamp
+            let max_y = Math.floor(max.y);
+
+            // clamp
+            min_x = Math.max(0, min_x);
+            min_y = Math.max(0, min_y);
+            max_x = Math.min(this.color_buffer.w - 1, max_x);
+            max_y = Math.min(this.color_buffer.h - 1, max_y);
 
             let all = (max_x - min_x) * (max_y - min_y);
             let draw = 0;
@@ -185,10 +192,11 @@ export default class Rasterizer {
 
                     // 對矩形裡的每個點P
                     // 判定是否位在screen space三角形裡面
-                    let { α, β, γ } = Triangle.calculate_α_β_γ(s0, s1, s2, P);
-                    if (!Triangle.is_in_triangle(α, β, γ)) {
+                    let { success, α, β, γ } = Triangle.calculate_α_β_γ(s0, s1, s2, P);
+                    if (!success)
+                        continue
+                    if (!Triangle.is_in_triangle(α, β, γ))
                         continue;
-                    }
 
                     // if yes 
                     // (1)從NDC到Screen Space是仿射變換，內插權重α、β、γ一樣)

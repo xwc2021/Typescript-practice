@@ -21,8 +21,13 @@ export default class Triangle {
         let ray = new Ray(P, dir02.multiply(-1));
         let result = Plane.hit(ray, new Plane(s0, n));
 
-        // Todo 這裡可能是null？
         let p_on_dir01 = result.hit_pos;
+        if (p_on_dir01 == null) {  // 退化成直線的三角形才有也可能
+            console.log('平行', s0, s1, s2, P);
+
+            // 不處理
+            return { success: false, α: 1, β: 0, γ: 0 };
+        }
         let vector_α = Vector.minus(p_on_dir01, s0);
         let vector_β = Vector.minus(diff, vector_α);
 
@@ -38,7 +43,7 @@ export default class Triangle {
         }
         let γ = 1 - α - β;
 
-        return { α, β, γ }
+        return { success: true, α, β, γ }
     }
 
     static is_in_triangle(α: number, β: number, γ: number) {

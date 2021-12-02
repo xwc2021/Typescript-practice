@@ -81,7 +81,7 @@ export default class RenderTarget {
                 let g = color.g;
                 let b = color.b;
 
-                // gamma校正
+                // 沒去gamma，也不用gamma校正
                 let gamma = 1 / 2.1;
                 r = Math.pow(r, gamma);
                 g = Math.pow(g, gamma);
