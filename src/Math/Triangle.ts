@@ -23,7 +23,7 @@ export default class Triangle {
 
         let p_on_dir01 = result.hit_pos;
         if (p_on_dir01 == null) {  // 退化成直線的三角形才有也可能
-            console.log('平行', s0, s1, s2, P);
+            // console.log('平行', s0, s1, s2, P);
 
             // 不處理
             return { success: false, α: 1, β: 0, γ: 0 };

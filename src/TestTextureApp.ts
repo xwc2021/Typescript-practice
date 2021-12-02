@@ -107,7 +107,6 @@ export default class TestTextureApp {
             console.log('init buffer');
         }
 
-
         for (let x = 0; x < this.colume_count; x++)
             for (let y = 0; y < this.row_count; y++)
                 this.buffer.set(x, y, new RGBA(0, 0, 0, 1));

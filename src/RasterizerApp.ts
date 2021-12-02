@@ -68,10 +68,11 @@ export default class RasterizerApp {
         CavnasHelper.set_canvas('canvas', this.screenWidth, this.screenHeight);
 
         this.box = new Box();
-        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 10, 500);
-        // this.texture = new Texture2D('/texture/Collage 2021-11-13 14_17_54.jpg');
-        // this.texture = new Texture2D('/texture/smoking_2.jpg');
-        this.texture = new Texture2D('/texture/Pom_Pom_Purin.png');
+        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 5, 500);
+        this.texture = new Texture2D('texture/Collage 2021-11-13 14_17_54.jpg');
+        // this.texture = new Texture2D('texture/smoking_2.jpg');
+        // this.texture = new Texture2D('texture/Pom_Pom_Purin.png');
+
 
         this.start();
     }
@@ -117,18 +118,18 @@ export default class RasterizerApp {
         let nowDegree = this.sum_t / 1000 * 15 % 360;
         // let nowDegree = 0;
 
-        // let rotateMatrix = Transform.rotateByY(nowDegree);
-        let rotateMatrix = Transform.rotateByY(336.55499999999995);
+        let rotateMatrix = Transform.rotateByY(nowDegree);
+        // let rotateMatrix = Transform.rotateByY(336.55499999999995);
         // let rotateMatrix = Transform.rotateByY(45);
         let combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.rasterize(this.camera, combineMatrix, this.texture, this.use_solid_color, this.ndc_clamp_effect);
         this.box.draw_line(this.ctx);
 
-        // offsetMatrix = Transform.offset(0, 0, 150);
-        // rotateMatrix = Transform.rotateByY(nowDegree);
-        // combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
-        // this.box.rasterize(this.camera, combineMatrix, this.texture,this.use_solid_color,this.ndc_clamp_effect);
-        // this.box.draw_line(this.ctx);
+        offsetMatrix = Transform.offset(0, 0, 150);
+        rotateMatrix = Transform.rotateByY(nowDegree);
+        combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
+        this.box.rasterize(this.camera, combineMatrix, this.texture, this.use_solid_color, this.ndc_clamp_effect);
+        this.box.draw_line(this.ctx);
 
         // 顯示到render target
         Rasterizer.show(this.render_target);
