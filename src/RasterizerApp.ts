@@ -8,6 +8,8 @@ import RGBA from "./Math/RGBA";
 import Rasterizer from "./Math/Rasterizer";
 import CavnasHelper from "./Math/CanvasHelper";
 import Texture2D from "./Math/Texture2D";
+import Vector2D from "./Math/Vector2D";
+import HHelper from "./Math/HHelper";
 
 export default class RasterizerApp {
 
@@ -31,31 +33,45 @@ export default class RasterizerApp {
     ctx: CanvasRenderingContext2D;
     render_target: RenderTarget;
     texture: Texture2D;
-    use_solid_color = false;
-    ndc_clamp_effect = false;
+    peek_screen_pos = new Vector2D(45, 60);
 
     constructor() {
         window.onload = () => {
             this.init();
 
-            document.getElementById('btn_timeout').onclick = () => {
+            HHelper.$('btn_timeout').onclick = () => {
                 this.stop();
             };
 
-            document.getElementById('btn_resume').onclick = () => {
+            HHelper.$('btn_resume').onclick = () => {
                 this.resume();
             };
 
-            document.getElementById('btn_toggle_drawing_mode').onclick = () => {
-                this.use_solid_color = !this.use_solid_color;
+            HHelper.$('btn_toggle_drawing_mode').onclick = () => {
+                Rasterizer.use_solid_color = !Rasterizer.use_solid_color;
             };
 
-            document.getElementById('btn_toggle_ndc_clamp_effect').onclick = () => {
-                this.ndc_clamp_effect = !this.ndc_clamp_effect;
+            HHelper.$('btn_toggle_ndc_clamp_effect').onclick = () => {
+                Rasterizer.ndc_clamp_effect = !Rasterizer.ndc_clamp_effect;
+            };
+
+            HHelper.$('btn_set_peek_position').onclick = () => {
+                let x = Number(HHelper.$('text_s_x').value);
+                let y = Number(HHelper.$('text_s_y').value);
+                this.peek_screen_pos.x = x;
+                this.peek_screen_pos.y = y;
+                Rasterizer.set_peek_screen_pos(this.peek_screen_pos);
+
+                console.log(x, y);
+            };
+
+            HHelper.$('btn_print_peek_position').onclick = () => {
+                Rasterizer.print_peek_position();
             };
         };
         document.onkeydown = this.keyProc.bind(this);
         this.drawScene = this.drawScene.bind(this);
+        Rasterizer.set_peek_screen_pos(this.peek_screen_pos);
     }
 
     init() {
@@ -72,7 +88,6 @@ export default class RasterizerApp {
         this.texture = new Texture2D('texture/Collage 2021-11-13 14_17_54.jpg');
         // this.texture = new Texture2D('texture/smoking_2.jpg');
         // this.texture = new Texture2D('texture/Pom_Pom_Purin.png');
-
 
         this.start();
     }
@@ -109,7 +124,14 @@ export default class RasterizerApp {
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
         this.ctx.beginPath();
         this.ctx.fillStyle = "rgba(180,30,15,0.1)";
+
         this.ctx.fillRect(0, 0, this.screenWidth, this.screenHeight);
+
+        // 畫peek pos
+        this.ctx.fillStyle = "rgba(255,255,0,1)";
+        this.ctx.fillRect(this.peek_screen_pos.x, this.peek_screen_pos.y, 1, 10);
+        this.ctx.fillRect(this.peek_screen_pos.x, this.peek_screen_pos.y, 10, 1);
+
 
         Rasterizer.clear(RGBA.black, 1);
 
@@ -118,18 +140,18 @@ export default class RasterizerApp {
         let nowDegree = this.sum_t / 1000 * 15 % 360;
         // let nowDegree = 0;
 
-        let rotateMatrix = Transform.rotateByY(nowDegree);
-        // let rotateMatrix = Transform.rotateByY(336.55499999999995);
+        // let rotateMatrix = Transform.rotateByY(nowDegree);
+        let rotateMatrix = Transform.rotateByY(336.55499999999995);
         // let rotateMatrix = Transform.rotateByY(45);
         let combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
-        this.box.rasterize(this.camera, combineMatrix, this.texture, this.use_solid_color, this.ndc_clamp_effect);
+        this.box.rasterize(this.camera, combineMatrix, this.texture);
         this.box.draw_line(this.ctx);
 
-        offsetMatrix = Transform.offset(0, 0, 150);
-        rotateMatrix = Transform.rotateByY(nowDegree);
-        combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
-        this.box.rasterize(this.camera, combineMatrix, this.texture, this.use_solid_color, this.ndc_clamp_effect);
-        this.box.draw_line(this.ctx);
+        // offsetMatrix = Transform.offset(0, 0, 150);
+        // rotateMatrix = Transform.rotateByY(nowDegree);
+        // combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
+        // this.box.rasterize(this.camera, combineMatrix, this.texture);
+        // this.box.draw_line(this.ctx);
 
         // 顯示到render target
         Rasterizer.show(this.render_target);

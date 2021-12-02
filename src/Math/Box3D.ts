@@ -14,12 +14,12 @@ export default class Box {
         this.triangles = [];
         //順時針
         let n = new Vector(0, 0, -1);
-        this.triangles.push(
-            new Triangle(
-                new Vertex(new Vector(-10, -10, -10), n, 1, 0, 0),
-                new Vertex(new Vector(10, 10, -10), n, 1, 1, 1),
-                new Vertex(new Vector(10, -10, -10), n, 1, 1, 0)
-            ));
+        // this.triangles.push(
+        //     new Triangle(
+        //         new Vertex(new Vector(-10, -10, -10), n, 1, 0, 0),
+        //         new Vertex(new Vector(10, 10, -10), n, 1, 1, 1),
+        //         new Vertex(new Vector(10, -10, -10), n, 1, 1, 0)
+        //     ));
         this.triangles.push(
             new Triangle(
                 new Vertex(new Vector(-10, -10, -10), n, 1, 0, 0),
@@ -31,22 +31,22 @@ export default class Box {
         for (let i = 0; i < m.length; ++i) {
             let rotateMatrix = m[i];
             let n2 = Transform.transformPoint(rotateMatrix, n);
-            this.triangles.push(
-                new Triangle(
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(- 10, -10, -10)), n2, 1, 0, 0),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, -10)), n2, 1, 1, 0)
-                ));
-            this.triangles.push(
-                new Triangle(
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, -10)), n2, 1, 0, 0),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, 10, -10)), n2, 1, 0, 1),
-                    Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1)
-                ));
+            // this.triangles.push(
+            //     new Triangle(
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(- 10, -10, -10)), n2, 1, 0, 0),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, -10, -10)), n2, 1, 1, 0)
+            //     ));
+            // this.triangles.push(
+            //     new Triangle(
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, -10, -10)), n2, 1, 0, 0),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(-10, 10, -10)), n2, 1, 0, 1),
+            //         Vertex.build_vertex(Transform.transformPoint(rotateMatrix, new Vector(10, 10, -10)), n2, 1, 1, 1)
+            //     ));
         }
     }
 
-    rasterize(camera: Camera, worldTransform: Transform, texture: Texture2D, use_solid_color: boolean, ndc_clamp_effect: boolean) {
+    rasterize(camera: Camera, worldTransform: Transform, texture: Texture2D) {
 
         // 測試裁切三角形的code
         // this.triangles_after_clip = [];
@@ -67,7 +67,7 @@ export default class Box {
 
         // 處理正方體的變換
         for (let i = 0; i < this.triangles_after_clip.length; ++i) {
-            this.triangles_after_clip[i].rasterize(camera, worldTransform, texture, use_solid_color, ndc_clamp_effect);
+            this.triangles_after_clip[i].rasterize(camera, worldTransform, texture);
         }
     }
 

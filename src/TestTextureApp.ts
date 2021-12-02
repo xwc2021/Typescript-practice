@@ -4,7 +4,7 @@ import RGBA from "./Math/RGBA";
 import Sampler from "./Math/Sampler";
 import Vector2D from "./Math/Vector2D";
 import { MathHelper, DrawHelper } from "./Math/Tool";
-
+import HHelper from "./Math/HHelper";
 
 export default class TestTextureApp {
 
@@ -24,21 +24,21 @@ export default class TestTextureApp {
         window.onload = () => {
             this.init();
 
-            this.$('btn_reset').onclick = () => {
+            HHelper.$('btn_reset').onclick = () => {
                 this.Render();
             };
 
-            this.$('move_right').onclick = () => {
+            HHelper.$('move_right').onclick = () => {
                 this.moveRight();
                 this.Render();
             };
 
-            this.$('move_up').onclick = () => {
+            HHelper.$('move_up').onclick = () => {
                 this.moveUp();
                 this.Render();
             };
 
-            this.$('canvas').onclick = (event) => {
+            HHelper.$('canvas').onclick = (event) => {
                 this.reBulid(new Vector2D(event.offsetX, event.offsetY));
             };
         };
@@ -63,27 +63,27 @@ export default class TestTextureApp {
     }
 
     drawUV() {
-        let u = parseFloat(this.$("u").value);
-        let v = parseFloat(this.$("v").value);
+        let u = parseFloat(HHelper.$("u").value);
+        let v = parseFloat(HHelper.$("v").value);
         this.texture2D(new Vector2D(u, v));
     }
 
     moveRight() {
-        let u = parseFloat(this.$("u").value);
+        let u = parseFloat(HHelper.$("u").value);
 
         let grid_u = 1 / this.colume_count;
         u = MathHelper.accAdd(u, grid_u);
 
-        this.$("u").value = u.toString();
+        HHelper.$("u").value = u.toString();
     }
 
     moveUp() {
-        let v = parseFloat(this.$("v").value);
+        let v = parseFloat(HHelper.$("v").value);
 
         let grid_v = 1 / this.row_count;
         v = MathHelper.accAdd(v, grid_v);
 
-        this.$("v").value = v.toString();
+        HHelper.$("v").value = v.toString();
     }
 
     reBulid(P: Vector2D) {
@@ -92,8 +92,8 @@ export default class TestTextureApp {
         let buffer_uv = new Vector2D(u, v);
         let uv = Sampler.buffer_to_uv_space(buffer_uv);
 
-        this.$("u").value = uv.x.toString();
-        this.$("v").value = uv.y.toString();
+        HHelper.$("u").value = uv.x.toString();
+        HHelper.$("v").value = uv.y.toString();
 
         this.Render();
     }
@@ -140,9 +140,7 @@ export default class TestTextureApp {
     }
 
 
-    $(id: string) {
-        return <HTMLInputElement>document.getElementById(id);
-    }
+
 
     drawPointByGridIndex(P: Vector2D) {
 

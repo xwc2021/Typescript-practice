@@ -65,8 +65,8 @@ export default class Triangle {
     }
 
     v_s: Vector[];
-    rasterize(pcamera: Camera, worldTransform: Transform, texture: Texture2D, use_solid_color: boolean, ndc_clamp_effect: boolean) {
-        this.v_s = Rasterizer.process(this, pcamera, worldTransform, texture, use_solid_color, ndc_clamp_effect);
+    rasterize(pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
+        this.v_s = Rasterizer.process(this, pcamera, worldTransform, texture);
     }
 
     draw(ctx: CanvasRenderingContext2D) {

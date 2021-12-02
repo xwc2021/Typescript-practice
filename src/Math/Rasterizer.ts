@@ -65,7 +65,7 @@ export default class Rasterizer {
         // 不對Right 、Left、Top、Bottom作裁切了
         // 裁切後反而會有bug，圖：bug/bug_when_clipping_2
         // 反正在screen space光柵化三角形時也會用邊界裁切
-        return out_list;
+        // return out_list;
 
         // Right
         out_list = Rasterizer.clip_helper(out_list,
@@ -139,8 +139,20 @@ export default class Rasterizer {
         return Rasterizer.clip_in_Projection_Space(v0, v1, v2, pcamera);
     }
 
+    static use_solid_color: boolean = false;
+    static ndc_clamp_effect: boolean = false;
+    static peek_screen_pos: Vector2D;
 
-    static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform, texture: Texture2D, use_solid_color: boolean, ndc_clamp_effect: boolean) {
+    static set_peek_screen_pos(peek_screen_pos: Vector2D) {
+        Rasterizer.peek_screen_pos = peek_screen_pos;
+    }
+
+    static print_once = false;
+    static print_peek_position() {
+        Rasterizer.print_once = true;
+        console.log('print_peek_position');
+    }
+    static process(triangle: Triangle, pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
 
         // to MVP
         let triangle_list = Rasterizer.MVP_backface_culling_clipping(triangle, pcamera, worldTransform);
@@ -158,7 +170,7 @@ export default class Rasterizer {
             // -1 ≤ x ≤ 1, -1 ≤ y ≤ 1
 
             // 不裁切left、right、top、bottom，然後clamp ndc也算是一種特殊效果
-            if (ndc_clamp_effect) {
+            if (Rasterizer.ndc_clamp_effect) {
                 n0.clamp_x(-1, 1).clamp_y(-1, 1);
                 n1.clamp_x(-1, 1).clamp_y(-1, 1);
                 n2.clamp_x(-1, 1).clamp_y(-1, 1);
@@ -202,11 +214,15 @@ export default class Rasterizer {
                     let { success, α, β, γ } = Triangle.calculate_α_β_γ(s0, s1, s2, P);
                     if (!success)
                         continue
+
+                    if (Rasterizer.print_once && x == Rasterizer.peek_screen_pos.x && y == Rasterizer.peek_screen_pos.y) {
+                        console.log('is_in_triangle', Triangle.is_in_triangle(α, β, γ), α, β, γ);
+                    }
+
                     if (!Triangle.is_in_triangle(α, β, γ))
                         continue;
 
                     // if yes 
-
                     // (1)計算z值 
                     // 從NDC到Screen Space是仿射變換，內插權重α、β、γ一樣
                     // https://gpnnotes.blogspot.com/2019/11/blog-post_30.html
@@ -233,16 +249,25 @@ export default class Rasterizer {
                     let v = v_ndc * w;
 
                     let { color } = texture.get(new Vector2D(u, v));
-                    if (use_solid_color)
+                    if (Rasterizer.use_solid_color)
                         Rasterizer.color_buffer.set(x, y, RGBA.yellow);
                     else
                         Rasterizer.color_buffer.set(x, y, color);
                     draw++;
+
+                    if (Rasterizer.print_once && x == Rasterizer.peek_screen_pos.x && y == Rasterizer.peek_screen_pos.y) {
+                        console.log('在三角形內', color);
+                    }
                 }
             }
             count++;
             // console.log(count, Math.floor(100 * draw / all));
         }
+        if (Rasterizer.print_once) {
+            Rasterizer.print_once = false;
+            console.log('finish peek');
+        }
+
         return list;
     }
 }
