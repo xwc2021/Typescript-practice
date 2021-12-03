@@ -19,18 +19,19 @@ export default class Texture2D {
         let ctx = CavnasHelper.get_context_by_canvas(canvas_texture);
         ctx.drawImage(this.img, 0, 0);
 
+        // 改成1次讀完全部
+        let data = ctx.getImageData(0, 0, w, h).data;
         this.buffer = new Buffer2D<RGBA>(w, h);
         for (let y = 0; y < h; ++y) {
             for (let x = 0; x < w; ++x) {
-                let data = ctx.getImageData(x, y, 1, 1).data;
-                this.buffer.set(x, y, new RGBA(data[0] / 255, data[1] / 255, data[2] / 255, data[3] / 255));
+                let seke = 4 * (w * y + x);
+                this.buffer.set(x, y, new RGBA(data[seke] / 255, data[seke + 1] / 255, data[seke + 2] / 255, data[seke + 3] / 255));
 
                 // if (y >= 7 && y <= 8 && x >= 7 && x <= 8) {
                 //     console.log(data);
                 // }
             }
         }
-
     };
 
     img: HTMLImageElement;
