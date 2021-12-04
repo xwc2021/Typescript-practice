@@ -26,13 +26,13 @@ export default class Buffer2D<T> {
     }
 
     get(x: number, y: number) {
+
         if (this.is_legal_index(x, y))
             return this.buffer[y][x];
         else {
             console.log('get', this.w, this.h, x, y);
             return RGBA.debug;
         }
-
     }
 
     clear(value: T) {

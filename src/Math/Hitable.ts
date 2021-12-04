@@ -3,5 +3,5 @@ import Ray from "./Ray";
 import Shader from "../Materails/Shader";
 
 export default interface Hitable {
-    hit(ray: Ray, s: Shader): HitInfo;
+    hit(ray: Ray, s: Shader): HitInfo | null;
 }

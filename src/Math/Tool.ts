@@ -30,11 +30,11 @@ export function clamp(x: number, min: number, max: number) {
 }
 
 export function get_hit_sort_list(obj_list: SceneNode[], ray: Ray) {
-    let hit_sort_list = obj_list.map(obj => obj.h.hit(ray, obj.s))
-        .filter(info => info.is_hit)
-        .sort((a: HitInfo, b: HitInfo) => a.t - b.t);
 
-    return hit_sort_list;
+    let list = obj_list.map(obj => obj.h.hit(ray, obj.s));
+    let hit_list = <HitInfo[]>(list.filter(info => info != null && info.positive_t));
+
+    return hit_list.sort((a: HitInfo, b: HitInfo) => a.t - b.t);
 }
 
 export function get_shadow_weight(hit_info: HitInfo, direction_light_dir: Vector, obj_list: SceneNode[]) {

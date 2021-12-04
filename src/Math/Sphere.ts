@@ -15,7 +15,7 @@ export default class Sphere implements Hitable {
         this.R = R;
     }
 
-    hit(ray: Ray, s: Shader): HitInfo {
+    hit(ray: Ray, s: Shader): HitInfo | null {
         // 解2次方程式
         // (X-C)。(X-C) = R*R
         // X=F+t*D
@@ -31,12 +31,12 @@ export default class Sphere implements Hitable {
             let t = -b / (2 * a);
 
             //擋掉
-            if (t < 0) { return { is_hit: false } }
+            if (t < 0) { return null }
 
             let hit_pos = F.add(D.multiply(t));
             let normal = hit_pos.minus(this.C).normalize();
             return {
-                is_hit: true,
+                positive_t: true,
                 hit_pos,
                 i: D,
                 t,
@@ -53,13 +53,13 @@ export default class Sphere implements Hitable {
             let t_list = [(-b - sqrt_k) / (2 * a), (-b + sqrt_k) / (2 * a)].filter(x => x > 0);
 
             // 都是負值
-            if (t_list.length == 0) { return { is_hit: false } }
+            if (t_list.length == 0) { return null }
 
             let t = t_list[0];
             let hit_pos = F.add(D.multiply(t));
             let normal = hit_pos.minus(this.C).normalize();
             return {
-                is_hit: true,
+                positive_t: true,
                 hit_pos,
                 i: D,
                 t,
@@ -67,9 +67,7 @@ export default class Sphere implements Hitable {
                 s
             }
         } else { // 沒交點
-            return {
-                is_hit: false,
-            }
+            return null
         }
     }
 }

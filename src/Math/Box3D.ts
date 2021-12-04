@@ -8,7 +8,6 @@ import Texture2D from './Texture2D';
 
 export default class Box {
     triangles: Triangle[];
-    triangles_after_clip: Triangle[];
     constructor() {
         // 建立正方體頂點資料
         this.triangles = [];
@@ -48,26 +47,9 @@ export default class Box {
 
     rasterize(camera: Camera, worldTransform: Transform, texture: Texture2D) {
 
-        // 測試裁切三角形的code
-        // this.triangles_after_clip = [];
-        // for (let i = 0; i < this.triangles.length; ++i) {
-        //     let triangle = this.triangles[i];
-        //     let nearPlaneZ = 1;
-        //     let v_clip = clip(triangle, nearPlaneZ);
-
-        //     let count = v_clip.length / 3;
-        //     // console.log(i, count);
-        //     for (let k = 0; k < count; ++k) {
-        //         // 組合三角形
-        //         let new_triangle = new Triangle(v_clip[k * 3], v_clip[k * 3 + 1], v_clip[k * 3 + 2]);
-        //         this.triangles_after_clip.push(new_triangle);
-        //     }
-        // }
-        this.triangles_after_clip = this.triangles;
-
         // 處理正方體的變換
-        for (let i = 0; i < this.triangles_after_clip.length; ++i) {
-            this.triangles_after_clip[i].rasterize(camera, worldTransform, texture);
+        for (let i = 0; i < this.triangles.length; ++i) {
+            this.triangles[i].rasterize(camera, worldTransform, texture);
         }
     }
 
@@ -80,8 +62,8 @@ export default class Box {
 
         ctx.beginPath();
 
-        for (let i = 0; i < this.triangles_after_clip.length; ++i) {
-            this.triangles_after_clip[i].draw(ctx);
+        for (let i = 0; i < this.triangles.length; ++i) {
+            this.triangles[i].draw(ctx);
         }
         ctx.stroke();
     }

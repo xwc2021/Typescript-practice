@@ -15,8 +15,8 @@ export default class RasterizerApp {
 
     cameraIndex_view = 1;
     cameraIndex_control = 0;
-    camera: Camera = null;
-    thandle: number;
+    camera: Camera;
+    thandle = 0;
 
     screenWidth = 512;
     screenHeight = 512;
@@ -24,20 +24,34 @@ export default class RasterizerApp {
     // screenWidth = 256;
     // screenHeight = 256;
 
-    box: Box = null;
+    box: Box;
 
-    last_t: number;
-    sum_t: number;
-    ctx: CanvasRenderingContext2D;
+    last_t = 0;
+    sum_t = 0;
+    ctx: CanvasRenderingContext2D | null;
     render_target: RenderTarget;
     texture: Texture2D;
     peek_screen_pos = new Vector2D(45, 60);
-    keybord_event: KeyboardEvent;
+    keybord_event: KeyboardEvent | null;
     keybord_use = false;
 
     constructor() {
+        Rasterizer.color_buffer = new Buffer2D<RGBA>(this.screenWidth, this.screenHeight);
+        Rasterizer.z_buffer = new Buffer2D<number>(this.screenWidth, this.screenHeight);
+        this.render_target = new RenderTarget(this.screenWidth, this.screenHeight);
+
+        // 不能對同1個canvas取不同的context
+        this.ctx = CavnasHelper.set_canvas('canvas_line', this.screenWidth, this.screenHeight).getContext('2d');
+        CavnasHelper.set_canvas('canvas', this.screenWidth, this.screenHeight);
+
+        this.box = new Box();
+        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 5, 500);
+        // this.texture = new Texture2D('texture/Collage 2021-11-13 14_17_54.jpg');
+        this.texture = new Texture2D('texture/thin_is_good_512x512.jpg');
+        this.keybord_event = null;
+
         window.onload = () => {
-            this.init();
+            this.start();
 
             HHelper.$('btn_timeout').onclick = () => {
                 this.stop();
@@ -75,23 +89,6 @@ export default class RasterizerApp {
         Rasterizer.set_peek_screen_pos(this.peek_screen_pos);
     }
 
-    init() {
-        Rasterizer.color_buffer = new Buffer2D<RGBA>(this.screenWidth, this.screenHeight);
-        Rasterizer.z_buffer = new Buffer2D<number>(this.screenWidth, this.screenHeight);
-        this.render_target = new RenderTarget(this.screenWidth, this.screenHeight);
-
-        // 不能對同1個canvas取不同的context
-        this.ctx = CavnasHelper.set_canvas('canvas_line', this.screenWidth, this.screenHeight).getContext('2d');
-        CavnasHelper.set_canvas('canvas', this.screenWidth, this.screenHeight);
-
-        this.box = new Box();
-        this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 5, 500);
-        // this.texture = new Texture2D('texture/Collage 2021-11-13 14_17_54.jpg');
-        this.texture = new Texture2D('texture/thin_is_good_512x512.jpg');
-
-        this.start();
-    }
-
     start() {
         this.stop();
         this.sum_t = 0;
@@ -108,7 +105,7 @@ export default class RasterizerApp {
 
     stop() {
         window.cancelAnimationFrame(this.thandle);
-        this.thandle = null;
+        this.thandle = 0;
     }
 
     drawScene(timestamp: number) {
@@ -124,17 +121,18 @@ export default class RasterizerApp {
         this.process_input(diff);
 
         // 清空
-        this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
-        this.ctx.beginPath();
-        this.ctx.fillStyle = "rgba(180,30,15,0.1)";
+        if (this.ctx) {
+            this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
+            this.ctx.beginPath();
+            this.ctx.fillStyle = "rgba(180,30,15,0.1)";
 
-        this.ctx.fillRect(0, 0, this.screenWidth, this.screenHeight);
+            this.ctx.fillRect(0, 0, this.screenWidth, this.screenHeight);
 
-        // 畫peek pos
-        this.ctx.fillStyle = "rgba(255,255,0,1)";
-        this.ctx.fillRect(this.peek_screen_pos.x, this.peek_screen_pos.y, 1, 10);
-        this.ctx.fillRect(this.peek_screen_pos.x, this.peek_screen_pos.y, 10, 1);
-
+            // 畫peek pos
+            this.ctx.fillStyle = "rgba(255,255,0,1)";
+            this.ctx.fillRect(this.peek_screen_pos.x, this.peek_screen_pos.y, 1, 10);
+            this.ctx.fillRect(this.peek_screen_pos.x, this.peek_screen_pos.y, 10, 1);
+        }
 
         Rasterizer.clear(RGBA.black, 1);
 
@@ -148,13 +146,15 @@ export default class RasterizerApp {
         // let rotateMatrix = Transform.rotateByY(45);
         let combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.rasterize(this.camera, combineMatrix, this.texture);
-        this.box.draw_line(this.ctx);
+        if (this.ctx)
+            this.box.draw_line(this.ctx);
 
         offsetMatrix = Transform.offset(0, 0, 150);
         rotateMatrix = Transform.rotateByY(nowDegree);
         combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
         this.box.rasterize(this.camera, combineMatrix, this.texture);
-        this.box.draw_line(this.ctx);
+        if (this.ctx)
+            this.box.draw_line(this.ctx);
 
         // 顯示到render target
         Rasterizer.show(this.render_target);
@@ -184,6 +184,8 @@ export default class RasterizerApp {
 
         let moveS = 50 * delta_time / 1000;
         let rotateS = 0.1 * delta_time / 1000;
+        if (!this.keybord_event)
+            return;
         switch (this.keybord_event.keyCode) {
             case KepMap.w:
                 this.camera.moveEye(moveS, this.camera.z_axis);

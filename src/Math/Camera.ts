@@ -67,7 +67,7 @@ export default class Camera {
         console.log(this.a, this.b);
     }
 
-    moveEye = function (s: number, A: Vector) {
+    moveEye(s: number, A: Vector) {
         this.eye = Vector.add(this.eye, A.multiply(s));
     }
 
@@ -155,7 +155,11 @@ export default class Camera {
                 let is_hit = hit_sort_list.length != 0;
                 if (is_hit) {
                     let hit_info = hit_sort_list[0];
-                    return hit_info.s.shading(hit_info, direction_light_dir, obj_list, 1);
+
+                    if (hit_info.s)
+                        return hit_info.s.shading(hit_info, direction_light_dir, obj_list, 1);
+                    else // 不可能到這裡
+                        return Diffuse.red.color;
                 } else {
                     return Diffuse.gray.color;
                 }

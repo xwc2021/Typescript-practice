@@ -22,11 +22,11 @@ export default class Vector2D {
         return new Vector2D(this.x + p.x, this.y + p.y);
     }
 
-    multiply = function (s: number) {
+    multiply(s: number) {
         return new Vector2D(this.x * s, this.y * s);
     }
 
-    toString = function () {
+    toString() {
         return "( " + this.x + " , " + this.y + " )";
     }
 }

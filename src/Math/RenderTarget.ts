@@ -3,7 +3,7 @@ import Vector from "./Vector";
 export default class RenderTarget {
     w: number = 320;
     h: number = 240;
-    backbuffer: OffscreenCanvas = null;
+    backbuffer: OffscreenCanvas;
     constructor(w: number = 320, h: number = 240) {
         this.w = w;
         this.h = h;
@@ -13,6 +13,10 @@ export default class RenderTarget {
     render_pixel(func: (x_weight: number, y_weight: number, ratio: number) => Vector) {
 
         let context_2d = this.backbuffer.getContext('2d');
+        if (!context_2d) {
+            console.log('get context failed');
+            return;
+        }
 
         // get source data array
         let backbuffer_data = context_2d.getImageData(0, 0, this.w, this.h);
@@ -63,6 +67,10 @@ export default class RenderTarget {
     set_pixel(func: (x: number, y: number) => RGBA) {
 
         let context_2d = this.backbuffer.getContext('2d');
+        if (!context_2d) {
+            console.log('get context failed');
+            return;
+        }
 
         // get source data array
         let backbuffer_data = context_2d.getImageData(0, 0, this.w, this.h);
@@ -107,6 +115,10 @@ export default class RenderTarget {
 
         // copy backbuffer to canvas
         let context_bitmap_render = canvas.getContext("bitmaprenderer");
+        if (!context_bitmap_render) {
+            console.log('get context_bitmap_render failed');
+            return;
+        }
         context_bitmap_render.transferFromImageBitmap(this.backbuffer.transferToImageBitmap());
     }
 }

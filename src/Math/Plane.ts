@@ -22,14 +22,14 @@ export default class Plane implements Hitable {
         return value > 0;
     }
 
-    hit(ray: Ray, s: Shader): HitInfo {
+    hit(ray: Ray, s: Shader): HitInfo | null {
         let result = Plane.hit(ray, this);
-        if (result.is_hit)
+        if (result)
             result.s = s;
         return result;
     }
 
-    static hit(ray: Ray, plane: Plane): HitInfo {
+    static hit(ray: Ray, plane: Plane): HitInfo | null {
         // ray hit plane 
         let from = ray.from;
         let dir = ray.dir;
@@ -42,13 +42,13 @@ export default class Plane implements Hitable {
 
         // avoid divide by 0
         if (number_equal(B, 0))
-            return { is_hit: false, hit_pos: null, t: -1 };
+            return null;
 
         let t = A / B;
-        let is_hit = t > 0.0;
+        let positive_t = t > 0.0;
         let hit_pos = from.add(dir.multiply(t));
         return {
-            is_hit,
+            positive_t,
             hit_pos,
             i: dir,
             t,

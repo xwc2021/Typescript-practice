@@ -87,8 +87,8 @@ export default class Sampler {
             let rectUV = new Vector2D((s_u + half_grid_u) / grid_u, (s_v + half_grid_v) / grid_v);
             return { rectUV, NW, NE, SW, SE: P, color: Sampler.Bilinear_Sampler(rectUV, NW, NE, SW, P, buffer) };
         }
-        else if (s_u >= half_grid_u && s_v <= half_grid_v)//相鄰3點在右上
-        {
+        // else if (s_u >= half_grid_u && s_v <= half_grid_v)//相鄰3點在右上
+        else {
             //剛好整除時要做修正
             if (nearest_point_u_float == nearest_point_u)
                 nearest_point_u = nearest_point_u - 1;

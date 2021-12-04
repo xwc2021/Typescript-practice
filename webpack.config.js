@@ -22,6 +22,7 @@ switch (app) {
 module.exports = {
     entry: target,
     devtool: 'inline-source-map',
+    mode: 'development',
     module: {
         rules: [
             {

@@ -22,13 +22,14 @@ export default class Triangle {
         let ray = new Ray(P, dir02.multiply(-1));
         let result = Plane.hit(ray, new Plane(s0, n));
 
-        let p_on_dir01 = result.hit_pos;
-        if (p_on_dir01 == null) {  // 退化成直線的三角形才有也可能
+        if (!result) { // 退化成直線的三角形才有也可能
             // console.log('平行', s0, s1, s2, P);
 
             // 不處理
             return { success: false, α: 1, β: 0, γ: 0 };
         }
+
+        let p_on_dir01 = result.hit_pos;
         let vector_α = Vector.minus(p_on_dir01, s0);
         let vector_β = Vector.minus(diff, vector_α);
 
@@ -66,9 +67,10 @@ export default class Triangle {
         this.v0 = pv0;
         this.v1 = pv1;
         this.v2 = pv2;
+        this.v_s = null;
     }
 
-    v_s: Vector[];
+    v_s: Vector[] | null;
     rasterize(pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
         this.v_s = Rasterizer.process(this, pcamera, worldTransform, texture);
     }

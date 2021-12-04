@@ -13,7 +13,6 @@ export default class Mirror implements Shader {
             console.log('超過上限');
             return Diffuse.green.color;
         }
-
         let n = hit_info.normal;
         let i = hit_info.i;
         let r = Vector.reflect(i, n);
@@ -28,7 +27,7 @@ export default class Mirror implements Shader {
         let is_hit = hit_sort_list.length != 0;
         if (is_hit) {
             let hit_info_next = hit_sort_list[0];
-            let hit_color = hit_info_next.s.shading(hit_info_next, direction_light_dir, obj_list, ++depth);
+            let hit_color = hit_info_next.s ? hit_info_next.s.shading(hit_info_next, direction_light_dir, obj_list, ++depth) : new Vector(1, 0, 0);
             return Vector.multiply3(color, hit_color.multiply(0.9));
         } else {
             return Vector.multiply3(color, Diffuse.gray.color.multiply(0.9));

@@ -14,11 +14,9 @@ export default class TestTextureApp {
     row_count = 20;
     colume_count = 20;
 
-    rect_w: number;
-    rect_h: number;
-
-
-    buffer: Buffer2D<RGBA>;
+    rect_w = this.canvas_width / this.colume_count;
+    rect_h = this.canvas_height / this.row_count;
+    buffer = new Buffer2D<RGBA>(this.colume_count, this.row_count);
 
     constructor() {
         window.onload = () => {
@@ -57,6 +55,11 @@ export default class TestTextureApp {
 
         // 顯示最後的結果
         let ctx = CavnasHelper.get_context('canvas2');
+        if (!ctx) {
+            console.log('ctx get failed')
+            return;
+        }
+
         ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = CavnasHelper.convert(color);
         ctx.fillRect(0, 0, 30, 30);
@@ -99,13 +102,6 @@ export default class TestTextureApp {
     }
 
     reset() {
-        this.rect_w = this.canvas_width / this.colume_count;
-        this.rect_h = this.canvas_height / this.row_count;
-
-        if (this.buffer == null) {
-            this.buffer = new Buffer2D(this.colume_count, this.row_count);
-            console.log('init buffer');
-        }
 
         for (let x = 0; x < this.colume_count; x++)
             for (let y = 0; y < this.row_count; y++)
@@ -126,6 +122,11 @@ export default class TestTextureApp {
 
     drawBuffer() {
         let ctx = CavnasHelper.get_context('canvas');
+        if (!ctx) {
+            console.log('ctx get failed')
+            return;
+        }
+
         ctx.clearRect(0, 0, 600, 600);
 
         for (let y = 0; y < this.row_count; y++) {
@@ -145,6 +146,11 @@ export default class TestTextureApp {
     drawPointByGridIndex(P: Vector2D) {
 
         let ctx = CavnasHelper.get_context('canvas');
+        if (!ctx) {
+            console.log('ctx get failed')
+            return;
+        }
+
         ctx.globalCompositeOperation = 'source-over';
 
         ctx.beginPath();
@@ -156,6 +162,11 @@ export default class TestTextureApp {
 
     drawRect(P: Vector2D) {
         let ctx = CavnasHelper.get_context('canvas');
+        if (!ctx) {
+            console.log('ctx get failed')
+            return;
+        }
+
         ctx.globalCompositeOperation = 'source-over';
 
         ctx.beginPath();
@@ -167,6 +178,11 @@ export default class TestTextureApp {
     //畫出uv點
     drawPointByRectUV(P: Vector2D, rectUV: Vector2D) {
         let ctx = CavnasHelper.get_context('canvas');
+        if (!ctx) {
+            console.log('ctx get failed')
+            return;
+        }
+
         ctx.globalCompositeOperation = 'source-over';
 
         ctx.beginPath();

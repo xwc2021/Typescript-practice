@@ -5,11 +5,7 @@ import Sampler from "./Sampler";
 import Vector2D from "./Vector2D";
 
 export default class Texture2D {
-    begin_load(src: string) {
-        this.img = new Image();
-        this.img.src = src; //
-        this.img.onload = this.load_texture_buffer;
-    }
+
 
     load_texture_buffer() {
         let w = this.img.width;
@@ -17,6 +13,10 @@ export default class Texture2D {
 
         let canvas_texture = CavnasHelper.set_canvas('canvas_texture', w, h);
         let ctx = CavnasHelper.get_context_by_canvas(canvas_texture);
+        if (!ctx) {
+            console.log('load_texture_buffer failed');
+            return;
+        }
         ctx.drawImage(this.img, 0, 0);
 
         // 改成1次讀完全部
@@ -35,10 +35,13 @@ export default class Texture2D {
     };
 
     img: HTMLImageElement;
-    buffer: Buffer2D<RGBA>;
+    buffer: Buffer2D<RGBA> | null = null;
     constructor(src: string) {
         this.load_texture_buffer = this.load_texture_buffer.bind(this);
-        this.begin_load(src);
+
+        this.img = new Image();
+        this.img.src = src;
+        this.img.onload = this.load_texture_buffer;
     }
 
     get(uv: Vector2D) {

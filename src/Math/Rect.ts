@@ -17,9 +17,9 @@ export default class Rect implements Hitable {
         this.h = h;
     }
 
-    hit(ray: Ray, s: Shader): HitInfo {
+    hit(ray: Ray, s: Shader): HitInfo | null {
         let result = this.plane.hit(ray, s);
-        if (result.is_hit) {
+        if (result) {
             let hit_pos = result.hit_pos;
             let diff = hit_pos.minus(this.plane.C);
 
@@ -32,18 +32,12 @@ export default class Rect implements Hitable {
             let h_value = Vector.dot(diff, h_axis);
 
             let is_hit = Math.abs(w_value) < this.w && Math.abs(h_value) < this.h;
-            return {
-                is_hit,
-                hit_pos,
-                i: ray.dir,
-                t: result.t,
-                normal: this.plane.N,
-                s
-            }
+            if (is_hit)
+                return result
+            else
+                return null;
         } else {
-            return {
-                is_hit: false,
-            }
+            return null;
         }
     }
 }

@@ -28,7 +28,7 @@ export default class RGBA {
             1);
     }
 
-    add = function (A: RGBA) {
+    add(A: RGBA) {
         return new RGBA(this.r + A.r, this.g + A.g, this.b + A.b, 1);
     }
 
