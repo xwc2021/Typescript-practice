@@ -157,17 +157,15 @@ export default class Rasterizer {
         let triangle_list = Rasterizer.MVP_backface_culling_clipping(triangle, pcamera, worldTransform);
 
         let list = [];
-        let count = 0;
-        // to NDC
         for (let T of triangle_list) {
 
+            // to NDC
             let n0 = pcamera.toNDC(T.v0.p, T.v0.w);
             let n1 = pcamera.toNDC(T.v1.p, T.v1.w);
             let n2 = pcamera.toNDC(T.v2.p, T.v2.w);
 
-            // NDC應該要落在
+            // 有裁切left、right、top、bottom的話NDC應該要落在
             // -1 ≤ x ≤ 1, -1 ≤ y ≤ 1
-
             // 不裁切left、right、top、bottom，然後clamp ndc也算是一種特殊效果
             if (Rasterizer.ndc_clamp_effect) {
                 n0.clamp_x(-1, 1).clamp_y(-1, 1);
@@ -181,7 +179,7 @@ export default class Rasterizer {
             let s1 = pcamera.toScreenSpace(n1);
             let s2 = pcamera.toScreenSpace(n2);
 
-            // 為了和本來的code相容，暫時先傳出去
+            // 為了和本來畫線的code相容，傳出去
             list.push(s0);
             list.push(s1);
             list.push(s2);
@@ -201,10 +199,6 @@ export default class Rasterizer {
             min_y = Math.max(0, min_y);
             max_x = Math.min(this.color_buffer.w - 1, max_x);
             max_y = Math.min(this.color_buffer.h - 1, max_y);
-
-            // 除錯用
-            let all = (max_x - min_x) * (max_y - min_y);
-            let draw = 0;
 
             for (let x = min_x; x <= max_x; ++x) {
                 for (let y = min_y; y <= max_y; ++y) {
@@ -248,7 +242,7 @@ export default class Rasterizer {
                     let u_ndc = Triangle.interpolation(γ, α, β, T.v0.u / T.v0.w, T.v1.u / T.v1.w, T.v2.u / T.v2.w);
                     let v_ndc = Triangle.interpolation(γ, α, β, T.v0.v / T.v0.w, T.v1.v / T.v1.w, T.v2.v / T.v2.w);
 
-                    // projection space 
+                    // 乘上w回到projection space
                     let u = u_ndc * w;
                     let v = v_ndc * w;
 
@@ -257,15 +251,12 @@ export default class Rasterizer {
                         Rasterizer.color_buffer.set(x, y, RGBA.yellow);
                     else
                         Rasterizer.color_buffer.set(x, y, color);
-                    draw++;
 
                     if (Rasterizer.print_once && x == Rasterizer.peek_screen_pos.x && y == Rasterizer.peek_screen_pos.y) {
-                        console.log('在三角形內', color);
+                        console.log('color', color);
                     }
                 }
             }
-            count++;
-            // console.log(count, Math.floor(100 * draw / all));
         }
         if (Rasterizer.print_once) {
             Rasterizer.print_once = false;
