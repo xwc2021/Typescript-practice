@@ -202,12 +202,10 @@ export default class Rasterizer {
             max_x = Math.min(this.color_buffer.w - 1, max_x);
             max_y = Math.min(this.color_buffer.h - 1, max_y);
 
+            // 除錯用
             let all = (max_x - min_x) * (max_y - min_y);
             let draw = 0;
 
-            let half_w_pixel = 0.5 / Rasterizer.color_buffer.w;
-            let half_h_pixel = 0.5 / Rasterizer.color_buffer.h;
-            // console.log(half_w_pixel, half_h_pixel);
             for (let x = min_x; x <= max_x; ++x) {
                 for (let y = min_y; y <= max_y; ++y) {
 
