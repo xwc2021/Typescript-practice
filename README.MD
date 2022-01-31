@@ -112,3 +112,7 @@ npx webpack
 
 # white ray tracing 101
 ![image](https://lh3.googleusercontent.com/pw/AM-JKLV1XpuWY-_Dl9b5w7aBOvFXDrahhi94pWDDOUHvbKWJpxywLOEjIp7c0YLzUxHisMANnjY9qha2axIHrjPrmhBfTqFQ-ULakNxqlboYxLp7zyJAoNAWUt3fXMy-fRj8Nlq_XDMgIUdUCu83k_3s9ORCgw=w1568-h882-no?authuser=0)
+
+# 執行方法
+vs code 裝live server
+在*.html按右鍵，就可以啟動了
