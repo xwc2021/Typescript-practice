@@ -64,7 +64,7 @@ export default class Rasterizer {
 
         // 不對Right 、Left、Top、Bottom作裁切了
         // 反正在screen space光柵化三角形時也會用邊界裁切
-        return out_list;
+        // return out_list;
 
         // Right
         out_list = Rasterizer.clip_helper(out_list,
@@ -234,15 +234,15 @@ export default class Rasterizer {
                     // 寫入z值
                     Rasterizer.z_buffer.set(x, y, z);
 
-                    // (2)在NDC進行內插，乘上w回到projection space
-                    // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html
-                    let w = 1 / Triangle.interpolation(γ, α, β, 1 / T.v0.w, 1 / T.v1.w, 1 / T.v2.w);
+                    // (2)透視修正
+                    // https://gpnnotes.blogspot.com/2021/11/blog-post_27.html#Highlights
 
                     // 要在NDC插值，所以除以w
                     let u_ndc = Triangle.interpolation(γ, α, β, T.v0.u / T.v0.w, T.v1.u / T.v1.w, T.v2.u / T.v2.w);
                     let v_ndc = Triangle.interpolation(γ, α, β, T.v0.v / T.v0.w, T.v1.v / T.v1.w, T.v2.v / T.v2.w);
 
                     // 乘上w回到projection space
+                    let w = 1 / Triangle.interpolation(γ, α, β, 1 / T.v0.w, 1 / T.v1.w, 1 / T.v2.w);
                     let u = u_ndc * w;
                     let v = v_ndc * w;
 
