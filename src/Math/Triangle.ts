@@ -36,16 +36,8 @@ export default class Triangle {
         // 擋掉dir01、dir02是y軸平行的情況
         // 浮點數請用 number_equal，不然會GG
         // 見圖：bug/float_point_compaire_error(fixed)/bug_when_clipping_2.jpg
-        // 其實當初直接用長度比算α、β不是更簡單嗎？
         let α = number_equal(dir01.x, 0) ? vector_α.y / dir01.y : vector_α.x / dir01.x;
         let β = number_equal(dir02.x, 0) ? vector_β.y / dir02.y : vector_β.x / dir02.x;
-        if (isNaN(α)) {
-            console.log(vector_α.x, dir01.x);
-        }
-
-        if (isNaN(β)) {
-            console.log(vector_β.x, dir02.x);
-        }
         let γ = 1 - α - β;
 
         return { success: true, α, β, γ }
