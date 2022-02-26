@@ -63,8 +63,8 @@ export default class Rasterizer {
             ClipPlane.Near);
 
         // 不對Right 、Left、Top、Bottom作裁切了
-        // 反正在screen space光柵化三角形時也會用邊界裁切
-        // return out_list;
+        // 這樣才可以看到ndc_clamp_effect
+        return out_list;
 
         // Right
         out_list = Rasterizer.clip_helper(out_list,
