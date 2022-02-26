@@ -64,7 +64,8 @@ export default class Rasterizer {
 
         // 不對Right 、Left、Top、Bottom作裁切了
         // 這樣才可以看到ndc_clamp_effect
-        return out_list;
+        if (Rasterizer.ndc_clamp_effect)
+            return out_list;
 
         // Right
         out_list = Rasterizer.clip_helper(out_list,
