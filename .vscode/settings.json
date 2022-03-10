@@ -1,0 +1,6 @@
+{
+    "liveServer.settings.ignoreFiles": [
+        "./dist/CreateScriptPlugin.js",
+        "./src/UserScript/*.ts"
+    ],
+}
