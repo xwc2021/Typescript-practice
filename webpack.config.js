@@ -3,7 +3,7 @@ const path = require('path');
 let target = '';
 let out = '';
 
-let app = 3;
+let app = 4;
 switch (app) {
     case 0:
         target = './src/WhiteRayTracingApp.ts';
