@@ -160,10 +160,15 @@ export function clip(triangle: Triangle,
     return v_clip;
 }
 
+// 處理浮點數精度問題
+// code from http://8st.blogspot.tw/2012/10/jsbug.html
 export class MathHelper {
-    //修正除法錯誤
+
+    // 處理除法精度問題
+    // (arg1 * 10^t1) / (arg2 * 10^t2) = (arg1/arg2)*10^(t1-t2)
+    // 所以最後要乘上 1/10^(t1-t2) = 10^(t2-t1)
     static accDiv(arg1: number, arg2: number) {
-        //code from http://8st.blogspot.tw/2012/10/jsbug.html
+
         let t1 = 0, t2 = 0, r1, r2;
         try { t1 = arg1.toString().split(".")[1].length } catch (e) { }
         try { t2 = arg2.toString().split(".")[1].length } catch (e) { }
@@ -173,7 +178,8 @@ export class MathHelper {
         return (r1 / r2) * Math.pow(10, t2 - t1);
     }
 
-    //修正加法錯誤
+    // 處理加法精度問題
+    // 先各自>>後，相加，再<<
     static accAdd(arg1: number, arg2: number) {
         //code from http://8st.blogspot.tw/2012/10/jsbug.html
         let r1, r2, m, c;
