@@ -179,7 +179,7 @@ export class MathHelper {
     }
 
     // 處理加法精度問題
-    // 先各自>>後，相加，再<<
+    // 相當於先各自>>m後，相加，再<<m
     static accAdd(arg1: number, arg2: number) {
         //code from http://8st.blogspot.tw/2012/10/jsbug.html
         let r1, r2, m, c;
