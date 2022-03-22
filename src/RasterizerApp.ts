@@ -30,7 +30,7 @@ export default class RasterizerApp {
     render_target: RenderTarget;
     texture: Texture2D;
     peek_screen_pos = new Vector2D(45, 60);
-    keybord_event?: KeyboardEvent;
+    keybord_event: KeyboardEvent | null = null;
 
     constructor() {
         Rasterizer.color_buffer = new Buffer2D<RGBA>(this.screenWidth, this.screenHeight);
@@ -225,7 +225,7 @@ export default class RasterizerApp {
     }
 
     key_up(event: KeyboardEvent) {
-        this.keybord_event = undefined;
+        this.keybord_event = null;
     }
 }
 

@@ -61,7 +61,7 @@ export default class Triangle {
         this.v2 = pv2;
     }
 
-    v_s?: Vector[];
+    v_s: Vector[] | null = null;
     rasterize(pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
         this.v_s = Rasterizer.process(this, pcamera, worldTransform, texture);
     }
