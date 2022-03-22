@@ -21,19 +21,16 @@ export default class RasterizerApp {
     screenWidth = 512;
     screenHeight = 512;
 
-    // screenWidth = 256;
-    // screenHeight = 256;
-
     box: Box;
 
-    last_t = 0;
+    skip_diff = false;
+    pre_t = 0;
     sum_t = 0;
     ctx: CanvasRenderingContext2D | null;
     render_target: RenderTarget;
     texture: Texture2D;
     peek_screen_pos = new Vector2D(45, 60);
-    keybord_event: KeyboardEvent | null;
-    keybord_use = false;
+    keybord_event?: KeyboardEvent;
 
     constructor() {
         Rasterizer.color_buffer = new Buffer2D<RGBA>(this.screenWidth, this.screenHeight);
@@ -48,7 +45,6 @@ export default class RasterizerApp {
         this.camera = new Camera(new Vector(0, 50, -200), new Vector(0, 0, 0), 60, this.screenWidth, this.screenHeight, 5, 500);
         // this.texture = new Texture2D('texture/Collage 2021-11-13 14_17_54.jpg');
         this.texture = new Texture2D('texture/thin_is_good_512x512.jpg');
-        this.keybord_event = null;
 
         window.onload = () => {
             this.start();
@@ -90,16 +86,16 @@ export default class RasterizerApp {
     }
 
     start() {
-        this.stop();
         this.sum_t = 0;
-        let d = new Date();
-        this.last_t = d.getTime();
+        this.pre_t = 0;
         this.thandle = window.requestAnimationFrame(this.drawScene);
     }
 
     resume() {
-        let d = new Date();
-        this.last_t = d.getTime();
+        if (this.thandle)
+            return;
+
+        this.skip_diff = true;
         this.thandle = window.requestAnimationFrame(this.drawScene);
     }
 
@@ -108,16 +104,19 @@ export default class RasterizerApp {
         this.thandle = 0;
     }
 
-    drawScene(timestamp: number) {
+    drawScene(accumulatedTime: number) {
 
-        let d = new Date();
-        let t = d.getTime();
-        let diff = t - this.last_t;
-        this.last_t = t;
-        this.sum_t = this.sum_t + diff;
-        document.title = diff.toString();
+        let diff = accumulatedTime - this.pre_t;
+        if (this.skip_diff) { // 因為accumulatedTime停不下來
+            this.skip_diff = false;
+            diff = 0;
+        }
+        this.pre_t = accumulatedTime;
+        this.sum_t += diff;
 
+        document.title = this.sum_t.toString() + "," + accumulatedTime.toString();
 
+        // 使用者輸入
         this.process_input(diff);
 
         // 清空
@@ -133,17 +132,13 @@ export default class RasterizerApp {
             this.ctx.fillRect(this.peek_screen_pos.x, this.peek_screen_pos.y, 1, 10);
             this.ctx.fillRect(this.peek_screen_pos.x, this.peek_screen_pos.y, 10, 1);
         }
-
         Rasterizer.clear(RGBA.black, 1);
 
-        //畫立方體
+        // 移動立方體
         let offsetMatrix = Transform.offset(0, 0, 0);
         let nowDegree = this.sum_t / 1000 * 15 % 360;
-        // let nowDegree = 0;
 
         let rotateMatrix = Transform.rotateByY(nowDegree);
-        // let rotateMatrix = Transform.rotateByY(336.55499999999995);
-        // let rotateMatrix = Transform.rotateByY(45);
         let combineMatrix = Transform.transformTransform(offsetMatrix, rotateMatrix);
         this.box.rasterize(this.camera, combineMatrix, this.texture);
         if (this.ctx)
@@ -152,6 +147,8 @@ export default class RasterizerApp {
         offsetMatrix = Transform.offset(0, 0, 150);
         rotateMatrix = Transform.rotateByY(nowDegree);
         combineMatrix = Transform.transformTransform(rotateMatrix, offsetMatrix);
+
+        // 畫立方體
         this.box.rasterize(this.camera, combineMatrix, this.texture);
         if (this.ctx)
             this.box.draw_line(this.ctx);
@@ -163,7 +160,8 @@ export default class RasterizerApp {
     }
 
     process_input(delta_time: number) {
-        if (!this.keybord_use)
+
+        if (!this.keybord_event)
             return;
 
         let KepMap =
@@ -184,8 +182,7 @@ export default class RasterizerApp {
 
         let moveS = 50 * delta_time / 1000;
         let rotateS = 0.1 * delta_time / 1000;
-        if (!this.keybord_event)
-            return;
+
         switch (this.keybord_event.keyCode) {
             case KepMap.w:
                 this.camera.moveEye(moveS, this.camera.z_axis);
@@ -225,11 +222,10 @@ export default class RasterizerApp {
 
     key_down(event: KeyboardEvent) {
         this.keybord_event = event;
-        this.keybord_use = true;
     }
 
     key_up(event: KeyboardEvent) {
-        this.keybord_use = false;
+        this.keybord_event = undefined;
     }
 }
 
