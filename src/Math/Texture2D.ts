@@ -35,7 +35,7 @@ export default class Texture2D {
     };
 
     img: HTMLImageElement;
-    buffer: Buffer2D<RGBA> | null = null;
+    buffer?: Buffer2D<RGBA>;
     constructor(src: string) {
         this.load_texture_buffer = this.load_texture_buffer.bind(this);
 

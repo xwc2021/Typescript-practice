@@ -59,10 +59,9 @@ export default class Triangle {
         this.v0 = pv0;
         this.v1 = pv1;
         this.v2 = pv2;
-        this.v_s = null;
     }
 
-    v_s: Vector[] | null;
+    v_s?: Vector[];
     rasterize(pcamera: Camera, worldTransform: Transform, texture: Texture2D) {
         this.v_s = Rasterizer.process(this, pcamera, worldTransform, texture);
     }
