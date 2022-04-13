@@ -3,7 +3,7 @@ const path = require('path');
 let target = '';
 let out = '';
 
-let app = 1;
+let app = 5;
 switch (app) {
     case 0:
         target = './src/WhiteRayTracingApp.ts';
@@ -25,7 +25,10 @@ switch (app) {
         target = './src/DynamicLoadingScriptApp.ts';
         out = 'DynamicLoadingScriptApp.js';
         break;
-
+    case 5:
+        target = './src/FFTApp.ts';
+        out = 'FFTApp.js';
+        break;
 }
 
 module.exports = {
