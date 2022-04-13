@@ -1,25 +1,8 @@
 # 從新出發
 本來是想學webgl，但好像偏離主題了
 
-# 裝nvm (node version manager)
-https://github.com/coreybutler/nvm-windows/releases
-
-裝好之後
-
-看目前可以取得的版本
-```
-nvm list available
-```
-
-裝你要的版本
-```
-nvm install 12.18.2
-```
-
-使用這個版本
-```
-nvm use 12.18.2
-```
+# 裝node
+到官網下載
 
 
 # 快速初始化專案
@@ -108,7 +91,6 @@ npx webpack
 
 # 遇到npm update會出現一堆error?
 把devDependencies、dependencies區塊從package.json拿掉，手動重裝吧，我跟npm也不太熟
-
 
 # white ray tracing 101
 ![image](https://lh3.googleusercontent.com/pw/AM-JKLV1XpuWY-_Dl9b5w7aBOvFXDrahhi94pWDDOUHvbKWJpxywLOEjIp7c0YLzUxHisMANnjY9qha2axIHrjPrmhBfTqFQ-ULakNxqlboYxLp7zyJAoNAWUt3fXMy-fRj8Nlq_XDMgIUdUCu83k_3s9ORCgw=w1568-h882-no?authuser=0)
